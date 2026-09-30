@@ -87,7 +87,7 @@ export function ContactForm({ t }: { t: Dictionary["form"] }) {
       <button
         type="submit"
         disabled={pending}
-        className="group mt-7 inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-ink px-6 py-3.5 text-[13px] font-medium text-white transition duration-300 hover:bg-dark disabled:opacity-60 sm:w-auto"
+        className="group mt-7 inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-primary px-6 py-3.5 text-[13px] font-medium text-white transition duration-300 hover:bg-secondary disabled:opacity-60 sm:w-auto"
       >
         {pending ? t.sending : t.submit}
         {!pending && <ArrowRight className="size-4 transition duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />}

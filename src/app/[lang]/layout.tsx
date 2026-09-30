@@ -3,6 +3,7 @@ import { Inter, Noto_Sans_Arabic } from "next/font/google";
 import { notFound } from "next/navigation";
 import "lenis/dist/lenis.css";
 import "../globals.css";
+import { ClickSpark } from "@/components/click-spark";
 import { RevealOnScroll } from "@/components/reveal-on-scroll";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { DEFAULT_LOCALE, LOCALES, dir, getDictionary, isLocale } from "@/lib/dictionaries";
@@ -36,6 +37,7 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
     >
       <body className="min-h-full">
         <RevealOnScroll />
+        <ClickSpark />
         <SmoothScroll>{props.children}</SmoothScroll>
       </body>
     </html>

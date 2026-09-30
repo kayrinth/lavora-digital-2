@@ -1,21 +1,28 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #f7f7f5;
+  --color-background: #f6f7fa;
   --color-surface: #ffffff;
-  --color-ink: #050505;
-  --color-dark: #1a1a18;
-  /* Body grey, darkened from the brief's #8A8A86 so 13-15px copy clears 4.5:1. */
-  --color-muted: #6b6b66;
-  /* The brief's grey, kept for large display type and hairlines only. */
-  --color-faint: #8a8a86;
-  --color-line: #e8e8e5;
+  /* Near-black with an indigo cast, so body copy sits in the same family as the brand. */
+  --color-ink: #0a0a14;
+  --color-muted: #5c6274;
+  /* 3.08:1 — large display type and hairlines only, never body copy. */
+  --color-faint: #878da2;
+  --color-line: #e2e5ec;
 
-  /* Accent. Decoration, fills and marks only — never small text on a light ground. */
-  --color-primary: #f5a623;
-  --color-primary-soft: #fcebcf;
-  --color-secondary: #f5a623;
-  --color-secondary-soft: #fcebcf;
+  /* Brand navy. Dark grounds, buttons, the display voice. */
+  --color-primary: #030164;
+  --color-primary-soft: #e9eaf6;
+  /* One step up from the navy: hover on a navy ground, and the plate behind photography. */
+  --color-dark: #0a0878;
+
+  /* Accent blue. 6.18:1 on the page ground, so unlike a yellow it can carry text. */
+  --color-secondary: #006199;
+  --color-secondary-soft: #e3eef7;
+
+  /* The two readable tints on a navy ground. Tinted from the hue, never grey. */
+  --color-onnavy: #a9aeda;
+  --color-onnavy-accent: #58b6e8;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
@@ -25,6 +32,11 @@
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
+}
+
+html {
+  /* Reserves the scrollbar track, so a short page does not jump sideways. */
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -108,11 +120,43 @@ body {
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
 
-/* ------------------------------------------------------------------ Focus */
+/* -------------------------------------------------------- Browser surfaces */
+/*
+ * The chrome we did not draw still belongs to the palette: selection, caret,
+ * scrollbar and focus ring all ship grey-blue by default and would read as a
+ * different product.
+ */
+::selection {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+:where(input, textarea) {
+  caret-color: var(--color-secondary);
+}
+
 /* One visible ring everywhere, drawn outside the element so a pill keeps its shape. */
 :focus-visible {
-  outline: 2px solid var(--color-ink);
+  outline: 2px solid var(--color-secondary);
   outline-offset: 3px;
+}
+
+/* A navy ground needs the ring inverted to stay visible. */
+.on-navy :focus-visible {
+  outline-color: var(--color-onnavy-accent);
+}
+
+@supports (scrollbar-color: auto) {
+  html {
+    scrollbar-color: var(--color-faint) transparent;
+    scrollbar-width: thin;
+  }
+}
+
+/* Links inside prose clear their descenders instead of striking through them. */
+a {
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: from-font;
 }
 
 /* ----------------------------------------------------------------- Motion */

@@ -184,7 +184,7 @@ export function HeroImage({ lang, t }: P) {
     <section className="pb-20 sm:pb-24 lg:pb-32">
       <Container>
         <div
-          className="rise relative overflow-hidden rounded-[24px] bg-dark sm:rounded-[32px]"
+          className="rise relative overflow-hidden rounded-[24px] bg-ink sm:rounded-[32px]"
           style={{ "--d": "420ms" } as React.CSSProperties}
         >
           <div className="relative aspect-[3/4] sm:aspect-[16/10] lg:aspect-[2.3/1]">
@@ -204,9 +204,9 @@ export function HeroImage({ lang, t }: P) {
               <li key={s.title}>
                 <Link
                   href={href(lang, `/services/${SERVICE_SLUGS[i]}`)}
-                  className="flex items-center gap-2 rounded-full bg-ink/45 px-4 py-2.5 text-[12px] text-white backdrop-blur-md transition hover:bg-ink"
+                  className="flex items-center gap-2 rounded-full bg-ink/55 px-4 py-2.5 text-[12px] text-white backdrop-blur-md transition hover:bg-ink"
                 >
-                  <span dir="ltr" className="text-primary tabular-nums">
+                  <span dir="ltr" className="text-onnavy-accent tabular-nums">
                     0{i + 1}
                   </span>
                   {s.title}
@@ -228,7 +228,7 @@ export function HeroImage({ lang, t }: P) {
               className="group mt-4 inline-flex items-center gap-2 text-[12.5px] font-medium"
             >
               {t.services.learnMore}
-              <span className="grid size-7 place-items-center rounded-full bg-primary text-ink transition group-hover:bg-ink group-hover:text-white">
+              <span className="grid size-7 place-items-center rounded-full bg-secondary text-white transition group-hover:bg-primary">
                 <ArrowRight className="size-3.5 rtl:rotate-180" />
               </span>
             </Link>
@@ -307,7 +307,7 @@ export function About({ t }: { t: Dictionary }) {
         <ul className="reveal-stagger mt-16 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4">
           {t.collaboration.features.map((f, i) => (
             <li key={f.title} className="reveal border-t border-line pt-6">
-              <span dir="ltr" className="eyebrow block text-muted tabular-nums">
+              <span dir="ltr" className="eyebrow block text-secondary tabular-nums">
                 0{i + 1}
               </span>
               <h3 className="mt-4 text-[17px] leading-snug font-semibold tracking-tight">
@@ -346,7 +346,7 @@ export function Stats({ t }: { t: Dictionary }) {
             <dl className="mt-10 grid gap-10 sm:grid-cols-2">
               {t.hero.stats.map((s) => (
                 <div key={s.l} className="relative border-t border-line pt-6">
-                  <span aria-hidden className="absolute -top-px start-0 h-px w-12 bg-primary" />
+                  <span aria-hidden className="absolute -top-px start-0 h-px w-12 bg-secondary" />
                   <dt className="sr-only">{s.l}</dt>
                   <dd>
                     <span dir="ltr" className="t-stat block">
@@ -373,47 +373,44 @@ export function Services({ lang, t }: P) {
   return (
     <section id="services" className="scroll-mt-24 pb-24 lg:pb-32">
       <Container>
-        <div className="rounded-[24px] bg-ink px-6 py-14 text-white sm:rounded-[32px] sm:px-10 sm:py-16 lg:px-14 lg:py-20">
+        <div className="on-navy rounded-[24px] bg-primary px-6 py-14 text-white sm:rounded-[32px] sm:px-10 sm:py-16 lg:px-14 lg:py-20">
           <div className="grid gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:gap-16">
             <div className="reveal">
-              <span className="eyebrow inline-flex rounded-full bg-primary px-4 py-2 text-ink">
+              <span className="eyebrow inline-flex rounded-full bg-secondary px-4 py-2 text-white">
                 {t.services.titleStrong}
               </span>
               <h2 className="t-display mt-7 max-w-[11ch]">
                 {t.services.titleLead} {t.services.titleStrong}
               </h2>
-              <p className="mt-6 max-w-sm text-[14.5px] leading-[1.6] text-white/65">
+              <p className="mt-6 max-w-sm text-[14.5px] leading-[1.6] text-onnavy">
                 {t.collaboration.body}
               </p>
-              <GhostButton
-                href={href(lang, "/portfolio")}
-                className="mt-8 border-white/25 text-white hover:border-white hover:bg-white hover:text-ink"
-              >
+              <GhostButton href={href(lang, "/portfolio")} onNavy className="mt-8">
                 {t.services.seeMore}
               </GhostButton>
             </div>
 
             {/* A hairline grid, drawn by the gap rather than by borders per card. */}
-            <ul className="reveal-stagger grid gap-px overflow-hidden rounded-2xl bg-white/12 sm:grid-cols-2">
+            <ul className="reveal-stagger grid gap-px overflow-hidden rounded-2xl bg-white/15 sm:grid-cols-2">
               {t.services.items.map((s, i) => {
                 const Icon = SERVICE_ICONS[i];
                 return (
-                  <li key={s.title} className="reveal bg-ink">
+                  <li key={s.title} className="reveal bg-primary">
                     <Link
                       href={href(lang, `/services/${SERVICE_SLUGS[i]}`)}
                       className="group flex h-full flex-col p-7 transition duration-300 hover:bg-dark sm:p-8"
                     >
                       <div className="flex items-center justify-between">
-                        <Icon className="size-6 text-primary" />
-                        <span dir="ltr" className="eyebrow text-white/50 tabular-nums">
+                        <Icon className="size-6 text-onnavy-accent" />
+                        <span dir="ltr" className="eyebrow text-onnavy tabular-nums">
                           0{i + 1}
                         </span>
                       </div>
                       <h3 className="mt-8 text-[18px] leading-snug font-semibold tracking-tight">
                         {s.title}
                       </h3>
-                      <p className="mt-2.5 text-[13.5px] leading-relaxed text-white/60">{s.desc}</p>
-                      <span className="mt-6 inline-flex items-center gap-1.5 text-[12.5px] font-medium text-white/80 transition group-hover:text-primary">
+                      <p className="mt-2.5 text-[13.5px] leading-relaxed text-onnavy">{s.desc}</p>
+                      <span className="mt-6 inline-flex items-center gap-1.5 text-[12.5px] font-medium text-white transition group-hover:text-onnavy-accent">
                         {t.services.learnMore}
                         <ArrowUpRight className="size-4 transition duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                       </span>
@@ -423,7 +420,7 @@ export function Services({ lang, t }: P) {
               })}
 
               {/* The empty fourth cell becomes the way out of the section. */}
-              <li className="bg-ink">
+              <li className="bg-primary">
                 <Link
                   href={href(lang, "#contact")}
                   className="group flex h-full flex-col justify-end p-7 transition duration-300 hover:bg-dark sm:p-8"
@@ -431,7 +428,7 @@ export function Services({ lang, t }: P) {
                   <span className="text-[18px] leading-snug font-semibold tracking-tight">
                     {t.portfolio.ctaTitle}
                   </span>
-                  <span className="mt-4 inline-flex items-center gap-2 text-[12.5px] font-medium text-primary">
+                  <span className="mt-4 inline-flex items-center gap-2 text-[12.5px] font-medium text-onnavy-accent">
                     {t.portfolio.cta}
                     <ArrowRight className="size-4 transition duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
                   </span>
@@ -491,7 +488,7 @@ export function Work({ lang, t }: P) {
   );
 }
 
-function ProjectCard({
+export function ProjectCard({
   project,
   lang,
   t,
@@ -508,7 +505,7 @@ function ProjectCard({
   return (
     <Link
       href={href(lang, `/portfolio/${project.slug}`)}
-      className={`group reveal relative block overflow-hidden rounded-[20px] bg-dark sm:rounded-[24px] ${
+      className={`group reveal relative block overflow-hidden rounded-[20px] bg-ink sm:rounded-[24px] ${
         featured ? "aspect-[4/3] lg:aspect-auto lg:h-full" : "aspect-[16/10] lg:aspect-[16/9]"
       }`}
     >
@@ -522,12 +519,12 @@ function ProjectCard({
       {/* Enough of a wash for white type to clear the photo underneath it. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent"
+        className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-transparent"
       />
 
       <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-6">
         <div className="min-w-0">
-          <p className="eyebrow text-primary">{t.portfolio.services[project.service]}</p>
+          <p className="eyebrow text-onnavy-accent">{t.portfolio.services[project.service]}</p>
           <h3
             className={`mt-2 leading-tight font-semibold tracking-tight text-white ${
               featured ? "text-[24px] sm:text-[30px]" : "text-[18px]"
@@ -537,7 +534,7 @@ function ProjectCard({
           </h3>
           {featured && <p className="mt-1.5 truncate text-[13.5px] text-white/70">{subtitle}</p>}
         </div>
-        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-surface text-ink transition duration-300 group-hover:bg-primary">
+        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-surface text-primary transition duration-300 group-hover:bg-secondary group-hover:text-white">
           <ArrowUpRight className="size-4.5" />
         </span>
       </div>
@@ -568,7 +565,7 @@ export function Process({ lang, t }: P) {
               <div className="flex items-start gap-6 py-8 transition duration-300 group-hover:ps-2 sm:gap-10">
                 <span
                   dir="ltr"
-                  className="w-10 shrink-0 text-[15px] font-semibold tabular-nums"
+                  className="w-10 shrink-0 text-[15px] font-semibold text-secondary tabular-nums"
                 >
                   0{i + 1}
                 </span>
@@ -582,7 +579,7 @@ export function Process({ lang, t }: P) {
                 </div>
                 <ArrowRight
                   aria-hidden
-                  className="mt-1.5 size-5 shrink-0 text-faint transition duration-300 group-hover:translate-x-1 group-hover:text-primary rtl:rotate-180 rtl:group-hover:-translate-x-1"
+                  className="mt-1.5 size-5 shrink-0 text-faint transition duration-300 group-hover:translate-x-1 group-hover:text-secondary rtl:rotate-180 rtl:group-hover:-translate-x-1"
                 />
               </div>
             </li>

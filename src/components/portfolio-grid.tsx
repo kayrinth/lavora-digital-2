@@ -44,7 +44,7 @@ export function PortfolioGrid({
               aria-current={active === f.key ? "page" : undefined}
               className={`inline-flex min-h-[44px] items-center rounded-full border px-4 text-[13px] transition ${
                 active === f.key
-                  ? "border-ink bg-ink text-white"
+                  ? "border-primary bg-primary text-white"
                   : "border-line text-muted hover:border-ink/40 hover:text-ink"
               }`}
             >
@@ -74,14 +74,14 @@ export function PortfolioGrid({
                     A flat 65% ink wash rather than a gradient: it is the only value
                     that holds white text above 4.5:1 even where the photo is white.
                   */}
-                  <span aria-hidden className="absolute inset-0 bg-ink/65" />
+                  <span aria-hidden className="absolute inset-0 bg-ink/72" />
                 </>
               )}
 
               <div className="relative">
                 {/* The logos are drawn for light backgrounds, so they keep a white tile. */}
                 {item.logo && (
-                  <span className="relative block h-14 w-32 rounded-xl bg-white">
+                  <span className="relative block h-14 w-32 rounded-xl bg-surface">
                     <Image
                       src={item.logo}
                       alt=""
@@ -104,7 +104,7 @@ export function PortfolioGrid({
                 <p className="max-w-[34ch] text-[13px] leading-relaxed text-white/90">
                   {item.summary}
                 </p>
-                <span className="mt-6 grid size-12 place-items-center rounded-full border border-white/50 transition duration-300 group-hover:border-white group-hover:bg-white group-hover:text-ink">
+                <span className="mt-6 grid size-12 place-items-center rounded-full border border-white/50 transition duration-300 group-hover:border-white group-hover:bg-white group-hover:text-primary">
                   <span className="sr-only">{viewLabel}</span>
                   <ArrowRight aria-hidden className="size-5 -rotate-45" />
                 </span>

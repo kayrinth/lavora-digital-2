@@ -126,7 +126,7 @@ export default async function Portfolio(props: PageProps<"/[lang]/portfolio">) {
                   </ul>
                 )}
 
-                <p className="reveal border-s-2 border-primary ps-5 text-[15px] font-medium text-ink">
+                <p className="reveal border-s border-secondary ps-5 text-[15px] font-medium text-ink">
                   {page.closing.kicker}
                 </p>
                 {page.closing.kickerBody && (

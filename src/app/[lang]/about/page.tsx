@@ -83,7 +83,7 @@ export default async function About(props: PageProps<"/[lang]/about">) {
                   </p>
                 ))}
               </div>
-              <p className="reveal mt-8 max-w-md border-s-2 border-primary ps-5 text-[17px] leading-relaxed font-medium text-ink">
+              <p className="reveal mt-8 max-w-md border-s border-secondary ps-5 text-[17px] leading-relaxed font-medium text-ink">
                 {doc.advertising.quote}
               </p>
             </div>

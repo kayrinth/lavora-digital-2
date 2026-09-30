@@ -176,6 +176,8 @@ const en = {
     metaYear: "Year",
     ctaTitle: "Have a project in mind?",
     cta: "Start a project",
+    next: "Next project",
+    related: "Related projects",
   },
 
   form: {
@@ -369,6 +371,8 @@ const ar: Dictionary = {
     metaYear: "السنة",
     ctaTitle: "لديك مشروع في بالك؟",
     cta: "ابدأ مشروعًا",
+    next: "المشروع التالي",
+    related: "مشاريع ذات صلة",
   },
 
   form: {

@@ -27,7 +27,7 @@ export function Eyebrow({
 }) {
   return (
     <p className={`eyebrow flex items-center gap-2 text-muted ${className}`}>
-      {dot && <span aria-hidden className="size-1.5 rounded-full bg-primary" />}
+      {dot && <span aria-hidden className="size-1.5 rounded-full bg-secondary" />}
       {children}
     </p>
   );
@@ -49,7 +49,7 @@ export function PrimaryButton({
   className?: string;
 }) {
   return (
-    <Link href={href} className={`${PILL} bg-ink text-white hover:bg-dark ${className}`}>
+    <Link href={href} className={`${PILL} bg-primary text-white hover:bg-secondary ${className}`}>
       {children}
       {withArrow && (
         <ArrowRight className="size-4 transition duration-300 group-hover/btn:translate-x-1 rtl:rotate-180 rtl:group-hover/btn:-translate-x-1" />
@@ -58,21 +58,28 @@ export function PrimaryButton({
   );
 }
 
-/** Accent pill, reserved for the one moment per page that has to be loudest. */
+/**
+ * Accent pill, reserved for the one moment per page that has to be loudest.
+ * `onNavy` swaps the whole class set rather than appending an override: two
+ * utilities for the same property are resolved by stylesheet order, not by
+ * their order in the attribute, so an override string is a coin flip.
+ */
 export function AccentButton({
   href,
   children,
+  onNavy = false,
   className = "",
 }: {
   href: string;
   children: React.ReactNode;
+  onNavy?: boolean;
   className?: string;
 }) {
+  const tone = onNavy
+    ? "bg-surface text-primary hover:bg-onnavy-accent"
+    : "bg-secondary text-white hover:bg-primary";
   return (
-    <Link
-      href={href}
-      className={`${PILL} bg-primary text-ink hover:bg-ink hover:text-white ${className}`}
-    >
+    <Link href={href} className={`${PILL} ${tone} ${className}`}>
       {children}
       <ArrowRight className="size-4 transition duration-300 group-hover/btn:translate-x-1 rtl:rotate-180 rtl:group-hover/btn:-translate-x-1" />
     </Link>
@@ -83,17 +90,19 @@ export function AccentButton({
 export function GhostButton({
   href,
   children,
+  onNavy = false,
   className = "",
 }: {
   href: string;
   children: React.ReactNode;
+  onNavy?: boolean;
   className?: string;
 }) {
+  const tone = onNavy
+    ? "border border-white/30 text-white hover:border-white hover:bg-white hover:text-primary"
+    : "border border-ink/15 text-ink hover:border-primary hover:bg-primary hover:text-white";
   return (
-    <Link
-      href={href}
-      className={`${PILL} border border-ink/15 text-ink hover:border-ink hover:bg-ink hover:text-white ${className}`}
-    >
+    <Link href={href} className={`${PILL} ${tone} ${className}`}>
       {children}
       <ArrowRight className="size-4 transition duration-300 group-hover/btn:translate-x-1 rtl:rotate-180 rtl:group-hover/btn:-translate-x-1" />
     </Link>
@@ -111,7 +120,7 @@ export function AccentUnderline({ className = "" }: { className?: string }) {
       viewBox="0 0 220 24"
       preserveAspectRatio="none"
       fill="none"
-      className={`pointer-events-none absolute text-primary ${className}`}
+      className={`pointer-events-none absolute text-secondary ${className}`}
     >
       <path
         d="M4 17C46 7 118 3 216 9"
