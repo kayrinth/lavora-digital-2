@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #f7f7f5;
+  --color-surface: #ffffff;
+  --color-ink: #050505;
+  --color-dark: #1a1a18;
+  /* Body grey, darkened from the brief's #8A8A86 so 13-15px copy clears 4.5:1. */
+  --color-muted: #6b6b66;
+  /* The brief's grey, kept for large display type and hairlines only. */
+  --color-faint: #8a8a86;
+  --color-line: #e8e8e5;
+
+  /* Accent. Decoration, fills and marks only — never small text on a light ground. */
+  --color-primary: #f5a623;
+  --color-primary-soft: #fcebcf;
+  --color-secondary: #f5a623;
+  --color-secondary-soft: #fcebcf;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-marquee: marquee 38s linear infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Inter carries no Arabic glyphs, so the Arabic build swaps the stack. */
+:lang(ar) body {
+  font-family: var(--font-arabic), var(--font-sans);
+}
+
+/* The marquee translates on X, so it has to run the other way when reading RTL. */
+[dir="rtl"] .animate-marquee {
+  animation-direction: reverse;
+}
+[dir="rtl"] .animate-marquee.\[animation-direction\:reverse\] {
+  animation-direction: normal;
+}
+
+/* ------------------------------------------------------------- Typography */
+/*
+ * Three display steps, all fluid. They carry the tight tracking and sub-1
+ * leading that the editorial layout is built on, so a heading never has to
+ * restate six utilities.
+ */
+.t-hero {
+  font-size: clamp(44px, 8.6vw, 116px);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.045em;
+}
+
+.t-display {
+  font-size: clamp(36px, 6.4vw, 84px);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+}
+
+.t-stat {
+  font-size: clamp(52px, 8vw, 104px);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Arabic letterforms join, so negative tracking welds them together. */
+:lang(ar) .t-hero,
+:lang(ar) .t-display,
+:lang(ar) .t-stat {
+  letter-spacing: 0;
+  line-height: 1.12;
+}
+
+/* Small uppercase label used above most sections. */
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+:lang(ar) .eyebrow {
+  letter-spacing: 0;
+}
+
+/* ----------------------------------------------------------------- Clients */
+
+/* Fade the logo rows out at both edges instead of cutting them off square. */
+.marquee-fade {
+  mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+}
+
+/* Hovering anywhere in the section stops both rows, so a logo can be read. */
+.clients:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+/* ------------------------------------------------------------------ Focus */
+/* One visible ring everywhere, drawn outside the element so a pill keeps its shape. */
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+/* ----------------------------------------------------------------- Motion */
+/*
+ * Two effects only, both fade plus a short rise. `.rise` runs once on load for
+ * the hero; `.reveal` is driven by scroll position for everything below it.
+ * Purpose: give the eye an order to read in. Anything more would fight the copy.
+ *
+ * Both are opt-in. Without motion support, or with reduced motion asked for,
+ * nothing animates and every element renders in its final state.
+ */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  /*
+   * The hidden state is scoped to `.js-reveal`, which the observer adds once it is
+   * running. If the script never runs, every `.reveal` stays plainly visible.
+   */
+  .js-reveal .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  .js-reveal .reveal.is-in {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+      transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition-delay: var(--d, 0ms);
+  }
+
+  /* A soft stagger across a row of cards. */
+  .reveal-stagger > *:nth-child(2) { --d: 90ms; }
+  .reveal-stagger > *:nth-child(3) { --d: 180ms; }
+  .reveal-stagger > *:nth-child(4) { --d: 270ms; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee { animation: none; }
+}
