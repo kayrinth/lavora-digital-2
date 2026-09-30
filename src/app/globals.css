@@ -78,6 +78,14 @@ body {
   letter-spacing: -0.04em;
 }
 
+/* Between display and body: a heading that has to share its row with an image. */
+.t-title {
+  font-size: clamp(28px, 3.4vw, 50px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
 .t-stat {
   font-size: clamp(52px, 8vw, 104px);
   font-weight: 700;
@@ -89,6 +97,7 @@ body {
 /* Arabic letterforms join, so negative tracking welds them together. */
 :lang(ar) .t-hero,
 :lang(ar) .t-display,
+:lang(ar) .t-title,
 :lang(ar) .t-stat {
   letter-spacing: 0;
   line-height: 1.12;

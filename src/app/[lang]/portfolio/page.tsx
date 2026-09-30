@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui";
 import { Footer, Navbar } from "@/components/sections";
-import { PortfolioGrid, type GridItem } from "@/components/portfolio-grid";
+import { PortfolioIndex, type IndexItem } from "@/components/portfolio-index";
 import { DEFAULT_LOCALE, getDictionary, isLocale, type Locale } from "@/lib/dictionaries";
 import { PROJECTS, pick, portfolioIntros, type ServiceKey } from "@/lib/portfolio";
 
@@ -51,14 +51,13 @@ export default async function Portfolio(props: PageProps<"/[lang]/portfolio">) {
 
   const shown = PROJECTS.filter((p) => p.service === active);
 
-  const items: GridItem[] = shown.map((p) => ({
+  const items: IndexItem[] = shown.map((p) => ({
     slug: p.slug,
     href: `/${lang}/portfolio/${p.slug}`,
     service: p.service,
     serviceLabel: t.portfolio.services[p.service],
     title: p.title,
     subtitle: pick(p.subtitle, lang),
-    logo: p.logo,
     image: p.thumb ?? p.gallery?.[0],
     summary: pick(p.summary, lang),
   }));
@@ -83,11 +82,12 @@ export default async function Portfolio(props: PageProps<"/[lang]/portfolio">) {
           </div>
 
           <div className="mt-14">
-            <PortfolioGrid
+            <PortfolioIndex
               items={items}
               filters={CATEGORIES.map((key) => ({
                 key,
                 label: t.portfolio.services[key],
+                count: PROJECTS.filter((p) => p.service === key).length,
               }))}
               active={active}
               basePath={`/${lang}/portfolio`}
