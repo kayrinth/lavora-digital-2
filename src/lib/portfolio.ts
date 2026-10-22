@@ -21,6 +21,11 @@ export type Project = {
   gallery?: string[];
   /** Card thumbnail, where a purpose-made crop beats the first gallery image. */
   thumb?: string;
+  /**
+   * The live site: linked from the case study, and the thing `npm run shots`
+   * screenshots into /public/preview to produce this project's `thumb`.
+   */
+  url?: string;
   /** CSS aspect-ratio for the gallery tiles, where the files are not the usual 4:5. */
   ratio?: string;
   summary: Localized<string>;
@@ -560,10 +565,8 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "borch-and-co",
-    thumb: "/thumbnail-website/broch.webp",
-    gallery: [
-      "/website/borch.png",
-    ],
+    url: "https://borchandco.id/",
+    thumb: "/preview/borch-and-co.webp",
     service: "web",
     title: "Borch & Co",
     subtitle: { en: "E Commerce Website", ar: "متجر إلكتروني" },
@@ -596,10 +599,8 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "chineserd-platform",
-    thumb: "/thumbnail-website/chineserd.webp",
-    gallery: [
-      "/website/chinesred.png",
-    ],
+    url: "https://chineserd.com/",
+    thumb: "/preview/chineserd-platform.webp",
     service: "web",
     title: "ChineseRd",
     subtitle: {
@@ -635,10 +636,8 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "sando",
-    thumb: "/thumbnail-website/sando.webp",
-    gallery: [
-      "/website/sando.png",
-    ],
+    url: "https://sandoenergi.com/",
+    thumb: "/preview/sando.webp",
     service: "web",
     title: "Sando",
     subtitle: {
@@ -674,10 +673,8 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "indo-karya-tangguh",
-    thumb: "/thumbnail-website/ikat.webp",
-    gallery: [
-      "/website/ikat.png",
-    ],
+    url: "https://indokaryatangguh.com/",
+    thumb: "/preview/indo-karya-tangguh.webp",
     service: "web",
     title: "Indo Karya Tangguh",
     subtitle: { en: "Corporate Digital Presence", ar: "حضور رقمي مؤسسي" },
@@ -710,10 +707,8 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "harmony-dental-clinic",
-    thumb: "/thumbnail-website/dental.webp",
-    gallery: [
-      "/website/harmony-dental.png",
-    ],
+    url: "https://harmonydentaljakarta.com/",
+    thumb: "/preview/harmony-dental-clinic.webp",
     service: "web",
     title: "Harmony Dental Clinic",
     subtitle: {
@@ -749,10 +744,8 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "nata-solusi-pratama",
-    thumb: "/thumbnail-website/natasolusi.webp",
-    gallery: [
-      "/website/nata-solusi.png",
-    ],
+    url: "https://natasolusi.com/",
+    thumb: "/preview/nata-solusi-pratama.webp",
     service: "web",
     title: "Nata Solusi Pratama",
     subtitle: {

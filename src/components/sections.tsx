@@ -694,7 +694,7 @@ export function Cta({ t }: { t: Dictionary }) {
             </div>
             <div className="absolute top-36 end-6 size-40 rotate-6 overflow-hidden rounded-[20px] xl:size-48">
               <Image
-                src="/thumbnail-website/natasolusi.webp"
+                src="/preview/nata-solusi-pratama.webp"
                 alt=""
                 fill
                 sizes="192px"

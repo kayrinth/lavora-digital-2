@@ -147,7 +147,46 @@ export default async function ProjectPage(
           </div>
         </Container>
 
-        {project.gallery && (
+        {/* Website work is shown live, scrolled inside its own frame, instead of
+            as flat screenshots; everything else keeps the image gallery. */}
+        {project.url ? (
+          <Container className="pb-16 lg:pb-24">
+            <div className="reveal overflow-hidden rounded-[20px] border border-line">
+              <div className="flex items-center gap-3 border-b border-line bg-surface px-4 py-3">
+                <span aria-hidden className="flex shrink-0 gap-1.5">
+                  {[0, 1, 2].map((i) => (
+                    <span key={i} className="size-2.5 rounded-full bg-line" />
+                  ))}
+                </span>
+                <span
+                  dir="ltr"
+                  className="truncate rounded-full bg-background px-3 py-1 text-[12px] text-muted"
+                >
+                  {project.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                </span>
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ms-auto inline-flex shrink-0 items-center gap-2 text-[12.5px] font-medium text-primary transition hover:text-secondary"
+                >
+                  <span className="hidden sm:inline">{t.portfolio.visit}</span>
+                  <ArrowUpRight aria-hidden className="size-4" />
+                </a>
+              </div>
+              <div className="relative aspect-[16/11] bg-surface sm:aspect-[16/10]">
+                <Image
+                  src={project.thumb!}
+                  alt={project.title}
+                  fill
+                  sizes="(min-width: 1024px) 1280px, 100vw"
+                  className="object-cover object-top"
+                />
+              </div>
+            </div>
+          </Container>
+        ) : (
+          project.gallery && (
           <Container className="pb-16 lg:pb-24">
             <ul
               className={`reveal-stagger grid gap-4 lg:gap-6 ${
@@ -183,6 +222,7 @@ export default async function ProjectPage(
               ))}
             </ul>
           </Container>
+          )
         )}
 
         {related.length > 0 && (

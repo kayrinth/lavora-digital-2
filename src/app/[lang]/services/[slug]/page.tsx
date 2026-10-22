@@ -4,9 +4,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AccentButton, Container, Eyebrow } from "@/components/ui";
 import { Footer, Navbar, ProjectCard } from "@/components/sections";
+import { ArrowDown } from "@/components/icons";
 import { DEFAULT_LOCALE, LOCALES, getDictionary, isLocale } from "@/lib/dictionaries";
 import { SERVICE_PAGE_SLUGS, SERVICE_SLUGS, getServiceDoc } from "@/lib/services";
 import { PROJECTS, type ServiceKey } from "@/lib/portfolio";
+
+/** Anchor prefix shared by the masthead index and the rows it jumps to. */
+const OFFER_ID = "offering-";
 
 /** Page slug back to the portfolio's category key, so a service can show its own work. */
 const SERVICE_KEY: Record<string, ServiceKey> = {
@@ -51,135 +55,177 @@ export default async function ServicePage(
     <div className="bg-background">
       <Navbar lang={lang} t={t} />
       <main>
-        {/* Masthead: the switcher doubles as the label, so the title needs no kicker. */}
-        <header className="on-navy bg-primary text-white">
-          <Container className="pt-10 pb-16 lg:pt-14 lg:pb-24">
-            <nav aria-label={t.footer.servicesTitle}>
-              <ul className="flex flex-wrap gap-2">
-                {siblings.map((s) => {
-                  const on = s.slug === slug;
-                  return (
-                    <li key={s.slug}>
-                      <Link
-                        href={`/${lang}/services/${s.slug}`}
-                        aria-current={on ? "page" : undefined}
-                        className={`inline-flex rounded-full px-4 py-2.5 text-[12.5px] transition ${
-                          on
-                            ? "bg-surface font-medium text-primary"
-                            : "border border-white/25 text-onnavy hover:border-white hover:text-white"
-                        }`}
+        {/*
+         * Masthead: the switcher doubles as the label, so the title needs no
+         * kicker. A panel inset in the page rather than a band bled to the
+         * edges, because the navbar is a pill floating on the page ground: run
+         * the navy to the top and it opens on a seam under the bar, and the
+         * bar's own frosted white turns to mud over it. Inset, the grey above
+         * is plainly the page margin — and it is what the home page does with
+         * its own opening panel.
+         */}
+        <header className="pt-3 pb-7 sm:pt-4 lg:pb-10">
+          <Container>
+            <div className="on-navy rounded-[24px] bg-primary px-6 py-14 text-white sm:rounded-[32px] sm:px-10 sm:py-16 lg:px-14 lg:py-20">
+              <nav aria-label={t.footer.servicesTitle}>
+                <ul className="flex flex-wrap gap-2">
+                  {siblings.map((s) => {
+                    const on = s.slug === slug;
+                    return (
+                      <li key={s.slug}>
+                        <Link
+                          href={`/${lang}/services/${s.slug}`}
+                          aria-current={on ? "page" : undefined}
+                          className={`inline-flex rounded-full px-4 py-2.5 text-[12.5px] transition ${
+                            on
+                              ? "bg-surface font-medium text-primary"
+                              : "border border-white/25 text-onnavy hover:border-white hover:text-white"
+                          }`}
+                        >
+                          {s.label}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
+
+              <h1 className="t-display mt-12 max-w-[16ch] lg:mt-16">{doc.title}</h1>
+
+              {/* Set in columns, so the intro holds the masthead's full width
+                  instead of leaving the half beside it empty. */}
+              <div className="mt-12 text-[15.5px] leading-[1.7] text-onnavy lg:columns-2 lg:gap-14">
+                {doc.intro.map((para) => (
+                  <p key={para} className="mb-5 break-inside-avoid last:mb-0">
+                    {para}
+                  </p>
+                ))}
+              </div>
+
+              <AccentButton href={`/${lang}#contact`} onNavy className="mt-10">
+                {doc.closing.cta}
+              </AccentButton>
+
+              {/*
+               * What the service actually contains, as the base of the masthead:
+               * the page is long, and this is both its summary and the way down
+               * to the row that answers the visitor's question. Flexed rather
+               * than a fixed grid, so two offerings fill the width as evenly as
+               * four do.
+               */}
+              <nav aria-label={doc.whatWeDo.heading} className="mt-14 lg:mt-20">
+                <ul className="flex flex-col sm:flex-row sm:gap-8 lg:gap-14">
+                  {doc.whatWeDo.blocks.map((block, i) => (
+                    <li key={block.title} className="sm:flex-1">
+                      <a
+                        href={`#${OFFER_ID}${i + 1}`}
+                        className="group relative flex items-center justify-between gap-5 border-t border-white/20 py-5 text-white last:border-b sm:last:border-b-0"
                       >
-                        {s.label}
-                      </Link>
+                        {/* The rule draws itself in, as it does on the work index. */}
+                        <span
+                          aria-hidden
+                          className="absolute -top-px start-0 h-px w-0 bg-onnavy-accent transition-all duration-700 ease-out group-hover:w-full"
+                        />
+                        <span className="text-[17px] leading-snug font-medium text-balance">
+                          {block.title}
+                        </span>
+                        <ArrowDown
+                          aria-hidden
+                          className="size-4 shrink-0 text-onnavy transition duration-300 group-hover:translate-y-0.5 group-hover:text-onnavy-accent"
+                        />
+                      </a>
                     </li>
-                  );
-                })}
-              </ul>
-            </nav>
-
-            <div className="mt-12 grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
-              <div>
-                <h1 className="t-display max-w-[14ch]">{doc.title}</h1>
-                <div className="mt-8 max-w-xl space-y-5 text-[15px] leading-[1.65] text-onnavy">
-                  {doc.intro.map((para) => (
-                    <p key={para}>{para}</p>
                   ))}
-                </div>
-                <AccentButton href={`/${lang}#contact`} onNavy className="mt-9">
-                  {doc.closing.cta}
-                </AccentButton>
-              </div>
-
-              {/* The illustration is transparent, so it needs a plate to sit on. */}
-              <div className="relative aspect-square rounded-[24px] bg-surface sm:rounded-[32px]">
-                <Image
-                  src={doc.image}
-                  alt=""
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 560px, 100vw"
-                  className="object-contain p-8"
-                />
-              </div>
+                </ul>
+              </nav>
             </div>
           </Container>
         </header>
 
-        {/* What we do: full-width editorial rows, one per offering. */}
-        <Container className="py-20 lg:py-28">
-          <h2 className="reveal t-display max-w-[14ch]">{doc.whatWeDo.heading}</h2>
+        {/*
+         * What we do: the page's substance, so it gets its own ground. A white
+         * band against the grey page is the change of pace the scroll needs,
+         * and the rows inside it stay editorial rather than becoming cards.
+         */}
+        <section className="border-y border-line bg-surface">
+          <Container className="py-20 lg:py-28">
+            <h2 className="reveal t-display max-w-[14ch]">{doc.whatWeDo.heading}</h2>
 
-          <div className="mt-14 lg:mt-20">
-            {doc.whatWeDo.blocks.map((block, i) => (
-              <article
-                key={block.title}
-                className="reveal grid gap-8 border-t border-line py-12 last:border-b lg:grid-cols-[0.38fr_0.62fr] lg:gap-16 lg:py-16"
-              >
-                <div>
-                  {doc.whatWeDo.numbered && (
-                    <span
-                      dir="ltr"
-                      className="block text-[13px] font-semibold text-secondary tabular-nums"
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                  )}
-                  <h3 className="mt-4 text-[26px] leading-[1.1] font-semibold tracking-tight text-balance sm:text-[32px]">
-                    {block.title}
-                  </h3>
-                  {block.tagline && (
-                    <p className="mt-4 max-w-sm text-[16px] leading-[1.45] text-muted">
-                      {block.tagline}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <div className="max-w-[64ch] space-y-4 text-[14.5px] leading-[1.7] text-muted">
-                    {block.paragraphs.map((para) => (
-                      <p key={para}>{para}</p>
-                    ))}
+            <div className="mt-14 lg:mt-20">
+              {doc.whatWeDo.blocks.map((block, i) => (
+                <article
+                  key={block.title}
+                  id={`${OFFER_ID}${i + 1}`}
+                  className="reveal grid scroll-mt-28 gap-8 border-t border-line py-14 lg:grid-cols-[0.42fr_0.58fr] lg:gap-14 lg:py-20"
+                >
+                  {/* Held in place while its own copy scrolls past it. */}
+                  <div className="lg:sticky lg:top-28 lg:self-start">
+                    {doc.whatWeDo.numbered && (
+                      <span
+                        dir="ltr"
+                        className="block text-[13px] font-semibold text-secondary tabular-nums"
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                    )}
+                    <h3 className="t-title mt-4 max-w-[15ch] text-balance">{block.title}</h3>
+                    {block.tagline && (
+                      <p className="mt-5 max-w-sm text-[17px] leading-[1.45] text-muted">
+                        {block.tagline}
+                      </p>
+                    )}
                   </div>
 
-                  {block.idealFor && (
-                    <div className="mt-8">
-                      <p className="eyebrow text-muted">{doc.idealForLabel}</p>
-                      <ul className="mt-4 flex flex-wrap gap-2">
-                        {block.idealFor.map((tag) => (
-                          <li
-                            key={tag}
-                            className="rounded-full bg-secondary-soft px-3.5 py-1.5 text-[12.5px] text-primary"
-                          >
-                            {tag}
-                          </li>
-                        ))}
-                      </ul>
+                  <div>
+                    {/* Set to the column, so the row has no dead third to its end. */}
+                    <div className="max-w-[70ch] space-y-5 text-[16px] leading-[1.75] text-muted">
+                      {block.paragraphs.map((para) => (
+                        <p key={para}>{para}</p>
+                      ))}
                     </div>
-                  )}
-                </div>
-              </article>
-            ))}
-          </div>
-        </Container>
+
+                    {block.idealFor && (
+                      <div className="mt-10 border-t border-line pt-6">
+                        <p className="eyebrow text-muted">{doc.idealForLabel}</p>
+                        <ul className="mt-4 flex flex-wrap gap-2">
+                          {block.idealFor.map((tag) => (
+                            <li
+                              key={tag}
+                              className="rounded-full bg-secondary-soft px-4 py-2 text-[13px] text-primary"
+                            >
+                              {tag}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </Container>
+        </section>
 
         {/* Process: the order is the information, so the steps carry their number. */}
         <Container className="pb-20 lg:pb-28">
           <div className="on-navy rounded-[24px] bg-primary px-6 py-14 text-white sm:rounded-[32px] sm:px-10 sm:py-16 lg:px-14 lg:py-20">
             <h2 className="reveal t-display max-w-[13ch]">{doc.process.heading}</h2>
 
+            {/* The step number is the one thing here the reader navigates by, so
+                it is set at display scale rather than tucked above the title. */}
             <ol className="reveal-stagger mt-12 grid gap-px overflow-hidden rounded-2xl bg-white/15 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
               {doc.process.steps.map((step, i) => (
-                <li key={step.title} className="reveal bg-primary px-7 py-8 sm:px-8 sm:py-9">
+                <li key={step.title} className="reveal bg-primary px-7 py-9 sm:px-8 sm:py-10">
                   <span
                     dir="ltr"
-                    className="eyebrow block text-onnavy-accent tabular-nums"
+                    className="block text-[40px] leading-none font-bold tracking-[-0.04em] text-onnavy-accent tabular-nums lg:text-[46px]"
                   >
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="mt-5 text-[19px] leading-snug font-semibold tracking-tight">
+                  <h3 className="mt-7 text-[20px] leading-snug font-semibold tracking-tight">
                     {step.title}
                   </h3>
-                  <p className="mt-3 text-[13.5px] leading-[1.65] text-onnavy">{step.desc}</p>
+                  <p className="mt-3.5 text-[14px] leading-[1.7] text-onnavy">{step.desc}</p>
                 </li>
               ))}
             </ol>
