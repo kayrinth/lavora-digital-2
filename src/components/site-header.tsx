@@ -75,7 +75,7 @@ export function SiteHeader({
         }`}
       />
       <div className="wrap flex h-20 items-center justify-between gap-3 sm:gap-6">
-        <Link href={home} onClick={close} className="flex min-h-11 shrink-0 items-center gap-2.5">
+        <Link href={home} onClick={close} className="flex min-h-11 shrink-0 items-center gap-0 sm:gap-2.5">
           <Image
             src="/lavora-logo.webp"
             alt=""
@@ -86,7 +86,9 @@ export function SiteHeader({
               over ? "brightness-0 invert" : ""
             }`}
           />
-          <span className="display text-base sm:text-lg">{brand}</span>
+          {/* The mark carries the brand on a phone, where the row has to hold the menu and the brief
+              button too. sr-only rather than hidden, so the link keeps its name for a screen reader. */}
+          <span className="display sr-only text-base sm:not-sr-only sm:text-lg">{brand}</span>
         </Link>
 
         <nav aria-label="Main" className="hidden items-center gap-10 lg:flex">
