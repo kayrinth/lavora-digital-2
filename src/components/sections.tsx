@@ -1,28 +1,32 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
+  Accent,
   AccentButton,
-  AccentUnderline,
+  ArrowDisc,
+  Band,
   Container,
-  Eyebrow,
-  GhostButton,
-  NavyPanel,
+  IconTile,
   PrimaryButton,
 } from "./ui";
 import { ContactForm } from "./contact-form";
-import { DesktopNav } from "./desktop-nav";
 import { HeroVideo } from "./hero-video";
-import { MobileMenu } from "./mobile-menu";
+import { SiteHeader, type MenuItem } from "./site-header";
 import type { Dictionary, Locale } from "@/lib/dictionaries";
 import { PROJECTS } from "@/lib/portfolio";
 import { SERVICE_SLUGS } from "@/lib/services";
 import {
   ArrowRight,
-  ArrowUpRight,
+  ChevronRight,
   Cursor,
+  Document,
+  Gauge,
   Instagram,
   Linkedin,
+  Mail,
   Megaphone,
+  Sparkle,
+  Target,
   TrendUp,
   Youtube,
 } from "./icons";
@@ -41,6 +45,14 @@ const SOCIALS = [
 
 /** Every in-app link carries the locale, so /ar never falls back to /en. */
 const href = (lang: Locale, path: string) => `/${lang}${path}`;
+
+/* Icon lists, each one running parallel to its list in the dictionary. */
+const FEATURE_ICONS = [Target, Gauge, TrendUp, Document];
+const SERVICE_ICONS = [Megaphone, Cursor, TrendUp];
+const STEP_ICONS = [Sparkle, Target, Megaphone, TrendUp];
+
+/** High-resolution artwork per service, in the order of t.services.items. */
+const SERVICE_ART = ["/services/ads.webp", "/services/web.webp", "/services/digital-marketing.webp"];
 
 /* ------------------------------------------------------------------ Navbar */
 
@@ -63,20 +75,9 @@ export function Navbar({ lang, t }: P) {
       href: href(lang, `/portfolio?service=${key}`),
     }));
 
-  const menu = [
-    {
-      key: "home",
-      label: t.nav.home,
-      href: href(lang, "#top"),
-      match: `/${lang}`,
-      exact: true,
-    },
-    {
-      key: "service",
-      label: t.nav.service,
-      match: `/${lang}/services`,
-      children: services,
-    },
+  const menu: MenuItem[] = [
+    { key: "home", label: t.nav.home, href: href(lang, "#top"), match: `/${lang}`, exact: true },
+    { key: "service", label: t.nav.service, match: `/${lang}/services`, children: services },
     {
       key: "work",
       label: t.nav.work,
@@ -84,171 +85,66 @@ export function Navbar({ lang, t }: P) {
       match: `/${lang}/portfolio`,
       children: projectCategories,
     },
-    {
-      key: "about",
-      label: t.nav.about,
-      href: href(lang, "/about"),
-      match: `/${lang}/about`,
-    },
+    { key: "about", label: t.nav.about, href: href(lang, "/about"), match: `/${lang}/about` },
   ];
 
-  const other: Locale = lang === "en" ? "ar" : "en";
-
   return (
-    /*
-     * Sticky rather than fixed: the bar floats inside its own padded strip, so
-     * it reads as a detached pill without the page needing a top offset to
-     * compensate. `relative` anchors the mobile sheet that drops out of it.
-     */
-    <header className="sticky top-0 z-50 pt-3 sm:pt-4">
-      <Container>
-        <div className="relative flex h-14 items-center justify-between gap-6 rounded-full border border-line bg-surface/80 ps-5 pe-2 backdrop-blur-xl sm:h-16 sm:ps-6">
-          <Link href={href(lang, "#top")} className="flex shrink-0 items-center gap-2.5">
-            <Image
-              src="/lavora-logo.webp"
-              alt={t.brand}
-              width={32}
-              height={32}
-              priority
-              className="size-8 object-contain"
-            />
-            <span className="text-[15px] font-semibold tracking-tight">{t.brand}</span>
-          </Link>
-
-          <DesktopNav items={menu} />
-
-          <div className="flex items-center gap-1">
-            {/* Same page, other language. hreflang lets crawlers pair the two. */}
-            <Link
-              href={`/${other}`}
-              hrefLang={other}
-              lang={other}
-              className="hidden rounded-full px-3 py-2 text-[12px] text-muted transition hover:text-ink sm:inline-block"
-            >
-              {t.nav.switchTo}
-            </Link>
-            <span className="hidden lg:inline-flex">
-              <PrimaryButton href={href(lang, "#contact")} className="px-5 py-3 text-[12.5px]">
-                {t.nav.cta}
-              </PrimaryButton>
-            </span>
-            <MobileMenu
-              items={menu}
-              otherLocale={other}
-              otherLocaleLabel={t.nav.switchTo}
-              openLabel={t.nav.openMenu}
-              closeLabel={t.nav.closeMenu}
-            />
-          </div>
-        </div>
-      </Container>
-    </header>
+    <SiteHeader
+      brand={t.brand}
+      items={menu}
+      home={`/${lang}`}
+      cta={t.nav.cta}
+      ctaHref={href(lang, "#contact")}
+      otherLocale={lang === "en" ? "ar" : "en"}
+      otherLocaleLabel={t.nav.switchTo}
+      openLabel={t.nav.openMenu}
+      closeLabel={t.nav.closeMenu}
+    />
   );
 }
 
 /* -------------------------------------------------------------------- Hero */
 
-export function Hero({ lang, t }: P) {
-  const last = t.hero.headline.length - 1;
-
+/** The showreel, full-bleed under the transparent header. */
+export function Hero({ t }: { t: Dictionary }) {
   return (
-    <section className="pt-16 pb-16 sm:pt-20 sm:pb-20 lg:pt-24 lg:pb-24">
-      <Container>
-        {/*
-         * Two columns on desktop: supporting copy on the left with generous measure,
-         * the display headline on the right. They stack into reading order on mobile.
-         */}
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-14 xl:gap-20">
-          <div
-            className="rise order-2 lg:order-1 lg:pb-3"
-            style={{ "--d": "260ms" } as React.CSSProperties}
-          >
-            <Eyebrow>{t.hero.eyebrow}</Eyebrow>
-            <p className="mt-5 max-w-xl text-[15px] sm:text-[16px] lg:text-[16.5px] leading-relaxed text-muted">
-              {t.hero.lead}
-            </p>
-            <PrimaryButton href={href(lang, "#contact")} withArrow className="mt-7">
-              {t.nav.cta}
-            </PrimaryButton>
-          </div>
-
-          <h1 className="t-hero order-1 lg:order-2 lg:text-end">
-            {t.hero.headline.map((line, i) => (
-              <span
-                key={line.strong}
-                className="rise block lg:whitespace-nowrap"
-                style={{ "--d": `${i * 110}ms` } as React.CSSProperties}
-              >
-                <span className="font-medium text-faint">{line.lead}</span>{" "}
-                {i === last ? (
-                  <span className="relative inline-block">
-                    {line.strong}
-                    <AccentUnderline className="start-0 -bottom-[0.02em] h-[0.16em] w-full" />
-                  </span>
-                ) : (
-                  line.strong
-                )}
-              </span>
-            ))}
-          </h1>
-        </div>
-      </Container>
-    </section>
+    <HeroVideo
+      alt={t.hero.imageAlt}
+      poster="/hero-poster.webp"
+      src="/lavora-hero-1080.webm"
+      headline={t.hero.headline}
+      tagline={t.hero.eyebrow}
+      label={t.a11y.showreel}
+      pauseLabel={t.a11y.pause}
+      playLabel={t.a11y.play}
+    />
   );
 }
 
-/* -------------------------------------------------------------- Hero image */
+/* ------------------------------------------------------------------- Intro */
 
-export function HeroImage({ lang, t }: P) {
+/** Who the agency is: the claim on white, the studio on a maroon field. */
+export function Intro({ lang, t }: P) {
   return (
-    /*
-     * Full-bleed and pulled up under the sticky bar, so the reel is the first
-     * thing on the page and the nav pill floats on it.
-     */
-    <section id="top" className="-mt-[68px] bg-ink sm:-mt-20">
-      <div className="relative overflow-hidden">
-        {/*
-         * The reel is cut 16:9 and its lettering sits in the middle of the
-         * frame. From lg up it fills the viewport and the sides are cropped,
-         * which the lettering survives; below lg it keeps its own ratio,
-         * because a phone portrait crop would eat two thirds of its width.
-         *
-         * The poster is the reel's own first frame, so the still the browser
-         * paints before playback is the frame playback starts on rather than
-         * a different picture that jumps. It is also what a device that
-         * cannot decode VP9 keeps showing.
-         */}
-        <div className="relative aspect-video lg:h-svh lg:aspect-auto">
-          <HeroVideo
+    <section className="grid lg:grid-cols-2">
+      <div className="flex flex-col items-center justify-center px-4 py-16 text-center md:px-16 md:py-28">
+        <h1 data-reveal className="display max-w-lg text-head">
+          <Accent lead={t.collaboration.titleLead} strong={t.collaboration.titleStrong} />
+        </h1>
+        <p className="mt-6 max-w-md text-lead text-dim">{t.hero.lead}</p>
+        <PrimaryButton href={href(lang, "#contact")} withArrow className="mt-8 md:mt-10">
+          {t.nav.cta}
+        </PrimaryButton>
+      </div>
+      <div className="flex items-center justify-center bg-brand p-6 md:p-20">
+        <div data-reveal="frame" className="relative w-full max-w-md overflow-hidden bg-ink">
+          <Image
+            src="/hero1.webp"
             alt={t.hero.imageAlt}
-            poster="/hero-poster.webp"
-            src="/lavora-hero-1080.webm"
+            width={1200}
+            height={900}
+            className="aspect-[4/3] w-full object-cover"
           />
-        </div>
-
-        {/*
-         * Floating information card. Full width on phones, a panel on desktop.
-         * Frosted dark rather than the white plate it was over the old
-         * photograph: the reel runs navy and sets its own white lettering,
-         * and a solid white block on top of that reads as a second title
-         * card competing with the first.
-         */}
-        <div className="on-navy absolute inset-x-4 bottom-4 rounded-2xl border border-white/15 bg-ink/65 p-5 text-white backdrop-blur-md sm:inset-x-auto sm:bottom-6 sm:end-6 sm:max-w-[19rem] sm:p-6 xl:bottom-10 xl:end-10">
-          <p className="text-[17px] leading-[1.3] font-medium tracking-tight sm:text-[19px]">
-            {t.banner.titleLead} {t.banner.titleStrong}
-          </p>
-          <p className="mt-2.5 hidden text-[13px] leading-relaxed text-onnavy sm:block">
-            {t.banner.body}
-          </p>
-          <Link
-            href={href(lang, "#process")}
-            className="group mt-4 inline-flex items-center gap-2 text-[12.5px] font-medium"
-          >
-            {t.services.learnMore}
-            <span className="grid size-7 place-items-center rounded-full bg-onnavy-accent text-primary transition group-hover:bg-white">
-              <ArrowRight className="size-3.5 rtl:rotate-180" />
-            </span>
-          </Link>
         </div>
       </div>
     </section>
@@ -257,49 +153,35 @@ export function HeroImage({ lang, t }: P) {
 
 /* ------------------------------------------------------------------- About */
 
-/**
- * In the order of public/client. Four of these logos ship on a solid white
- * background, so every one sits on a white tile rather than straight on the page.
- */
-const CLIENTS = [
-  { file: "01. Unilever.png", name: "Unilever" },
-  { file: "02. LOGO VASELINE.png", name: "Vaseline" },
-  { file: "03. LOGO DOVE.png", name: "Dove" },
-  { file: "04. LOGO PEPSODENT.webp", name: "Pepsodent" },
-  { file: "05. LOGO RINSO.webp", name: "Rinso" },
-  { file: "06. LOGO ADIDAS.png", name: "Adidas" },
-  { file: "07. LOGO KALBE.webp", name: "Kalbe" },
-  { file: "08. LOGO PROMAG.png", name: "Promag" },
-  { file: "09. LOGO WAROENG STEAK.jpg", name: "Waroeng Steak" },
-  { file: "10. LOGO SPRINGHILL.jpeg", name: "Springhill" },
-  { file: "11. LOGO NATA SOLUSI.jpg", name: "Nata Solusi" },
-  { file: "12. LOGO CHINESERD.png", name: "Chinese RD" },
-  { file: "13. LOGO BARBURGER.png", name: "Barburger" },
-  { file: "14. LOGO SENSWELL.webp", name: "Senswell" },
-];
-
+/** How the agency works, as an index of four rows under a 2px rule. */
 export function About({ t }: { t: Dictionary }) {
   return (
-    <section id="collaboration" className="scroll-mt-24 pb-20 lg:pb-28">
-      <Container>
-        <Eyebrow className="reveal">{t.nav.about}</Eyebrow>
+    <Band ground="mist" id="collaboration" className="scroll-mt-20">
+      <div className="grid gap-6 md:gap-8 lg:grid-cols-12 lg:items-end">
+        <h2 data-reveal className="display text-head lg:col-span-7">
+          {t.nav.about}
+        </h2>
+        <p className="max-w-md text-lead text-dim lg:col-span-4 lg:col-start-9">
+          {t.collaboration.body}
+        </p>
+      </div>
 
-        {/* Thin rules instead of cards: the grid line is the only container needed. */}
-        <ul className="reveal-stagger mt-8 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:mt-10 lg:grid-cols-4">
-          {t.collaboration.features.map((f, i) => (
-            <li key={f.title} className="reveal border-t border-line pt-6">
-              <span dir="ltr" className="eyebrow block text-secondary tabular-nums">
-                0{i + 1}
-              </span>
-              <h3 className="mt-4 text-[17px] leading-snug font-semibold tracking-tight">
-                {f.title}
-              </h3>
-              <p className="mt-2.5 text-[13.5px] leading-relaxed text-muted">{f.desc}</p>
+      <ul data-reveal="list" className="mt-10 border-t-2 border-ink md:mt-16">
+        {t.collaboration.features.map((f, i) => {
+          const Icon = FEATURE_ICONS[i];
+          return (
+            <li
+              key={f.title}
+              className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-1 border-b border-line py-5 md:grid-cols-[auto_18rem_1fr] md:items-center md:gap-x-8"
+            >
+              <IconTile icon={Icon} size="sm" className="row-span-2 md:row-span-1" />
+              <h3 className="text-base/snug font-bold md:text-lg/snug">{f.title}</h3>
+              <p className="text-dim">{f.desc}</p>
             </li>
-          ))}
-        </ul>
-      </Container>
-    </section>
+          );
+        })}
+      </ul>
+    </Band>
   );
 }
 
@@ -307,173 +189,95 @@ export function About({ t }: { t: Dictionary }) {
 
 export function Stats({ t }: { t: Dictionary }) {
   return (
-    <section className="pb-20 lg:pb-28">
-      <Container>
-        <div className="grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:gap-20">
-          <div className="reveal relative aspect-[4/3] overflow-hidden rounded-[24px] bg-surface">
-            {/* Transparent WebP: the white frame is what the screenshot sits on. */}
-            <Image
-              src="/report.webp"
-              alt={t.banner.imageAlt}
-              fill
-              sizes="(min-width: 1024px) 620px, 100vw"
-              className="object-contain p-6"
-            />
-          </div>
-
-          <div className="reveal">
-            <p className="max-w-md text-[14.5px] leading-[1.6] text-muted">{t.banner.body}</p>
-
-            <dl className="mt-10 grid gap-10 sm:grid-cols-2">
-              {t.hero.stats.map((s) => (
-                <div key={s.l} className="relative border-t border-line pt-6">
-                  <span aria-hidden className="absolute -top-px start-0 h-px w-12 bg-secondary" />
-                  <dt className="sr-only">{s.l}</dt>
-                  <dd>
-                    <span dir="ltr" className="t-stat block">
-                      {s.n}
-                    </span>
-                    <span className="mt-4 block text-[13.5px] text-muted">{s.l}</span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
+    <Band>
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+        <div data-reveal="frame" className="overflow-hidden bg-mist">
+          {/* Transparent WebP: the mist plate is what the screenshot sits on. */}
+          <Image
+            src="/report.webp"
+            alt={t.banner.imageAlt}
+            width={1200}
+            height={900}
+            className="aspect-[4/3] w-full object-contain p-6"
+          />
         </div>
-      </Container>
-    </section>
+
+        <div>
+          <h2 data-reveal className="display text-head">
+            <Accent lead={t.banner.titleLead} strong={t.banner.titleStrong} />
+          </h2>
+          <p className="mt-6 max-w-md text-lead text-dim">{t.banner.body}</p>
+
+          <dl data-reveal="list" className="mt-10 grid gap-8 border-t-2 border-ink pt-8 sm:grid-cols-2">
+            {t.hero.stats.map((s) => (
+              /* Column-reversed, so the figure reads first while the term still precedes its value in the
+                 markup and a screen reader hears the label once rather than twice. */
+              <div key={s.l} className="flex flex-col-reverse">
+                <dt className="mt-3 text-dim">{s.l}</dt>
+                <dd dir="ltr" className="display text-title text-brand">
+                  {s.n}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </Band>
   );
 }
 
 /* ---------------------------------------------------------------- Services */
 
-/** One mark per service, in the order of t.services.items. */
-const SERVICE_ICONS = [Megaphone, Cursor, TrendUp];
-
-/** High-resolution visual artwork per service. */
-const SERVICE_ART = [
-  "/services/ads.webp",
-  "/services/web.webp",
-  "/services/digital-marketing.webp",
-] as const;
-
-/** Subtle tailored ambient glows that harmonize with each service's 3D artwork. */
-const SERVICE_GLOWS = [
-  "from-sky-500/20 via-sky-500/5",
-  "from-secondary/25 via-secondary/5",
-  "from-indigo-500/20 via-indigo-500/5",
-] as const;
-
 export function Services({ lang, t }: P) {
   return (
-    <section id="services" className="scroll-mt-24 pb-20 lg:pb-28">
-      <Container>
-        <NavyPanel>
-          {/*
-           * The heading runs alone above a full-width grid, where it used to
-           * share the panel with a column of body copy that was
-           * `t.collaboration.body` — the same paragraph the About section runs
-           * two screens up — and a button repeated under the work below.
-           */}
-          <div className="reveal">
-            <span className="eyebrow inline-flex rounded-full bg-secondary px-4 py-2 text-white">
-              {t.services.titleStrong}
-            </span>
-            <h2 className="t-display mt-7 max-w-[14ch]">
-              {t.services.titleLead} {t.services.titleStrong}
-            </h2>
-          </div>
+    <Band ground="steel" id="services" className="scroll-mt-20">
+      <h2 data-reveal className="display text-head leading-[1.08]">
+        <Accent lead={t.services.titleLead} strong={t.services.titleStrong} field />
+      </h2>
 
-          {/* Natural separated cards with refined glass surfaces and cohesive dark depth */}
-          <ul className="reveal-stagger mt-14 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-6">
-            {t.services.items.map((s, i) => {
-              const Icon = SERVICE_ICONS[i];
-              const art = SERVICE_ART[i];
-              const glow = SERVICE_GLOWS[i];
-              return (
-                <li key={s.title} className="reveal flex">
-                  <Link
-                    href={href(lang, `/services/${SERVICE_SLUGS[i]}`)}
-                    className="group relative flex h-full w-full flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c1026]/80 p-6 backdrop-blur-xs transition duration-500 hover:border-white/20 hover:bg-[#111738]/95 hover:shadow-[0_16px_40px_rgba(0,4,20,0.4)] sm:p-7"
-                  >
-                    {/* The rule draws itself in, as it does on the work index. */}
-                    <span
-                      aria-hidden
-                      className="absolute top-0 start-0 h-0.5 w-0 bg-onnavy-accent transition-[width] duration-700 ease-out group-hover:w-full"
-                    />
+      <div className="mt-10 grid gap-12 md:mt-16 md:grid-cols-2 md:gap-14 lg:grid-cols-3 lg:gap-8">
+        {t.services.items.map((s, i) => {
+          const Icon = SERVICE_ICONS[i];
+          return (
+            <article key={s.title} className="group relative">
+              <div data-reveal="frame" className="aspect-[6/5] overflow-hidden bg-mist">
+                <Image
+                  src={SERVICE_ART[i]}
+                  alt={s.title}
+                  width={900}
+                  height={750}
+                  className="size-full object-contain p-5 transition-transform duration-700 ease-out-expo group-hover:scale-[1.04]"
+                />
+              </div>
+              <div className="mt-6 flex items-center gap-4">
+                <IconTile icon={Icon} size="sm" />
+                <h3 className="text-base font-extrabold uppercase md:text-xl">{s.title}</h3>
+              </div>
+              <p className="mt-3 max-w-sm">{s.desc}</p>
+              <Link
+                href={href(lang, `/services/${SERVICE_SLUGS[i]}`)}
+                aria-label={`${s.title} — ${t.services.learnMore}`}
+                className="mt-6 grid size-12 place-items-center rounded-full border border-white transition-colors group-hover:bg-white group-hover:text-ink after:absolute after:inset-0"
+              >
+                <ChevronRight className="size-5 transition-transform duration-300 ease-out-expo group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
+              </Link>
+            </article>
+          );
+        })}
+      </div>
 
-                    {/* Dedicated visual thumbnail stage — natural dark recess with subtle ambient backlighting */}
-                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-white/[0.06] bg-[#060818]/70 transition duration-500 group-hover:border-white/15">
-                      {/* Ambient light glow behind artwork tailored to subject */}
-                      <div
-                        aria-hidden
-                        className={`absolute inset-0 bg-radial ${glow} to-transparent opacity-40 transition duration-500 group-hover:opacity-80`}
-                      />
-                      <Image
-                        src={art}
-                        alt={s.title}
-                        fill
-                        sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
-                        className="object-contain p-3.5 drop-shadow-[0_12px_24px_rgba(0,0,0,0.35)] transition duration-700 ease-out group-hover:scale-105"
-                      />
-                      {/* Floating pill badge with number + icon */}
-                      <div className="absolute top-3 start-3 z-10 flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 backdrop-blur-md">
-                        <span
-                          dir="ltr"
-                          className="text-[12px] font-semibold tracking-tight text-onnavy-accent tabular-nums"
-                        >
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="size-1 rounded-full bg-white/30" />
-                        <Icon className="size-3.5 text-onnavy transition duration-300 group-hover:text-white" />
-                      </div>
-                    </div>
-
-                    <div className="mt-7 flex flex-col flex-1">
-                      <h3 className="text-[20px] leading-snug font-semibold tracking-tight text-white transition-colors duration-300 group-hover:text-white lg:text-[22px]">
-                        {s.title}
-                      </h3>
-                      <p className="mt-3 text-[14px] leading-[1.65] text-onnavy">
-                        {s.desc}
-                      </p>
-
-                      <div className="mt-auto pt-7 flex items-center justify-between border-t border-white/[0.08] text-[13px] font-medium text-white transition duration-300 group-hover:text-onnavy-accent">
-                        <span>{t.services.learnMore}</span>
-                        <span className="grid size-9 place-items-center rounded-full border border-white/10 bg-white/[0.06] text-white transition duration-300 group-hover:border-onnavy-accent group-hover:bg-onnavy-accent group-hover:text-primary">
-                          <ArrowUpRight className="size-4 transition duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-
-          {/*
-           * The way out of the section, as one rule-wide row. It used to be an
-           * odd fourth cell in a 2x2 grid, which read as a service the brand
-           * does not sell.
-           */}
-          <Link
-            href={href(lang, "#contact")}
-            className="group reveal relative mt-12 flex flex-col gap-5 border-t border-white/20 pt-8 sm:flex-row sm:items-center sm:justify-between lg:mt-14"
-          >
-            <span
-              aria-hidden
-              className="absolute -top-px start-0 h-px w-0 bg-onnavy-accent transition-[width] duration-700 ease-out group-hover:w-full"
-            />
-            <span className="t-title max-w-[20ch] text-balance">{t.portfolio.ctaTitle}</span>
-            <span className="inline-flex shrink-0 items-center gap-3 text-[13px] font-medium text-onnavy-accent">
-              {t.portfolio.cta}
-              <span className="grid size-12 place-items-center rounded-full border border-white/25 text-white transition duration-300 group-hover:border-onnavy-accent group-hover:bg-onnavy-accent group-hover:text-primary lg:size-14">
-                <ArrowRight className="size-4.5 rtl:rotate-180" />
-              </span>
-            </span>
-          </Link>
-        </NavyPanel>
-      </Container>
-    </section>
+      {/* The way out of the section, as one rule-wide row. */}
+      <Link
+        href={href(lang, "#contact")}
+        className="group mt-12 flex flex-col gap-5 border-t-2 border-white pt-8 sm:flex-row sm:items-center sm:justify-between lg:mt-16"
+      >
+        <span className="display text-row max-w-[20ch]">{t.portfolio.ctaTitle}</span>
+        <span className="inline-flex shrink-0 items-center gap-4 text-sm font-bold tracking-[0.06em] uppercase">
+          {t.portfolio.cta}
+          <ArrowDisc size="size-12" onDark icon={ArrowRight} />
+        </span>
+      </Link>
+    </Band>
   );
 }
 
@@ -484,8 +288,8 @@ function pickThumb(p: (typeof PROJECTS)[number]) {
 }
 
 /**
- * Curates 1 flagship project per service discipline (ads, web, marketing)
- * so the homepage displays the agency's full spectrum of expertise.
+ * Curates one flagship project per discipline (ads, web, marketing) so the
+ * home page shows the agency's full spectrum.
  */
 function getFeaturedProjects() {
   const ads =
@@ -504,139 +308,106 @@ function getFeaturedProjects() {
 
 const FEATURED = getFeaturedProjects();
 
+/** A run of projects as an index: a square thumbnail, the title, the service and the client. */
 export function Work({ lang, t }: P) {
-  const [lead, ...rest] = FEATURED;
-  if (!lead) return null;
-
   return (
-    <section className="pb-20 lg:pb-28">
-      <Container>
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
-          <h2 className="reveal t-display max-w-[9ch]">
-            {t.portfolio.titleLead}{" "}
-            <span className="relative inline-block text-faint">
-              {t.portfolio.titleStrong}
-              <AccentUnderline className="start-0 -bottom-[0.02em] h-[0.16em] w-full" />
-            </span>
-          </h2>
-          <p className="reveal max-w-sm text-[14.5px] leading-[1.6] text-muted lg:justify-self-end lg:pb-3">
-            {t.portfolio.intro}
-          </p>
-        </div>
+    <Band>
+      <div className="grid gap-6 md:gap-8 lg:grid-cols-12 lg:items-end">
+        <h2 data-reveal className="display text-head lg:col-span-7">
+          <Accent lead={t.portfolio.titleLead} strong={t.portfolio.titleStrong} />
+        </h2>
+        <p className="max-w-md text-lead text-dim lg:col-span-4 lg:col-start-9">{t.portfolio.intro}</p>
+      </div>
 
-        <div className="mt-14 grid gap-5 lg:grid-cols-[1.45fr_1fr] lg:gap-6">
-          <ProjectCard project={lead} lang={lang} t={t} featured />
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1 lg:gap-6">
-            {rest.map((p) => (
-              <ProjectCard key={p.slug} project={p} lang={lang} t={t} />
-            ))}
-          </div>
-        </div>
+      <ul data-reveal="list" className="mt-10 border-t-2 border-ink md:mt-16">
+        {FEATURED.map((p) => {
+          const subtitle = p.subtitle[lang] ?? p.subtitle.en;
+          return (
+            <li key={p.slug} className="border-b border-line">
+              <Link
+                href={href(lang, `/portfolio/${p.slug}`)}
+                className="group grid grid-cols-[4.5rem_1fr_auto] items-center gap-5 py-4 md:grid-cols-[6rem_1fr_auto] md:gap-8 md:py-5 xl:grid-cols-[7rem_1fr_13rem_18rem_auto]"
+              >
+                <span className="block aspect-square overflow-hidden bg-mist">
+                  {pickThumb(p) && (
+                    <Image
+                      src={pickThumb(p)!}
+                      alt=""
+                      width={240}
+                      height={240}
+                      className="size-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-110"
+                    />
+                  )}
+                </span>
+                <span className="min-w-0">
+                  <span className="display block text-row transition-colors group-hover:text-brand">
+                    {p.title}
+                  </span>
+                  <span className="mt-1 block text-sm text-dim xl:hidden">
+                    {t.portfolio.services[p.service]} · {subtitle}
+                  </span>
+                </span>
+                <span className="hidden font-semibold xl:block">{t.portfolio.services[p.service]}</span>
+                <span className="hidden truncate text-dim xl:block">{subtitle}</span>
+                <ArrowDisc />
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
 
-        <div className="mt-12 flex justify-center">
-          <GhostButton href={href(lang, "/portfolio")}>{t.services.seeMore}</GhostButton>
-        </div>
-      </Container>
-    </section>
+      <div className="mt-10">
+        <PrimaryButton href={href(lang, "/portfolio")} withArrow>
+          {t.services.seeMore}
+        </PrimaryButton>
+      </div>
+    </Band>
   );
 }
 
+/** A project as a card: its image, title and service, and an arrow to its page. */
 export function ProjectCard({
   project,
   lang,
   t,
-  featured = false,
+  compact,
 }: {
   project: (typeof PROJECTS)[number];
   lang: Locale;
   t: Dictionary;
-  featured?: boolean;
+  /** Two up on phones, where the arrow is dropped: the whole card is the link. */
+  compact?: boolean;
 }) {
   const src = pickThumb(project);
   const subtitle = project.subtitle[lang] ?? project.subtitle.en;
-  const isWeb = project.service === "web";
+  const web = project.service === "web";
 
   return (
-    <Link
-      href={href(lang, `/portfolio/${project.slug}`)}
-      className={`group reveal relative block overflow-hidden rounded-[20px] bg-[#0c0d18] border border-white/10 transition-colors duration-500 hover:border-white/25 sm:rounded-[24px] ${
-        featured ? "aspect-[4/3] lg:aspect-auto lg:h-full" : "aspect-[16/10] lg:aspect-[16/9]"
-      }`}
-    >
-      {/* Background ambient canvas */}
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-gradient-to-br from-[#141628] via-[#0c0d18] to-[#070710]"
-      />
-
-      {/* Main Thumbnail Image */}
-      <Image
-        src={src!}
-        alt={project.title}
-        fill
-        sizes={featured ? "(min-width: 1024px) 800px, 100vw" : "(min-width: 1024px) 520px, 50vw"}
-        className={`object-cover transition duration-700 ease-out group-hover:scale-[1.04] ${
-          isWeb ? "object-top" : "object-[center_20%]"
-        }`}
-      />
-
-      {/*
-       * Calibrated gradient scrim: multi-stop so the top 65% of the artwork remains
-       * vibrant and clean, while the text at the bottom has 100% legibility.
-       */}
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-[#0a0a14]/60 via-35% to-transparent transition duration-700 group-hover:from-primary/95 group-hover:via-primary/50"
-      />
-
-      {/* Top accent line drawn on hover */}
-      <span
-        aria-hidden
-        className="absolute top-0 start-0 h-0.5 w-0 bg-onnavy-accent transition-[width] duration-700 ease-out group-hover:w-full z-20"
-      />
-
-      {/* Top badges: Service Category Pill & Client Logo */}
-      <div className="absolute top-4 inset-x-4 z-20 flex items-center justify-between gap-3 pointer-events-none sm:top-5 sm:inset-x-5">
-        <span className="eyebrow inline-flex items-center gap-1.5 rounded-full bg-[#0a0a14]/80 px-3 py-1.5 text-onnavy-accent border border-white/15 backdrop-blur-md shadow-sm">
-          <span className="size-1.5 rounded-full bg-onnavy-accent" />
-          {t.portfolio.services[project.service]}
-        </span>
-
-        {project.logo && (
-          <span className="flex h-8 items-center justify-center rounded-full bg-white/95 px-3 py-1 shadow-md backdrop-blur-md transition duration-300 group-hover:scale-105">
-            <Image
-              src={project.logo}
-              alt={project.title}
-              width={64}
-              height={22}
-              className="max-h-5 w-auto object-contain"
-            />
-          </span>
+    <Link href={href(lang, `/portfolio/${project.slug}`)} className="group block">
+      <span className={`block overflow-hidden bg-mist ${web ? "aspect-video" : "aspect-[4/5]"}`}>
+        {src && (
+          <Image
+            src={src}
+            alt=""
+            width={900}
+            height={1125}
+            className={`size-full transition-transform duration-700 ease-out-expo group-hover:scale-[1.04] ${
+              web ? "object-cover object-top" : "object-contain p-4"
+            }`}
+          />
         )}
-      </div>
-
-      {/* Bottom Information Bar */}
-      <div className="absolute inset-x-0 bottom-0 z-20 flex items-end justify-between gap-4 p-5 sm:p-6">
-        <div className="min-w-0">
-          <h3
-            className={`leading-tight font-semibold tracking-tight text-white ${
-              featured ? "text-[24px] sm:text-[32px]" : "text-[18px] sm:text-[20px]"
-            }`}
-          >
-            {project.title}
-          </h3>
-          <p
-            className={`mt-1.5 truncate text-white/80 font-normal ${
-              featured ? "text-[14px] sm:text-[15px]" : "text-[13px]"
-            }`}
-          >
-            {subtitle}
-          </p>
-        </div>
-        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-surface text-primary shadow-lg transition duration-500 group-hover:bg-secondary group-hover:text-white group-hover:scale-105 sm:size-12">
-          <ArrowUpRight className="size-4.5 transition duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+      </span>
+      <span className={`flex items-start justify-between gap-4 ${compact ? "mt-3 sm:mt-4" : "mt-4"}`}>
+        <span>
+          <span className="block text-base font-extrabold uppercase md:text-xl">{project.title}</span>
+          <span className="mt-1 block text-sm text-dim">
+            {t.portfolio.services[project.service]} · {subtitle}
+          </span>
         </span>
-      </div>
+        <span className={compact ? "hidden sm:block" : ""}>
+          <ArrowDisc size="size-10" />
+        </span>
+      </span>
     </Link>
   );
 }
@@ -645,127 +416,92 @@ export function ProjectCard({
 
 export function Process({ lang, t }: P) {
   return (
-    <section id="process" className="scroll-mt-24 pb-20 lg:pb-28">
-      <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
-        <div className="reveal lg:sticky lg:top-28 lg:self-start">
-          <Eyebrow>{t.process.eyebrow}</Eyebrow>
-          <h2 className="t-display mt-7 max-w-[14ch]">
-            {t.process.titleLead} <span className="text-faint">{t.process.titleStrong}</span>
-          </h2>
-          <p className="mt-6 max-w-sm text-[14.5px] leading-[1.6] text-muted">{t.process.body}</p>
-          <AccentButton href={href(lang, "#contact")} className="mt-8">
-            {t.process.cta}
-          </AccentButton>
-        </div>
+    <Band ground="mist" id="process" className="scroll-mt-20">
+      <div className="grid gap-6 md:gap-8 lg:grid-cols-12 lg:items-end">
+        <h2 data-reveal className="display text-head lg:col-span-7">
+          <Accent lead={t.process.titleLead} strong={t.process.titleStrong} tail={t.process.titleTail} />
+        </h2>
+        <p className="max-w-md text-lead text-dim lg:col-span-4 lg:col-start-9">{t.process.body}</p>
+      </div>
 
-        <ol className="reveal-stagger border-t border-line">
-          {t.process.steps.map((s, i) => (
-            <li key={s.title} className="reveal group border-b border-line">
-              <div className="flex items-start gap-6 py-8 transition duration-300 group-hover:ps-2 sm:gap-10">
-                <span
-                  dir="ltr"
-                  className="w-10 shrink-0 text-[15px] font-semibold text-secondary tabular-nums"
-                >
-                  0{i + 1}
-                </span>
-                <div className="flex-1">
-                  <h3 className="text-[20px] leading-snug font-semibold tracking-tight sm:text-[24px]">
-                    {s.title}
-                  </h3>
-                  <p className="mt-2.5 max-w-lg text-[13.5px] leading-relaxed text-muted">
-                    {s.desc}
-                  </p>
-                </div>
-                <ArrowRight
-                  aria-hidden
-                  className="mt-1.5 size-5 shrink-0 text-faint transition duration-300 group-hover:translate-x-1 group-hover:text-secondary rtl:rotate-180 rtl:group-hover:-translate-x-1"
-                />
+      <ol
+        data-reveal="list"
+        className="mt-10 grid gap-x-16 gap-y-8 md:mt-16 md:grid-flow-col md:grid-cols-2 md:grid-rows-2 md:gap-y-10"
+      >
+        {t.process.steps.map((s, i) => {
+          const Icon = STEP_ICONS[i];
+          return (
+            <li key={s.title} className="flex gap-4 md:gap-7">
+              <span className="grid size-16 shrink-0 place-items-center bg-steel text-white md:size-28">
+                <Icon aria-hidden className="size-7 md:size-11" strokeWidth={1.25} />
+              </span>
+              <div className="md:pt-1">
+                <h3 className="text-base font-extrabold text-brand uppercase md:text-xl">{s.title}</h3>
+                <p className="mt-2 text-ink/80">{s.desc}</p>
               </div>
             </li>
-          ))}
-        </ol>
-      </Container>
-    </section>
+          );
+        })}
+      </ol>
+
+      <div className="mt-10 md:mt-14">
+        <AccentButton href={href(lang, "#contact")}>{t.process.cta}</AccentButton>
+      </div>
+    </Band>
   );
 }
 
 /* ----------------------------------------------------------------- Clients */
 
-/** Grey by default so the row stays quiet; colour returns on hover. */
-function LogoTile({ file }: { file: string }) {
-  return (
-    <li className="relative h-20 w-36 shrink-0 rounded-2xl bg-surface transition duration-300 hover:-translate-y-1 sm:h-24 sm:w-44">
-      <Image
-        src={`/client/${encodeURIComponent(file)}`}
-        alt=""
-        fill
-        sizes="176px"
-        className="object-contain p-4 grayscale transition duration-500 group-hover/clients:grayscale-0 sm:p-5"
-      />
-    </li>
-  );
-}
+/** In the order of public/client. */
+const CLIENTS = [
+  { file: "01. Unilever.png", name: "Unilever" },
+  { file: "02. LOGO VASELINE.png", name: "Vaseline" },
+  { file: "03. LOGO DOVE.png", name: "Dove" },
+  { file: "04. LOGO PEPSODENT.webp", name: "Pepsodent" },
+  { file: "05. LOGO RINSO.webp", name: "Rinso" },
+  { file: "06. LOGO ADIDAS.png", name: "Adidas" },
+  { file: "07. LOGO KALBE.webp", name: "Kalbe" },
+  { file: "08. LOGO PROMAG.png", name: "Promag" },
+  { file: "09. LOGO WAROENG STEAK.jpg", name: "Waroeng Steak" },
+  { file: "10. LOGO SPRINGHILL.jpeg", name: "Springhill" },
+  { file: "11. LOGO NATA SOLUSI.jpg", name: "Nata Solusi" },
+  { file: "12. LOGO CHINESERD.png", name: "Chinese RD" },
+  { file: "13. LOGO BARBURGER.png", name: "Barburger" },
+  { file: "14. LOGO SENSWELL.webp", name: "Senswell" },
+];
 
-/**
- * Four copies of the group: the keyframes shift the track by -50%, so each half
- * has to be identical and wider than the viewport for the loop to be seamless.
- */
-function ClientTrack({
-  items,
-  reverse = false,
-  duration,
-}: {
-  items: typeof CLIENTS;
-  reverse?: boolean;
-  duration: string;
-}) {
-  return (
-    <div
-      className={`flex w-max animate-marquee ${reverse ? "[animation-direction:reverse]" : ""}`}
-      style={{ animationDuration: duration }}
-    >
-      {[0, 1, 2, 3].map((copy) => (
-        <ul key={copy} aria-hidden className="flex shrink-0 items-center gap-4 pe-4">
-          {items.map((c) => (
-            <LogoTile key={c.file} file={c.file} />
-          ))}
-        </ul>
-      ))}
-    </div>
-  );
-}
-
+/** The client list under its maroon bar. */
 export function Clients({ t }: { t: Dictionary }) {
-  const half = Math.ceil(CLIENTS.length / 2);
-
   return (
-    <section
-      aria-label={`${t.clients.titleLead} ${t.clients.titleStrong}`.trim()}
-      className="clients group/clients overflow-hidden pb-20 lg:pb-28"
-    >
-      <Container>
-        <Eyebrow className="reveal justify-center">
-          {t.clients.titleLead} {t.clients.titleStrong}
-        </Eyebrow>
-      </Container>
-
-      {/* Two rows at different speeds and directions, so the strip has some depth. */}
-      <div className="marquee-fade mt-10 space-y-4 motion-reduce:hidden">
-        <ClientTrack items={CLIENTS.slice(0, half)} duration="42s" />
-        <ClientTrack items={CLIENTS.slice(half)} reverse duration="56s" />
+    <section aria-labelledby="clients">
+      <div className="bg-brand py-5 text-white md:py-6">
+        <div className="wrap flex items-center gap-6 md:gap-10">
+          <span aria-hidden className="h-0.5 flex-1 bg-white" />
+          <h2 id="clients" data-reveal className="display text-head">
+            {`${t.clients.titleLead} ${t.clients.titleStrong}`.trim()}
+          </h2>
+          <span aria-hidden className="h-0.5 flex-1 bg-white" />
+        </div>
       </div>
-
-      {/* Nothing moves when reduced motion is asked for, so the logos sit still. */}
-      <Container className="mt-10 hidden motion-reduce:block">
-        <ul className="flex flex-wrap items-center justify-center gap-4">
+      <Container className="py-12 md:py-20">
+        <ul data-reveal="list" className="grid grid-cols-3 border-t border-l border-line lg:grid-cols-6">
           {CLIENTS.map((c) => (
-            <LogoTile key={c.file} file={c.file} />
+            <li
+              key={c.file}
+              className="relative grid h-20 place-items-center border-r border-b border-line px-2 sm:h-24 sm:px-3 md:h-32 md:px-4"
+            >
+              <Image
+                src={`/client/${encodeURIComponent(c.file)}`}
+                alt={c.name}
+                width={176}
+                height={88}
+                className="max-h-11 w-auto max-w-full object-contain sm:max-h-14"
+              />
+            </li>
           ))}
         </ul>
       </Container>
-
-      {/* The rows above are decorative; this keeps the names available to a screen reader. */}
-      <p className="sr-only">{CLIENTS.map((c) => c.name).join(", ")}</p>
     </section>
   );
 }
@@ -774,70 +510,31 @@ export function Clients({ t }: { t: Dictionary }) {
 
 export function Cta({ t }: { t: Dictionary }) {
   return (
-    <section id="contact" className="scroll-mt-24 pb-20 lg:pb-28">
-      <Container>
-        <div className="relative overflow-hidden rounded-[24px] bg-surface px-6 py-16 sm:rounded-[32px] sm:px-10 sm:py-20 lg:px-14">
-          {/*
-           * Two small plates flanking the headline, the reference's editorial
-           * composition. Desktop only: on a phone they would crowd the form.
-           */}
-          <div className="pointer-events-none absolute inset-0 hidden lg:block">
-            <div className="absolute top-20 start-6 size-40 -rotate-6 overflow-hidden rounded-[20px] xl:size-48">
-              <Image
-                src="/hero1.webp"
-                alt=""
-                fill
-                sizes="192px"
-                className="object-cover object-[55%_50%]"
-              />
-            </div>
-            <div className="absolute top-36 end-6 size-40 rotate-6 overflow-hidden rounded-[20px] xl:size-48">
-              <Image
-                src="/preview/nata-solusi-pratama.webp"
-                alt=""
-                fill
-                sizes="192px"
-                className="object-cover"
-              />
-            </div>
-          </div>
-
-          <div className="relative mx-auto max-w-2xl text-center">
-            <Eyebrow className="reveal justify-center">{t.nav.contact}</Eyebrow>
-            <h2 className="reveal t-display mt-7">
-              {t.cta.titleLead}{" "}
-              <span className="relative inline-block">
-                {t.cta.titleStrong}
-                <AccentUnderline className="start-0 -bottom-[0.02em] h-[0.16em] w-full" />
-              </span>{" "}
-              <span className="text-faint">{t.cta.titleTail}</span>
-            </h2>
-            <p className="reveal mx-auto mt-6 max-w-md text-[14.5px] leading-[1.6] text-muted">
-              {t.cta.body}
-            </p>
-          </div>
-
-          <div className="relative mt-12">
-            <ContactForm t={t.form} />
-          </div>
-        </div>
-      </Container>
-    </section>
+    <Band ground="steel" id="contact" className="scroll-mt-20">
+      <div className="mx-auto max-w-3xl text-center">
+        <h2 data-reveal className="display text-head leading-[1.08]">
+          <Accent lead={t.cta.titleLead} strong={t.cta.titleStrong} tail={t.cta.titleTail} field />
+        </h2>
+        <p className="mx-auto mt-6 max-w-2xl text-lead">{t.cta.body}</p>
+      </div>
+      <div className="mx-auto mt-10 max-w-3xl rounded-md bg-surface p-6 text-ink [--focus:var(--color-brand)] md:p-10">
+        <ContactForm t={t.form} />
+      </div>
+    </Band>
   );
 }
 
 /* ------------------------------------------------------------------ Footer */
 
 export function Footer({ lang, t }: P) {
+  const heading = "text-sm font-bold tracking-[0.08em] uppercase";
+
   const columns = [
     {
       title: t.footer.servicesTitle,
       items: t.services.items.map((s, i) => {
         const slug = SERVICE_SLUGS[i];
-        return {
-          label: s.title,
-          href: slug ? href(lang, `/services/${slug}`) : href(lang, "#services"),
-        };
+        return { label: s.title, href: href(lang, slug ? `/services/${slug}` : "#services") };
       }),
     },
     {
@@ -851,21 +548,20 @@ export function Footer({ lang, t }: P) {
   ];
 
   return (
-    <footer className="overflow-hidden border-t border-line">
-      <Container className="grid gap-12 py-16 lg:grid-cols-[1.4fr_1fr] lg:gap-20 lg:py-20">
-        <div className="max-w-sm">
+    <footer className="bg-ink text-white [--focus:#fff]">
+      <div className="wrap grid gap-12 py-16 md:grid-cols-12 md:py-20">
+        <div className="md:col-span-5">
           <div className="flex items-center gap-2.5">
             <Image
               src="/lavora-logo.webp"
               alt=""
-              width={32}
-              height={32}
-              className="size-8 object-contain"
+              width={40}
+              height={40}
+              className="size-10 object-contain brightness-0 invert"
             />
-            <span className="text-[16px] font-semibold tracking-tight">{t.brand}</span>
+            <span className="display text-lg">{t.brand}</span>
           </div>
-
-          <p className="mt-5 text-[13.5px] leading-relaxed text-muted">{t.footer.blurb}</p>
+          <p className="mt-6 max-w-sm text-base/relaxed text-white/70">{t.footer.blurb}</p>
 
           <ul className="mt-6 flex items-center gap-2">
             {SOCIALS.map(({ Icon, label }) => (
@@ -873,7 +569,7 @@ export function Footer({ lang, t }: P) {
                 <Link
                   href={href(lang, "#contact")}
                   aria-label={label}
-                  className="grid size-11 place-items-center rounded-full border border-line text-ink transition hover:border-ink hover:bg-ink hover:text-white"
+                  className="grid size-11 place-items-center rounded-md border border-white/25 transition-colors hover:border-white hover:bg-white hover:text-ink"
                 >
                   <Icon className="size-[18px]" />
                 </Link>
@@ -882,55 +578,46 @@ export function Footer({ lang, t }: P) {
           </ul>
         </div>
 
-        <div className="grid grid-cols-2 gap-8 lg:justify-self-end">
-          {columns.map((col) => (
-            <div key={col.title}>
-              <h3 className="eyebrow text-muted">{col.title}</h3>
-              <ul className="mt-4">
-                {col.items.map((item) => (
-                  <li key={item.label}>
-                    <Link
-                      href={item.href}
-                      className="inline-flex min-h-[40px] items-center text-[14px] text-muted transition hover:text-ink"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </Container>
+        {columns.map((col, i) => (
+          <div key={col.title} className={i === 0 ? "md:col-span-4" : "md:col-span-3"}>
+            <h2 className={heading}>{col.title}</h2>
+            <ul className="mt-2">
+              {col.items.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="inline-flex min-h-11 items-center text-base text-white/70 transition-colors hover:text-white"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            {i === 1 && (
+              <Link
+                href={href(lang, "#contact")}
+                className="link mt-2 inline-flex min-h-11 items-center gap-2 text-base"
+              >
+                <Mail className="size-4" />
+                {t.nav.contact}
+              </Link>
+            )}
+          </div>
+        ))}
+      </div>
 
-      <Container>
-        <div className="flex flex-col gap-4 border-t border-line py-7 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[12.5px] text-muted">{t.footer.rights}</p>
+      <div className="wrap">
+        <div className="flex flex-wrap items-center justify-between gap-x-10 gap-y-2 border-t border-white/15 py-8 text-sm text-white/60">
+          <p>{t.footer.rights}</p>
           <div className="flex gap-6">
-            <Link
-              href={href(lang, "/terms")}
-              className="text-[12.5px] text-muted transition hover:text-ink"
-            >
+            <Link href={href(lang, "/terms")} className="transition-colors hover:text-white">
               {t.footer.terms}
             </Link>
-            <Link
-              href={href(lang, "/privacy")}
-              className="text-[12.5px] text-muted transition hover:text-ink"
-            >
+            <Link href={href(lang, "/privacy")} className="transition-colors hover:text-white">
               {t.footer.privacy}
             </Link>
           </div>
         </div>
-      </Container>
-
-      {/*
-       * Oversized wordmark bled off the bottom edge. Decorative only, and the
-       * brand name is latin in both locales, so it stays LTR.
-       */}
-      <div aria-hidden dir="ltr" className="select-none px-5 sm:px-8 lg:px-12">
-        <p className="-mb-[0.17em] text-center text-[min(19vw,280px)] leading-[0.8] font-extrabold tracking-[-0.055em] text-line">
-          LA VORA
-        </p>
       </div>
     </footer>
   );

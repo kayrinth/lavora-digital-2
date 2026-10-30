@@ -1,21 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Container, PrimaryButton } from "@/components/ui";
+import { AccentButton, Band, Container } from "@/components/ui";
 import { Footer, Navbar } from "@/components/sections";
+import { Cursor, Megaphone, TrendUp } from "@/components/icons";
 import { DEFAULT_LOCALE, getDictionary, isLocale } from "@/lib/dictionaries";
 import { about } from "@/lib/about";
 
-/** Existing project artwork, reused rather than adding new assets. */
-const EXPERTISE_ART = [
-  "/services/ads.webp",
-  "/services/web.webp",
-  "/services/digital-marketing.webp",
-];
+/** One mark per expertise, in the order of doc.expertise.items. */
+const EXPERTISE_ICONS = [Megaphone, Cursor, TrendUp];
 
-export async function generateMetadata(
-  props: PageProps<"/[lang]/about">,
-): Promise<Metadata> {
+export async function generateMetadata(props: PageProps<"/[lang]/about">): Promise<Metadata> {
   const { lang } = await props.params;
   const doc = about[isLocale(lang) ? lang : DEFAULT_LOCALE];
   return { title: `${doc.eyebrow} | ${doc.title}`, description: doc.intro[0] };
@@ -28,125 +23,118 @@ export default async function About(props: PageProps<"/[lang]/about">) {
   const doc = about[lang];
 
   return (
-    <div className="bg-background">
+    <>
       <Navbar lang={lang} t={t} />
-      <main>
-        {/* Intro: copy on one side, the studio shot on the other. */}
-        <Container className="grid gap-12 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:py-24">
-          <div>
-            <p className="reveal eyebrow text-muted">{doc.eyebrow}</p>
-            <h1 className="reveal mt-4 max-w-xl text-[34px] leading-[1.12] font-light tracking-tight sm:text-[44px]">
-              {doc.title}
-            </h1>
-            <div className="mt-8 max-w-xl space-y-5 text-[14.5px] leading-relaxed text-muted">
-              {doc.intro.map((para) => (
-                <p key={para} className="reveal">
-                  {para}
-                </p>
+      <main id="main">
+        {/* The company on ink: the mark, the claim, and the story under a hairline. */}
+        <section className="bg-ink py-14 text-white [--focus:#fff] md:py-28">
+          <Container>
+            <div className="grid gap-8 lg:grid-cols-12 lg:items-center lg:gap-16">
+              <Image
+                src="/lavora-logo.webp"
+                alt={t.brand}
+                width={320}
+                height={320}
+                priority
+                className="w-full max-w-32 brightness-0 invert sm:max-w-40 lg:col-span-5 lg:mx-auto lg:max-w-56"
+              />
+              <div className="lg:col-span-7">
+                <p className="text-sm font-bold tracking-[0.06em] text-white/60 uppercase">{doc.eyebrow}</p>
+                <h1 className="display mt-4 text-title">{doc.title}</h1>
+                <p className="mt-6 max-w-2xl text-lead text-white/85">{doc.intro[0]}</p>
+              </div>
+            </div>
+
+            <div className="mt-12 grid gap-6 border-t border-white/15 pt-8 text-lead text-white/85 md:grid-cols-2 md:gap-12">
+              {doc.intro.slice(1).map((para) => (
+                <p key={para}>{para}</p>
               ))}
             </div>
-          </div>
+          </Container>
+        </section>
 
-          <div className="reveal relative aspect-[4/3] self-start overflow-hidden rounded-2xl lg:sticky lg:top-24">
-            <Image
-              src="/hero1.webp"
-              alt={t.hero.imageAlt}
-              fill
-              priority
-              sizes="(min-width: 1024px) 520px, 100vw"
-              className="object-cover"
-            />
-          </div>
-        </Container>
-
-        {/* Advertising: the dashboard leads, so the order flips. */}
-        <section className="border-y border-line bg-surface">
-          <Container className="grid items-center gap-12 py-16 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16 lg:py-24">
-            <div className="reveal relative aspect-[16/10] lg:order-2">
-              <Image
-                src="/report.webp"
-                alt={t.banner.imageAlt}
-                fill
-                sizes="(min-width: 1024px) 560px, 100vw"
-                className="object-contain"
-              />
-            </div>
-
-            <div className="lg:order-1">
-              <h2 className="reveal max-w-md text-[30px] leading-[1.15] font-light tracking-tight sm:text-[38px]">
+        {/* What the agency actually does, with the claim hung under the picture. */}
+        <Band>
+          <div className="grid gap-12 md:gap-16 lg:grid-cols-12 lg:items-center">
+            <div className="lg:col-span-6">
+              <h2 data-reveal className="display text-head">
                 {doc.advertising.heading}
               </h2>
-              <div className="mt-7 max-w-lg space-y-5 text-[14.5px] leading-relaxed text-muted">
+              <div className="mt-6 space-y-5 text-lead text-dim md:mt-8">
                 {doc.advertising.paragraphs.map((para) => (
-                  <p key={para} className="reveal">
-                    {para}
-                  </p>
+                  <p key={para}>{para}</p>
                 ))}
               </div>
-              <p className="reveal mt-8 max-w-md border-s border-secondary ps-5 text-[17px] leading-relaxed font-medium text-ink">
+            </div>
+
+            <div className="relative lg:col-span-6">
+              <div data-reveal="frame" className="overflow-hidden bg-mist">
+                <Image
+                  src="/report.webp"
+                  alt={t.banner.imageAlt}
+                  width={1200}
+                  height={900}
+                  className="aspect-[4/3] w-full object-contain p-6"
+                />
+              </div>
+              <p
+                data-reveal="wipe"
+                className="absolute -bottom-6 start-4 max-w-[85%] bg-brand px-5 py-3 text-lg font-extrabold text-white italic md:start-6 md:px-6 md:py-4 md:text-xl"
+              >
                 {doc.advertising.quote}
               </p>
             </div>
-          </Container>
-        </section>
+          </div>
+        </Band>
 
-        {/* Expertise: one card per service, using the service artwork. */}
-        <Container className="py-16 lg:py-24">
-          <h2 className="reveal text-center text-[30px] leading-tight font-light tracking-tight sm:text-[38px]">
+        {/* The three disciplines, as cards on mist. */}
+        <Band ground="mist">
+          <h2 data-reveal className="display text-head">
             {doc.expertise.heading}
           </h2>
 
-          <ul className="reveal-stagger mt-12 grid gap-8 md:grid-cols-3">
-            {doc.expertise.items.map((item, i) => (
-              <li
-                key={item.title}
-                className="group reveal overflow-hidden rounded-2xl border border-line bg-surface transition duration-500 hover:border-secondary/30 hover:shadow-lg"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-primary-soft/60 to-secondary-soft/60 p-6">
-                  <Image
-                    src={EXPERTISE_ART[i]}
-                    alt={item.title}
-                    fill
-                    sizes="(min-width: 768px) 336px, 100vw"
-                    className="object-contain p-4 transition duration-700 ease-out group-hover:scale-105"
-                  />
-                </div>
-                <div className="px-6 py-7">
-                  <h3 className="text-[18px] font-semibold text-ink transition-colors duration-300 group-hover:text-secondary">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 text-[13.5px] leading-relaxed text-muted">
-                    {item.desc}
-                  </p>
-                </div>
-              </li>
-            ))}
+          <ul data-reveal="list" className="mt-10 grid border-t-2 border-ink md:mt-16 lg:grid-cols-3 lg:gap-6 lg:border-t-0">
+            {doc.expertise.items.map((item, i) => {
+              const Icon = EXPERTISE_ICONS[i];
+              return (
+                <li
+                  key={item.title}
+                  className="grid grid-cols-[2.5rem_1fr] gap-x-4 border-b border-line py-5 md:gap-x-6 lg:flex lg:flex-col lg:items-center lg:rounded-lg lg:border-0 lg:bg-surface lg:px-6 lg:pt-8 lg:pb-10 lg:text-center"
+                >
+                  <span className="grid size-10 place-items-center rounded-full bg-brand text-white lg:size-16">
+                    <Icon aria-hidden className="size-5 lg:size-7" />
+                  </span>
+                  <h3 className="text-base font-extrabold uppercase md:text-xl lg:mt-6">{item.title}</h3>
+                  <span aria-hidden className="mt-4 hidden h-0.5 w-8 bg-brand lg:block" />
+                  <p className="col-start-2 mt-1 text-dim lg:mt-4">{item.desc}</p>
+                </li>
+              );
+            })}
           </ul>
-        </Container>
+        </Band>
 
-        {/* Closing. */}
-        <section className="border-t border-line bg-surface">
-          <Container className="py-16 text-center lg:py-24">
-            <h2 className="reveal text-[30px] leading-tight font-light tracking-tight sm:text-[38px]">
+        {/* The sign-off. */}
+        <Band ground="ink">
+          <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+            <h2 data-reveal className="display text-head lg:col-span-5">
               {doc.closing.heading}
             </h2>
-            <div className="mx-auto mt-7 max-w-2xl space-y-5 text-[14.5px] leading-relaxed text-muted">
+            <div className="space-y-5 text-lead text-white/85 lg:col-span-7">
               {doc.closing.paragraphs.map((para) => (
-                <p key={para} className="reveal">
-                  {para}
-                </p>
+                <p key={para}>{para}</p>
               ))}
             </div>
-            <p className="reveal mt-10 text-[22px] font-light tracking-tight sm:text-[26px]">
-              {doc.closing.kicker}
-            </p>
-            <PrimaryButton href={`/${lang}#contact`} withArrow className="mt-7">
-              {doc.closing.cta}
-            </PrimaryButton>
-          </Container>
-        </section>
+          </div>
+
+          <p className="display mt-12 text-head md:mt-16">
+            <span className="flag">{doc.closing.kicker}</span>
+          </p>
+          <AccentButton href={`/${lang}#contact`} onNavy className="mt-8 md:mt-10">
+            {doc.closing.cta}
+          </AccentButton>
+        </Band>
       </main>
       <Footer lang={lang} t={t} />
-    </div>
+    </>
   );
 }

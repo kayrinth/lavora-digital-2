@@ -5,7 +5,7 @@ import {
   Cta,
   Footer,
   Hero,
-  HeroImage,
+  Intro,
   Navbar,
   Process,
   Services,
@@ -20,12 +20,12 @@ export default async function Home(props: PageProps<"/[lang]">) {
   const t = getDictionary(lang);
 
   return (
-    <div className="bg-background">
+    <>
       <Navbar lang={lang} t={t} />
-      <main>
-        {/* Who we are → who trusts us → what we do → proof → how → talk to us. */}
-        <HeroImage lang={lang} t={t} />
-        <Hero lang={lang} t={t} />
+      {/* The film → who we are → how we work → who trusts us → the proof → what we do → the work → the process → the brief. */}
+      <main id="main">
+        <Hero t={t} />
+        <Intro lang={lang} t={t} />
         <About t={t} />
         <Clients t={t} />
         <Stats t={t} />
@@ -35,6 +35,6 @@ export default async function Home(props: PageProps<"/[lang]">) {
         <Cta t={t} />
       </main>
       <Footer lang={lang} t={t} />
-    </div>
+    </>
   );
 }

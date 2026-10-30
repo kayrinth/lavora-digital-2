@@ -112,3 +112,43 @@ export const ArrowUpRight = (p: P) => (
     <path d="M7 17 17 7m-8.5 0H17v8.5" />
   </svg>
 );
+
+export const ArrowLeft = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M20 12H5m5.5-5.5L5 12l5.5 5.5" />
+  </svg>
+);
+
+export const ChevronRight = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="m9.5 6 5.5 6-5.5 6" />
+  </svg>
+);
+
+export const Pause = (p: P) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...p}>
+    <rect x="7" y="5" width="3.5" height="14" rx="1" />
+    <rect x="13.5" y="5" width="3.5" height="14" rx="1" />
+  </svg>
+);
+
+export const Mail = (p: P) => (
+  <svg {...base} {...p}>
+    <rect x="3" y="5.5" width="18" height="13" rx="2.5" />
+    <path d="m4 8 7.1 4.6a1.7 1.7 0 0 0 1.8 0L20 8" />
+  </svg>
+);
+
+export const Sparkle = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M12 3.5 13.8 9a3 3 0 0 0 1.9 1.9l5.5 1.8-5.5 1.8A3 3 0 0 0 13.8 16L12 21.5 10.2 16a3 3 0 0 0-1.9-1.9L2.8 12.3l5.5-1.8A3 3 0 0 0 10.2 9z" />
+  </svg>
+);
+
+export const Document = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M6 3.5h7.5L19 9v11.5H6z" />
+    <path d="M13 3.5V9h6" />
+    <path d="M9 13h7M9 16.5h5" />
+  </svg>
+);

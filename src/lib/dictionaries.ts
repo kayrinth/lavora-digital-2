@@ -21,6 +21,14 @@ const en = {
       "La Vora Digital plans, buys and optimises digital advertising — paid social, search, programmatic and creative.",
   },
 
+  // Labels for assistive technology only; no marketing copy lives here.
+  a11y: {
+    skip: "Skip to content",
+    showreel: "Showreel",
+    play: "Play the video",
+    pause: "Pause the video",
+  },
+
   nav: {
     home: "Home",
     work: "Project",
@@ -219,6 +227,13 @@ const ar: Dictionary = {
     title: "لا فورا ديجيتال — وكالة إعلانات رقمية",
     description:
       "لا فورا ديجيتال تخطط وتشتري وتحسّن الإعلانات الرقمية: السوشيال المدفوع والبحث والبرمجي والمحتوى الإبداعي.",
+  },
+
+  a11y: {
+    skip: "تخطَّ إلى المحتوى",
+    showreel: "الريل التعريفي",
+    play: "تشغيل الفيديو",
+    pause: "إيقاف الفيديو",
   },
 
   nav: {

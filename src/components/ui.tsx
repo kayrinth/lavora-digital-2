@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowRight } from "./icons";
+import { ArrowRight, ArrowUpRight } from "./icons";
 
+/** The site's one container: up to 90rem, 16px side padding growing to 48px from 48rem. */
 export function Container({
   className = "",
   children,
@@ -8,142 +9,126 @@ export function Container({
   className?: string;
   children: React.ReactNode;
 }) {
-  return (
-    <div className={`mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`wrap ${className}`}>{children}</div>;
 }
 
 /**
- * The navy slab: the services panel, the service masthead and its process
- * grid, the case study masthead. One component because the four were already
- * the same twenty-utility string copied four times, and because the wash that
- * gives the slab its direction belongs to all of them.
- *
- * Inset in the page rather than bled to the edges: the navbar is a pill
- * floating on the page ground, and a navy band running to the top opens on a
- * seam under it.
+ * A full-width colour band. The page is built from these, alternating so
+ * neighbouring bands differ: white, mist, steel, maroon, ink. Steel, maroon and
+ * ink carry white text and set the focus ring to white.
  */
-export function NavyPanel({
+const GROUND = {
+  surface: "bg-surface text-ink",
+  mist: "bg-mist text-ink",
+  steel: "bg-steel text-white [--focus:#fff]",
+  brand: "bg-brand text-white [--focus:#fff]",
+  ink: "bg-ink text-white [--focus:#fff]",
+} as const;
+
+export type Ground = keyof typeof GROUND;
+
+export function Band({
+  ground = "surface",
   className = "",
   children,
+  ...rest
 }: {
+  ground?: Ground;
   className?: string;
   children: React.ReactNode;
-}) {
+} & Omit<React.ComponentProps<"section">, "className" | "children">) {
   return (
-    <div
-      className={`on-navy navy-wash relative overflow-hidden rounded-[24px] border border-white/10 bg-[#070919] px-6 py-14 text-white shadow-2xl sm:rounded-[32px] sm:px-10 sm:py-16 lg:px-14 lg:py-20 ${className}`}
-    >
-      {/* Top perimeter hairline shimmer */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
-      />
-      {children}
-    </div>
+    <section className={`${GROUND[ground]} py-16 md:py-32 ${className}`} {...rest}>
+      <Container>{children}</Container>
+    </section>
   );
 }
 
 /**
- * The switcher that opens a navy masthead, on the service pages and on the
- * work index. It doubles as the page's own label, which is why a masthead
- * carrying one needs no kicker above its title.
+ * A heading with one emphasised phrase. Maroon type holds 8.8:1 on white and
+ * mist but only 1.9:1 on steel and ink, so a dark ground carries the phrase as
+ * a maroon field with white text instead — the same flag that hangs under a
+ * photo. Pass `field` on steel, maroon and ink.
  */
-export function NavyPills({
-  label,
-  items,
+export function Accent({
+  lead,
+  strong,
+  tail,
+  field,
 }: {
-  label: string;
-  items: { href: string; label: string; current: boolean; count?: number }[];
+  lead?: string;
+  strong: string;
+  tail?: string;
+  field?: boolean;
 }) {
   return (
-    <nav aria-label={label}>
-      <ul className="flex flex-wrap gap-2">
-        {items.map((item) => (
-          <li key={item.href}>
-            <Link
-              href={item.href}
-              aria-current={item.current ? "page" : undefined}
-              className={`inline-flex min-h-[44px] items-center gap-2.5 rounded-full px-5 text-[12.5px] transition duration-300 ${
-                item.current
-                  ? "bg-surface font-medium text-primary"
-                  : "border border-white/25 text-onnavy hover:border-white hover:text-white"
-              }`}
-            >
-              {item.label}
-              {item.count !== undefined && (
-                <span
-                  dir="ltr"
-                  className={`text-[11px] tabular-nums ${
-                    item.current ? "text-secondary" : "text-onnavy-accent"
-                  }`}
-                >
-                  {item.count}
-                </span>
-              )}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <>
+      {lead && <>{lead} </>}
+      <span className={field ? "flag" : "text-brand"}>{strong}</span>
+      {tail && <> {tail}</>}
+    </>
   );
 }
 
-/**
- * How every detail page signs off. Navy rather than another white card: the
- * ask is the loudest moment on the page and the brand owns a loud surface, and
- * a centred sign-off on the page ground was the quietest thing in the scroll.
- */
-export function CtaPanel({
-  heading,
-  body,
-  cta,
-  href,
-}: {
-  heading: string;
-  body: string;
-  cta: string;
-  href: string;
-}) {
-  return (
-    <NavyPanel>
-      <div className="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-end lg:gap-20">
-        <h2 className="reveal t-display max-w-[14ch] text-balance">{heading}</h2>
-        <div className="reveal lg:pb-2">
-          <p className="max-w-md text-[15.5px] leading-[1.7] text-onnavy">{body}</p>
-          <AccentButton href={href} onNavy className="mt-8">
-            {cta}
-          </AccentButton>
-        </div>
-      </div>
-    </NavyPanel>
-  );
-}
-
-/** Small uppercase label. A leading accent dot ties it to the accent system. */
+/** Small uppercase label: metadata, section kickers, column heads. */
 export function Eyebrow({
   children,
   className = "",
-  dot = true,
 }: {
   children: React.ReactNode;
   className?: string;
-  dot?: boolean;
 }) {
   return (
-    <p className={`eyebrow flex items-center gap-2 text-muted ${className}`}>
-      {dot && <span aria-hidden className="size-1.5 rounded-full bg-secondary" />}
-      {children}
-    </p>
+    <p className={`text-sm font-bold tracking-[0.06em] uppercase ${className}`}>{children}</p>
   );
 }
 
-const PILL =
-  "group/btn inline-flex items-center gap-2.5 rounded-full px-6 py-3.5 text-[13px] font-medium transition duration-300";
+/** A lucide-weight line icon on a solid maroon tile. Marks a service row or a unit. */
+export function IconTile({
+  icon: Icon,
+  size = "md",
+  className = "",
+}: {
+  icon: (p: React.SVGProps<SVGSVGElement>) => React.ReactElement;
+  size?: "sm" | "md" | "lg";
+  className?: string;
+}) {
+  const box = { sm: "size-11", md: "size-12", lg: "size-12 md:size-20" }[size];
+  const glyph = { sm: "size-5", md: "size-6", lg: "size-6 md:size-10" }[size];
+  return (
+    <span className={`grid shrink-0 place-items-center rounded-md bg-brand text-white ${box} ${className}`}>
+      <Icon aria-hidden className={glyph} />
+    </span>
+  );
+}
 
-/** Black pill. The default call to action everywhere on the site. */
+/**
+ * The circle that ends a row or a card. It fills maroon when the row or card
+ * around it is hovered; on a dark ground it is white-bordered and fills white.
+ */
+export function ArrowDisc({
+  size = "size-11",
+  onDark = false,
+  icon: Icon = ArrowUpRight,
+}: {
+  size?: string;
+  onDark?: boolean;
+  icon?: (p: React.SVGProps<SVGSVGElement>) => React.ReactElement;
+}) {
+  const tone = onDark
+    ? "border-white text-white group-hover:bg-white group-hover:text-ink"
+    : "border-line text-brand group-hover:border-brand group-hover:bg-brand group-hover:text-white";
+  return (
+    <span
+      aria-hidden
+      className={`grid shrink-0 place-items-center rounded-full border transition-colors ${size} ${tone}`}
+    >
+      <Icon className="size-4 transition-transform duration-300 ease-out-expo group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
+    </span>
+  );
+}
+
+/** Ink button: the default action on white and mist. */
 export function PrimaryButton({
   href,
   children,
@@ -156,20 +141,16 @@ export function PrimaryButton({
   className?: string;
 }) {
   return (
-    <Link href={href} className={`${PILL} bg-primary text-white hover:bg-secondary ${className}`}>
+    <Link href={href} className={`btn btn-dark ${className}`}>
       {children}
-      {withArrow && (
-        <ArrowRight className="size-4 transition duration-300 group-hover/btn:translate-x-1 rtl:rotate-180 rtl:group-hover/btn:-translate-x-1" />
-      )}
+      {withArrow && <ArrowRight className="size-4" />}
     </Link>
   );
 }
 
 /**
- * Accent pill, reserved for the one moment per page that has to be loudest.
- * `onNavy` swaps the whole class set rather than appending an override: two
- * utilities for the same property are resolved by stylesheet order, not by
- * their order in the attribute, so an override string is a coin flip.
+ * Maroon button, or white on a dark ground. Reserved for the one moment per
+ * page that has to be loudest.
  */
 export function AccentButton({
   href,
@@ -179,21 +160,19 @@ export function AccentButton({
 }: {
   href: string;
   children: React.ReactNode;
+  /** On a steel, maroon or ink ground, where maroon would disappear. */
   onNavy?: boolean;
   className?: string;
 }) {
-  const tone = onNavy
-    ? "bg-surface text-primary hover:bg-onnavy-accent"
-    : "bg-secondary text-white hover:bg-primary";
   return (
-    <Link href={href} className={`${PILL} ${tone} ${className}`}>
+    <Link href={href} className={`btn ${onNavy ? "btn-light" : "btn-brand"} ${className}`}>
       {children}
-      <ArrowRight className="size-4 transition duration-300 group-hover/btn:translate-x-1 rtl:rotate-180 rtl:group-hover/btn:-translate-x-1" />
+      <ArrowRight className="size-4" />
     </Link>
   );
 }
 
-/** Outlined pill for the secondary path out of a section. */
+/** The hairline-bordered button: the secondary path out of a section. */
 export function GhostButton({
   href,
   children,
@@ -205,36 +184,71 @@ export function GhostButton({
   onNavy?: boolean;
   className?: string;
 }) {
-  const tone = onNavy
-    ? "border border-white/30 text-white hover:border-white hover:bg-white hover:text-primary"
-    : "border border-ink/15 text-ink hover:border-primary hover:bg-primary hover:text-white";
   return (
-    <Link href={href} className={`${PILL} ${tone} ${className}`}>
+    <Link href={href} className={`btn ${onNavy ? "btn-light" : "btn-outline"} ${className}`}>
       {children}
-      <ArrowRight className="size-4 transition duration-300 group-hover/btn:translate-x-1 rtl:rotate-180 rtl:group-hover/btn:-translate-x-1" />
+      <ArrowRight className="size-4" />
     </Link>
   );
 }
 
-/**
- * The hand-drawn accent stroke that sits under a display word, as in the
- * reference. Decorative: it carries no meaning a screen reader needs.
- */
-export function AccentUnderline({ className = "" }: { className?: string }) {
+/** The switcher that opens the work index and the service pages. */
+export function Pills({
+  label,
+  items,
+}: {
+  label: string;
+  items: { href: string; label: string; current: boolean; count?: number }[];
+}) {
   return (
-    <svg
-      aria-hidden
-      viewBox="0 0 220 24"
-      preserveAspectRatio="none"
-      fill="none"
-      className={`pointer-events-none absolute text-secondary ${className}`}
-    >
-      <path
-        d="M4 17C46 7 118 3 216 9"
-        stroke="currentColor"
-        strokeWidth="7"
-        strokeLinecap="round"
-      />
-    </svg>
+    <nav aria-label={label}>
+      <ul className="flex flex-wrap gap-3">
+        {items.map((item) => (
+          <li key={item.href}>
+            <Link
+              href={item.href}
+              aria-current={item.current ? "page" : undefined}
+              className={`btn ${item.current ? "btn-dark" : "btn-outline"}`}
+            >
+              {item.label}
+              {item.count !== undefined && (
+                <span dir="ltr" className={item.current ? "text-white/70" : "text-dim"}>
+                  {item.count}
+                </span>
+              )}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
+/** The closing call on every page but home, which closes on the brief form itself. */
+export function CtaPanel({
+  heading,
+  body,
+  cta,
+  href,
+}: {
+  heading: string;
+  body: string;
+  cta: string;
+  href: string;
+}) {
+  return (
+    <section className="bg-steel text-white [--focus:#fff]">
+      <div className="wrap flex flex-wrap items-end justify-between gap-8 py-16 md:py-24">
+        <div className="max-w-3xl">
+          <h2 data-reveal className="display text-head leading-[1.08]">
+            {heading}
+          </h2>
+          <p className="mt-5 max-w-xl text-lead">{body}</p>
+        </div>
+        <AccentButton href={href} onNavy>
+          {cta}
+        </AccentButton>
+      </div>
+    </section>
   );
 }
