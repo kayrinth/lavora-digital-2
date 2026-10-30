@@ -70,19 +70,6 @@ export function Accent({
   );
 }
 
-/** Small uppercase label: metadata, section kickers, column heads. */
-export function Eyebrow({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <p className={`text-sm font-bold tracking-[0.06em] uppercase ${className}`}>{children}</p>
-  );
-}
-
 /** A line icon on a solid navy tile. Marks a service row or a unit. */
 export function IconTile({
   icon: Icon,

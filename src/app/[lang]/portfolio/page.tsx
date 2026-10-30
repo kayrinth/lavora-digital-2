@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Band, Container, CtaPanel, Eyebrow, Pills } from "@/components/ui";
+import { Band, Container, CtaPanel, Pills } from "@/components/ui";
 import { Footer, Navbar } from "@/components/sections";
 import { PortfolioIndex, type IndexItem } from "@/components/portfolio-index";
 import { DEFAULT_LOCALE, getDictionary, isLocale, type Locale } from "@/lib/dictionaries";
@@ -62,42 +62,43 @@ export default async function Portfolio(props: PageProps<"/[lang]/portfolio">) {
     <>
       <Navbar lang={lang} t={t} />
       <main id="main">
-        <section className="pt-12 pb-12 md:pt-24 md:pb-20">
+        <section className="pt-12 pb-12 md:pt-20 md:pb-16">
           <Container>
-            <div className="grid gap-6 md:gap-10 lg:grid-cols-12 lg:items-end">
+            {/* Both columns start at the top. Bottom-aligning them parked the title halfway down the
+                masthead and left the quarter above it empty. */}
+            <div className="grid gap-8 md:gap-10 lg:grid-cols-12 lg:items-start lg:gap-12">
               <div className="lg:col-span-7">
                 <span aria-hidden className="block h-1.5 w-20 bg-brand" />
                 <h1 className="display mt-6 text-title">{page.title}</h1>
-              </div>
-              <div className="lg:col-span-5">
-                {page.eyebrow && <Eyebrow className="mb-4 text-brand">{page.eyebrow}</Eyebrow>}
-                <div className="space-y-4 text-lead text-dim">
-                  {page.intro.map((para: string) => (
-                    <p key={para}>{para}</p>
-                  ))}
+                {/* The switcher travels with the title it changes, so the masthead reads as one block
+                    and the two columns end up a comparable height. */}
+                <div className="mt-8 md:mt-10">
+                  <Pills
+                    label={t.portfolio.filterLabel}
+                    items={CATEGORIES.map((key) => ({
+                      href: `/${lang}/portfolio?service=${key}`,
+                      label: t.portfolio.services[key],
+                      current: key === active,
+                      count: PROJECTS.filter((p) => p.service === key).length,
+                    }))}
+                  />
                 </div>
               </div>
-            </div>
-
-            <div className="mt-10 md:mt-12">
-              <Pills
-                label={t.portfolio.filterLabel}
-                items={CATEGORIES.map((key) => ({
-                  href: `/${lang}/portfolio?service=${key}`,
-                  label: t.portfolio.services[key],
-                  current: key === active,
-                  count: PROJECTS.filter((p) => p.service === key).length,
-                }))}
-              />
+              <div className="space-y-4 text-lead text-dim lg:col-span-5">
+                {page.intro.map((para: string) => (
+                  <p key={para}>{para}</p>
+                ))}
+              </div>
             </div>
           </Container>
         </section>
 
-        {/* The unit bar: the category and how much of it there is. */}
+        {/* The unit bar carries the category's own name, which used to sit as a label above the intro
+            and said the same thing as the selected pill. */}
         <div className="bg-brand text-white">
           <div className="wrap flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-6 md:py-10">
             <h2 data-reveal className="display text-head">
-              {t.portfolio.services[active]}
+              {page.eyebrow || t.portfolio.services[active]}
             </h2>
             <p className="text-base font-semibold md:text-lg">
               {shown.length}

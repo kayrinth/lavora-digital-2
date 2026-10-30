@@ -196,9 +196,9 @@ export function Stats({ t }: { t: Dictionary }) {
           <Image
             src="/report.webp"
             alt={t.banner.imageAlt}
-            width={1200}
-            height={900}
-            className="aspect-[4/3] w-full object-contain p-6"
+            width={1709}
+            height={920}
+            className="aspect-video w-full object-contain p-4"
           />
         </div>
 
@@ -239,7 +239,8 @@ export function Services({ lang, t }: P) {
         {t.services.items.map((s, i) => {
           const Icon = SERVICE_ICONS[i];
           return (
-            <article key={s.title} className="group relative">
+            // A flex column, so three descriptions of different lengths still land their arrows on one line.
+            <article key={s.title} className="group relative flex flex-col">
               <div data-reveal="frame" className="aspect-[6/5] overflow-hidden bg-mist">
                 <Image
                   src={SERVICE_ART[i]}
@@ -254,13 +255,15 @@ export function Services({ lang, t }: P) {
                 <h3 className="text-base font-extrabold uppercase md:text-xl">{s.title}</h3>
               </div>
               <p className="mt-3 max-w-sm">{s.desc}</p>
-              <Link
-                href={href(lang, `/services/${SERVICE_SLUGS[i]}`)}
-                aria-label={`${s.title} — ${t.services.learnMore}`}
-                className="mt-6 grid size-12 place-items-center rounded-full border border-white transition-colors group-hover:bg-white group-hover:text-ink after:absolute after:inset-0"
-              >
-                <ChevronRight className="size-5 transition-transform duration-300 ease-out-expo group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
-              </Link>
+              <div className="mt-auto pt-6">
+                <Link
+                  href={href(lang, `/services/${SERVICE_SLUGS[i]}`)}
+                  aria-label={`${s.title} — ${t.services.learnMore}`}
+                  className="grid size-12 place-items-center rounded-full border border-white transition-colors group-hover:bg-white group-hover:text-ink after:absolute after:inset-0"
+                >
+                  <ChevronRight className="size-5 transition-transform duration-300 ease-out-expo group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
+                </Link>
+              </div>
             </article>
           );
         })}
@@ -485,7 +488,9 @@ export function Clients({ t }: { t: Dictionary }) {
         </div>
       </div>
       <Container className="py-12 md:py-20">
-        <ul data-reveal="list" className="grid grid-cols-3 border-t border-l border-line lg:grid-cols-6">
+        {/* 14 logos divide flush by 2 and by 7, so the phone and the desktop both end on a full row;
+            six columns left four empty ruled cells hanging off the end. */}
+        <ul data-reveal="list" className="grid grid-cols-2 border-t border-l border-line sm:grid-cols-3 lg:grid-cols-7">
           {CLIENTS.map((c) => (
             <li
               key={c.file}

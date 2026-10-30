@@ -152,13 +152,12 @@ export default async function ServicePage(props: PageProps<"/[lang]/services/[sl
       <main id="main">
         <section className="pt-12 pb-16 md:pt-24 md:pb-28">
           <Container>
-            <div className="grid gap-10 md:gap-12 lg:grid-cols-12 lg:items-end">
+            {/* Top-aligned: with the bottoms matched, the three service tiles sank to the foot of a
+                column twice their height and left the space beside the title empty. */}
+            <div className="grid gap-10 md:gap-12 lg:grid-cols-12 lg:items-start">
               <div className="lg:col-span-7">
                 <span aria-hidden className="block h-1.5 w-20 bg-brand" />
-                <p className="mt-6 text-sm font-bold tracking-[0.06em] text-brand uppercase">
-                  {doc.eyebrow}
-                </p>
-                <h1 className="display mt-4 text-title">{doc.title}</h1>
+                <h1 className="display mt-6 text-title">{doc.title}</h1>
                 <div className="mt-6 max-w-xl space-y-4 text-lead text-dim md:mt-8">
                   {doc.intro.map((para) => (
                     <p key={para}>{para}</p>
@@ -191,14 +190,16 @@ export default async function ServicePage(props: PageProps<"/[lang]/services/[sl
               </ul>
             </div>
 
-            <div data-reveal="frame" className="mt-12 overflow-hidden bg-mist md:mt-20">
+            {/* 7:5 at a capped width: the three artworks run 1.34 to 1.50, so a full-width 16:9 plate
+                was more mist than picture. */}
+            <div data-reveal="frame" className="mx-auto mt-12 max-w-3xl overflow-hidden bg-mist md:mt-20">
               <Image
                 src={doc.image}
                 alt={doc.title}
-                width={1600}
-                height={900}
+                width={1400}
+                height={1000}
                 priority
-                className="aspect-[16/9] w-full object-contain p-6 md:p-12"
+                className="aspect-[7/5] w-full object-contain p-4 md:p-8"
               />
             </div>
           </Container>

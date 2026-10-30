@@ -45,6 +45,15 @@ export default async function ProjectPage(props: PageProps<"/[lang]/portfolio/[s
   const serviceLabel = t.portfolio.services[project.service];
   const web = project.service === "web";
 
+  const facts: { label: string; value: string; href?: string }[] = [
+    ...meta,
+    {
+      label: t.portfolio.metaService,
+      value: serviceLabel,
+      href: `/${lang}/services/${SERVICE_PAGE[project.service]}`,
+    },
+  ];
+
   // Wraps, so the last case study still offers somewhere to go next.
   const index = PROJECTS.findIndex((p) => p.slug === project.slug);
   const next = PROJECTS[(index + 1) % PROJECTS.length];
@@ -72,40 +81,46 @@ export default async function ProjectPage(props: PageProps<"/[lang]/portfolio/[s
               <ArrowLeft className="size-4 rtl:rotate-180" /> {t.portfolio.back}
             </Link>
 
-            <div className="mt-4 grid gap-8 md:mt-6 md:gap-10 lg:grid-cols-12 lg:items-end">
+            {/* Top-aligned, so the facts' rule starts level with the title instead of floating in the
+                middle of a half-empty column. */}
+            <div className="mt-6 grid gap-8 md:mt-8 md:gap-10 lg:grid-cols-12 lg:items-start">
               <div className="lg:col-span-7">
-                <Link
-                  href={`/${lang}/services/${SERVICE_PAGE[project.service]}`}
-                  className="text-sm font-bold tracking-[0.06em] text-brand uppercase transition-colors hover:text-ink"
-                >
-                  {serviceLabel}
-                </Link>
-                <h1 className="display mt-4 text-title">{project.title}</h1>
+                {/* The client's mark opens the column: it was an orphan tile below the facts. */}
+                {project.logo && (
+                  <div className="mb-6 grid h-20 w-36 place-items-center border border-line bg-surface p-3 md:h-24 md:w-44 md:p-4">
+                    <Image
+                      src={project.logo}
+                      alt=""
+                      width={208}
+                      height={112}
+                      priority
+                      className="max-h-full w-auto max-w-full object-contain"
+                    />
+                  </div>
+                )}
+                <h1 className="display text-title">{project.title}</h1>
                 <p className="mt-6 max-w-lg text-lead text-dim">{pick(project.subtitle, lang)}</p>
               </div>
 
               <dl className="grid grid-cols-2 gap-6 border-t-2 border-ink pt-6 sm:grid-cols-3 lg:col-span-5">
-                {[...meta, { label: t.portfolio.metaService, value: serviceLabel }].map((row) => (
+                {facts.map((row) => (
                   <div key={row.label}>
                     <dt className="text-sm text-dim">{row.label}</dt>
-                    <dd className="mt-1 text-base/snug font-semibold md:text-lg/snug">{row.value}</dd>
+                    <dd className="mt-1 text-base/snug font-semibold md:text-lg/snug">
+                      {/* The service was a label above the title; it belongs with the other facts,
+                          and it is the only one that leads anywhere. */}
+                      {row.href ? (
+                        <Link href={row.href} className="link text-brand">
+                          {row.value}
+                        </Link>
+                      ) : (
+                        row.value
+                      )}
+                    </dd>
                   </div>
                 ))}
               </dl>
             </div>
-
-            {project.logo && (
-              <div className="mt-10 grid h-24 w-44 place-items-center border border-line bg-surface p-4 md:h-28 md:w-52">
-                <Image
-                  src={project.logo}
-                  alt=""
-                  width={208}
-                  height={112}
-                  priority
-                  className="max-h-full w-auto max-w-full object-contain"
-                />
-              </div>
-            )}
 
             {/* The write-up: the summary opens the column, the lead paragraph carries the argument. */}
             <div className="mt-10 grid gap-8 border-t border-line pt-8 md:mt-20 md:grid-cols-2 md:gap-16 md:pt-10">

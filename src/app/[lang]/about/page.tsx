@@ -29,20 +29,22 @@ export default async function About(props: PageProps<"/[lang]/about">) {
         {/* The company on ink: the mark, the claim, and the story under a hairline. */}
         <section className="bg-ink py-14 text-white [--focus:#fff] md:py-28">
           <Container>
-            <div className="grid gap-8 lg:grid-cols-12 lg:items-center lg:gap-16">
+            {/* The mark and the name as one lockup. The mark alone in its own column was a small square
+                with a third of the band empty on either side of it. */}
+            <div className="flex items-center gap-3">
               <Image
                 src="/lavora-logo.webp"
-                alt={t.brand}
-                width={320}
-                height={320}
+                alt=""
+                width={64}
+                height={64}
                 priority
-                className="w-full max-w-32 brightness-0 invert sm:max-w-40 lg:col-span-5 lg:mx-auto lg:max-w-56"
+                className="size-12 brightness-0 invert md:size-14"
               />
-              <div className="lg:col-span-7">
-                <p className="text-sm font-bold tracking-[0.06em] text-white/60 uppercase">{doc.eyebrow}</p>
-                <h1 className="display mt-4 text-title">{doc.title}</h1>
-                <p className="mt-6 max-w-2xl text-lead text-white/85">{doc.intro[0]}</p>
-              </div>
+              <span className="display text-lg md:text-xl">{t.brand}</span>
+            </div>
+            <div className="mt-8 grid gap-8 md:mt-10 lg:grid-cols-12 lg:items-start lg:gap-16">
+              <h1 className="display text-title lg:col-span-7">{doc.title}</h1>
+              <p className="text-lead text-white/85 lg:col-span-5">{doc.intro[0]}</p>
             </div>
 
             <div className="mt-12 grid gap-6 border-t border-white/15 pt-8 text-lead text-white/85 md:grid-cols-2 md:gap-12">
@@ -72,9 +74,9 @@ export default async function About(props: PageProps<"/[lang]/about">) {
                 <Image
                   src="/report.webp"
                   alt={t.banner.imageAlt}
-                  width={1200}
-                  height={900}
-                  className="aspect-[4/3] w-full object-contain p-6"
+                  width={1709}
+                  height={920}
+                  className="aspect-video w-full object-contain p-4"
                 />
               </div>
               <p
