@@ -96,9 +96,30 @@ export function SiteHeader({
               className={over ? "opacity-0" : ""}
             />
           </span>
-          {/* The mark carries the brand on a phone, where the row has to hold the menu and the brief
-              button too. sr-only rather than hidden, so the link keeps its name for a screen reader. */}
-          <span className="display sr-only text-base sm:not-sr-only sm:text-lg">{brand}</span>
+          {/* The wordmark is the logo's own lettering rather than Archivo set to look like it. It
+              drops below 40rem, where the row has to hold the menu and the brief button too; the
+              name stays in the accessibility tree either way, in the page's own language. */}
+          <span className="hidden h-7 *:col-start-1 *:row-start-1 *:h-full *:w-auto *:transition-opacity *:duration-300 sm:grid sm:h-8">
+            <Image
+              src="/lavora-wordmark-light.webp"
+              alt=""
+              width={768}
+              height={167}
+              sizes="160px"
+              priority
+              className={over ? "" : "opacity-0"}
+            />
+            <Image
+              src="/lavora-wordmark.webp"
+              alt=""
+              width={768}
+              height={167}
+              sizes="160px"
+              priority
+              className={over ? "opacity-0" : ""}
+            />
+          </span>
+          <span className="sr-only">{brand}</span>
         </Link>
 
         <nav aria-label="Main" className="hidden items-center gap-10 lg:flex">

@@ -40,7 +40,16 @@ export default async function About(props: PageProps<"/[lang]/about">) {
                 priority
                 className="size-12 object-contain md:size-14"
               />
-              <span className="display text-lg md:text-xl">{t.brand}</span>
+              <Image
+                src="/lavora-wordmark-light.webp"
+                alt=""
+                width={768}
+                height={167}
+                sizes="(min-width: 768px) 224px, 184px"
+                priority
+                className="h-10 w-auto md:h-12"
+              />
+              <span className="sr-only">{t.brand}</span>
             </div>
             <div className="mt-8 grid gap-8 md:mt-10 lg:grid-cols-12 lg:items-start lg:gap-16">
               <h1 className="display text-title lg:col-span-7">{doc.title}</h1>

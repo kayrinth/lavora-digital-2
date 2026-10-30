@@ -556,7 +556,7 @@ export function Footer({ lang, t }: P) {
     <footer className="bg-ink text-white [--focus:#fff]">
       <div className="wrap grid gap-12 py-16 md:grid-cols-12 md:py-20">
         <div className="md:col-span-5">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <Image
               src="/lavora-mark-light.webp"
               alt=""
@@ -564,7 +564,15 @@ export function Footer({ lang, t }: P) {
               height={48}
               className="size-10 object-contain"
             />
-            <span className="display text-lg">{t.brand}</span>
+            <Image
+              src="/lavora-wordmark-light.webp"
+              alt=""
+              width={768}
+              height={167}
+              sizes="180px"
+              className="h-9 w-auto"
+            />
+            <span className="sr-only">{t.brand}</span>
           </div>
           <p className="mt-6 max-w-sm text-base/relaxed text-white/70">{t.footer.blurb}</p>
 
