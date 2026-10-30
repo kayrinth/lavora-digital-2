@@ -75,7 +75,7 @@ export function SiteHeader({
         }`}
       />
       <div className="wrap flex h-20 items-center justify-between gap-3 sm:gap-6">
-        <Link href={home} onClick={close} className="flex min-h-11 shrink-0 items-center gap-0 sm:gap-2.5">
+        <Link href={home} onClick={close} className="flex min-h-11 shrink-0 items-center gap-0 sm:gap-2">
           {/* Two marks cross-fading, not one flattened with a filter: the light version keeps the
               artwork's navy-to-white sweep instead of going flat. */}
           <span className="grid shrink-0 *:col-start-1 *:row-start-1 *:size-8 *:object-contain *:transition-opacity *:duration-300 sm:*:size-9">
@@ -99,7 +99,7 @@ export function SiteHeader({
           {/* The wordmark is the logo's own lettering rather than Archivo set to look like it. It
               drops below 40rem, where the row has to hold the menu and the brief button too; the
               name stays in the accessibility tree either way, in the page's own language. */}
-          <span className="hidden h-7 *:col-start-1 *:row-start-1 *:h-full *:w-auto *:transition-opacity *:duration-300 sm:grid sm:h-8">
+          <span className="hidden h-6 *:col-start-1 *:row-start-1 *:h-full *:w-auto *:transition-opacity *:duration-300 sm:grid">
             <Image
               src="/lavora-wordmark-light.webp"
               alt=""
