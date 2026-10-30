@@ -65,32 +65,32 @@ body {
  * restate six utilities.
  */
 .t-hero {
-  font-size: clamp(44px, 8.6vw, 116px);
+  font-size: clamp(32px, 4.5vw, 58px);
   font-weight: 700;
-  line-height: 0.88;
-  letter-spacing: -0.045em;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
 }
 
 .t-display {
-  font-size: clamp(36px, 6.4vw, 84px);
+  font-size: clamp(24px, 3vw, 40px);
   font-weight: 700;
-  line-height: 0.92;
-  letter-spacing: -0.04em;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
 }
 
 /* Between display and body: a heading that has to share its row with an image. */
 .t-title {
-  font-size: clamp(28px, 3.4vw, 50px);
+  font-size: clamp(19px, 2vw, 26px);
   font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.035em;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
 }
 
 .t-stat {
-  font-size: clamp(52px, 8vw, 104px);
+  font-size: clamp(36px, 4.5vw, 60px);
   font-weight: 700;
-  line-height: 0.85;
-  letter-spacing: -0.05em;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
 }
 
@@ -100,7 +100,7 @@ body {
 :lang(ar) .t-title,
 :lang(ar) .t-stat {
   letter-spacing: 0;
-  line-height: 1.12;
+  line-height: 1.18;
 }
 
 /* Small uppercase label used above most sections. */
@@ -112,6 +112,39 @@ body {
 }
 :lang(ar) .eyebrow {
   letter-spacing: 0;
+}
+
+/* ------------------------------------------------------------- Navy panel */
+/*
+ * The navy slab is the brand's loudest surface and the site uses four of them.
+ * At that size a flat fill reads as a rectangle of paint, so each one carries a
+ * single soft light from its top-start corner, mixed from the accent rather
+ * than from white: the panel stays navy and gains a direction.
+ *
+ * The layer is drawn behind the content, and the panel isolates so a negative
+ * z-index lands above its own background instead of falling out behind it.
+ */
+.navy-wash {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.navy-wash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 55% at 8% -4%, color-mix(in oklab, var(--color-secondary) 38%, transparent), transparent 65%),
+    radial-gradient(65% 55% at 92% 28%, rgba(99, 102, 241, 0.2), transparent 65%),
+    radial-gradient(60% 50% at 50% 105%, color-mix(in oklab, var(--color-primary) 70%, transparent), transparent 70%);
+}
+
+/* The light falls from the reading side, so it swaps with the text direction. */
+[dir="rtl"] .navy-wash::before {
+  transform: scaleX(-1);
 }
 
 /* ----------------------------------------------------------------- Clients */
@@ -194,16 +227,18 @@ a {
    */
   .js-reveal .reveal {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translate3d(0, 18px, 0);
+    will-change: opacity, transform;
   }
 
   .js-reveal .reveal.is-in {
     opacity: 1;
-    transform: none;
+    transform: translate3d(0, 0, 0);
     transition:
-      opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
-      transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+      opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
     transition-delay: var(--d, 0ms);
+    will-change: auto;
   }
 
   /* A soft stagger across a row of cards. */

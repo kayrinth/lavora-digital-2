@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Container } from "@/components/ui";
+import { Container, NavyPanel, NavyPills } from "@/components/ui";
 import { Footer, Navbar } from "@/components/sections";
 import { PortfolioIndex, type IndexItem } from "@/components/portfolio-index";
 import { DEFAULT_LOCALE, getDictionary, isLocale, type Locale } from "@/lib/dictionaries";
 import { PROJECTS, pick, portfolioIntros, type ServiceKey } from "@/lib/portfolio";
 
 /** Which categories actually have projects, in the order they first appear. */
-const CATEGORIES = PROJECTS.map((p) => p.service).filter(
-  (s, i, all) => all.indexOf(s) === i,
-);
+const CATEGORIES = PROJECTS.map((p) => p.service).filter((s, i, all) => all.indexOf(s) === i);
 
 /** No "all" view: an unknown or missing ?service= lands on the first category. */
 function readService(value: string | string[] | undefined) {
@@ -30,9 +28,7 @@ function heading(lang: Locale, service: ServiceKey) {
   );
 }
 
-export async function generateMetadata(
-  props: PageProps<"/[lang]/portfolio">,
-): Promise<Metadata> {
+export async function generateMetadata(props: PageProps<"/[lang]/portfolio">): Promise<Metadata> {
   const { lang } = await props.params;
   const locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
   const { service } = await props.searchParams;
@@ -66,44 +62,59 @@ export default async function Portfolio(props: PageProps<"/[lang]/portfolio">) {
     <div className="bg-background">
       <Navbar lang={lang} t={t} />
       <main>
-        <Container className="py-16 lg:py-24">
-          {page.eyebrow && (
-            <p className="reveal eyebrow text-muted">{page.eyebrow}</p>
-          )}
-          <h1 className="reveal mt-4 max-w-2xl text-[34px] leading-[1.12] font-light tracking-tight sm:text-[44px]">
-            {page.title}
-          </h1>
-          <div className="mt-8 max-w-2xl space-y-5 text-[14.5px] leading-relaxed text-muted">
-            {page.intro.map((para: string) => (
-              <p key={para} className="reveal">
-                {para}
-              </p>
-            ))}
-          </div>
+        {/*
+         * Masthead on the brand ground, the same opening the service pages and
+         * the case studies take. The switcher is the page's label, so the
+         * title needs no kicker above it, and the counts on it are the first
+         * fact the visitor gets about the work.
+         */}
+        <header className="pt-3 pb-7 sm:pt-4 lg:pb-10">
+          <Container>
+            <NavyPanel>
+              <div className="rise">
+                <NavyPills
+                  label={t.portfolio.filterLabel}
+                  items={CATEGORIES.map((key) => ({
+                    href: `/${lang}/portfolio?service=${key}`,
+                    label: t.portfolio.services[key],
+                    current: key === active,
+                    count: PROJECTS.filter((p) => p.service === key).length,
+                  }))}
+                />
+              </div>
 
-          <div className="mt-14">
-            <PortfolioIndex
-              items={items}
-              filters={CATEGORIES.map((key) => ({
-                key,
-                label: t.portfolio.services[key],
-                count: PROJECTS.filter((p) => p.service === key).length,
-              }))}
-              active={active}
-              basePath={`/${lang}/portfolio`}
-              filterLabel={t.portfolio.filterLabel}
-              viewLabel={t.portfolio.view}
-            />
-          </div>
+              <h1
+                className="rise t-display mt-12 max-w-[16ch] text-balance lg:mt-16"
+                style={{ "--d": "90ms" } as React.CSSProperties}
+              >
+                {page.title}
+              </h1>
+
+              {/* Set in columns, so the intro holds the masthead's full width
+                  rather than leaving the half beside it empty. */}
+              <div
+                className="rise mt-12 text-[15.5px] leading-[1.7] text-onnavy lg:columns-2 lg:gap-14"
+                style={{ "--d": "180ms" } as React.CSSProperties}
+              >
+                {page.intro.map((para: string) => (
+                  <p key={para} className="mb-5 break-inside-avoid last:mb-0">
+                    {para}
+                  </p>
+                ))}
+              </div>
+            </NavyPanel>
+          </Container>
+        </header>
+
+        <Container className="pt-2 pb-16 lg:pt-6 lg:pb-24">
+          <PortfolioIndex items={items} viewLabel={t.portfolio.view} />
         </Container>
 
         {page.closing && (
           <section className="border-t border-line bg-surface">
             <Container className="grid gap-10 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:py-24">
               <div>
-                <h2 className="reveal text-[30px] leading-[1.15] font-light tracking-tight sm:text-[38px]">
-                  {page.closing.heading}
-                </h2>
+                <h2 className="reveal t-title max-w-[14ch] text-balance">{page.closing.heading}</h2>
                 <p className="reveal mt-5 text-[17px] leading-relaxed font-medium text-ink">
                   {page.closing.lead}
                 </p>
@@ -129,9 +140,7 @@ export default async function Portfolio(props: PageProps<"/[lang]/portfolio">) {
                 <p className="reveal border-s border-secondary ps-5 text-[15px] font-medium text-ink">
                   {page.closing.kicker}
                 </p>
-                {page.closing.kickerBody && (
-                  <p className="reveal">{page.closing.kickerBody}</p>
-                )}
+                {page.closing.kickerBody && <p className="reveal">{page.closing.kickerBody}</p>}
               </div>
             </Container>
           </section>

@@ -24,8 +24,8 @@ export default async function Home(props: PageProps<"/[lang]">) {
       <Navbar lang={lang} t={t} />
       <main>
         {/* Who we are → who trusts us → what we do → proof → how → talk to us. */}
-        <Hero lang={lang} t={t} />
         <HeroImage lang={lang} t={t} />
+        <Hero lang={lang} t={t} />
         <About t={t} />
         <Clients t={t} />
         <Stats t={t} />

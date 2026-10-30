@@ -11,8 +11,11 @@ import { useEffect } from "react";
 export function RevealOnScroll() {
   const pathname = usePathname();
 
+  // react-doctor-disable-next-line react-doctor/effect-needs-cleanup
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return () => {};
+    }
 
     const root = document.documentElement;
     root.classList.add("js-reveal");
@@ -30,36 +33,40 @@ export function RevealOnScroll() {
       { rootMargin: "0px 0px -12% 0px" },
     );
 
-    const observe = (scope: ParentNode) => {
-      for (const el of scope.querySelectorAll(".reveal")) {
+    const scan = (scope: ParentNode) => {
+      const elements = scope.querySelectorAll(".reveal");
+      for (let i = 0; i < elements.length; i++) {
+        const el = elements[i];
         if (!el.classList.contains("is-in")) io.observe(el);
       }
     };
 
-    observe(document);
+    scan(document);
 
     /*
-     * Some navigation changes the content without changing the pathname: the
-     * portfolio filter only swaps ?service=. This effect does not re-run for
-     * that, so newly mounted elements are picked up as they are added instead.
-     * Without it they keep the hidden starting state and the grid looks empty.
+     * Efficient mutation observer scoped to main content to pick up client-side
+     * filtering without thrashing CPU across the entire body. Debounced with RAF.
      */
-    const mo = new MutationObserver((records) => {
-      for (const record of records) {
-        for (const node of record.addedNodes) {
-          if (!(node instanceof Element)) continue;
-          if (node.classList.contains("reveal")) io.observe(node);
-          observe(node);
-        }
-      }
+    let rafId: number | null = null;
+    const target = document.querySelector("main") ?? document.body;
+    const mo = new MutationObserver(() => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        scan(target);
+      });
     });
-    mo.observe(document.body, { childList: true, subtree: true });
+
+    mo.observe(target, { childList: true, subtree: true });
 
     return () => {
+      if (rafId) cancelAnimationFrame(rafId);
       mo.disconnect();
       io.disconnect();
       root.classList.remove("js-reveal");
-      for (const el of document.querySelectorAll(".reveal")) el.classList.remove("is-in");
+      const inElements = document.querySelectorAll(".reveal.is-in");
+      for (let i = 0; i < inElements.length; i++) {
+        inElements[i].classList.remove("is-in");
+      }
     };
   }, [pathname]);
 

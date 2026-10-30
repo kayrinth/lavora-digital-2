@@ -15,6 +15,113 @@ export function Container({
   );
 }
 
+/**
+ * The navy slab: the services panel, the service masthead and its process
+ * grid, the case study masthead. One component because the four were already
+ * the same twenty-utility string copied four times, and because the wash that
+ * gives the slab its direction belongs to all of them.
+ *
+ * Inset in the page rather than bled to the edges: the navbar is a pill
+ * floating on the page ground, and a navy band running to the top opens on a
+ * seam under it.
+ */
+export function NavyPanel({
+  className = "",
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={`on-navy navy-wash relative overflow-hidden rounded-[24px] border border-white/10 bg-[#070919] px-6 py-14 text-white shadow-2xl sm:rounded-[32px] sm:px-10 sm:py-16 lg:px-14 lg:py-20 ${className}`}
+    >
+      {/* Top perimeter hairline shimmer */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
+      />
+      {children}
+    </div>
+  );
+}
+
+/**
+ * The switcher that opens a navy masthead, on the service pages and on the
+ * work index. It doubles as the page's own label, which is why a masthead
+ * carrying one needs no kicker above its title.
+ */
+export function NavyPills({
+  label,
+  items,
+}: {
+  label: string;
+  items: { href: string; label: string; current: boolean; count?: number }[];
+}) {
+  return (
+    <nav aria-label={label}>
+      <ul className="flex flex-wrap gap-2">
+        {items.map((item) => (
+          <li key={item.href}>
+            <Link
+              href={item.href}
+              aria-current={item.current ? "page" : undefined}
+              className={`inline-flex min-h-[44px] items-center gap-2.5 rounded-full px-5 text-[12.5px] transition duration-300 ${
+                item.current
+                  ? "bg-surface font-medium text-primary"
+                  : "border border-white/25 text-onnavy hover:border-white hover:text-white"
+              }`}
+            >
+              {item.label}
+              {item.count !== undefined && (
+                <span
+                  dir="ltr"
+                  className={`text-[11px] tabular-nums ${
+                    item.current ? "text-secondary" : "text-onnavy-accent"
+                  }`}
+                >
+                  {item.count}
+                </span>
+              )}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
+/**
+ * How every detail page signs off. Navy rather than another white card: the
+ * ask is the loudest moment on the page and the brand owns a loud surface, and
+ * a centred sign-off on the page ground was the quietest thing in the scroll.
+ */
+export function CtaPanel({
+  heading,
+  body,
+  cta,
+  href,
+}: {
+  heading: string;
+  body: string;
+  cta: string;
+  href: string;
+}) {
+  return (
+    <NavyPanel>
+      <div className="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-end lg:gap-20">
+        <h2 className="reveal t-display max-w-[14ch] text-balance">{heading}</h2>
+        <div className="reveal lg:pb-2">
+          <p className="max-w-md text-[15.5px] leading-[1.7] text-onnavy">{body}</p>
+          <AccentButton href={href} onNavy className="mt-8">
+            {cta}
+          </AccentButton>
+        </div>
+      </div>
+    </NavyPanel>
+  );
+}
+
 /** Small uppercase label. A leading accent dot ties it to the accent system. */
 export function Eyebrow({
   children,

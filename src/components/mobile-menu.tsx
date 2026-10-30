@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Close, Menu } from "./icons";
-import { isActive, type NavItem, type NavService } from "./desktop-nav";
+import { isActive, type NavItem, type NavService } from "@/lib/nav";
 
 type Item = NavItem & { children?: NavService[] };
 

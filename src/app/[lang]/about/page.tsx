@@ -100,19 +100,21 @@ export default async function About(props: PageProps<"/[lang]/about">) {
             {doc.expertise.items.map((item, i) => (
               <li
                 key={item.title}
-                className="reveal overflow-hidden rounded-2xl border border-line bg-surface"
+                className="group reveal overflow-hidden rounded-2xl border border-line bg-surface transition duration-500 hover:border-secondary/30 hover:shadow-lg"
               >
-                <div className="relative aspect-[4/3] bg-gradient-to-br from-primary-soft to-secondary-soft">
+                <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-primary-soft/60 to-secondary-soft/60 p-6">
                   <Image
                     src={EXPERTISE_ART[i]}
-                    alt=""
+                    alt={item.title}
                     fill
                     sizes="(min-width: 768px) 336px, 100vw"
-                    className="object-contain p-5"
+                    className="object-contain p-4 transition duration-700 ease-out group-hover:scale-105"
                   />
                 </div>
                 <div className="px-6 py-7">
-                  <h3 className="text-[18px] font-semibold">{item.title}</h3>
+                  <h3 className="text-[18px] font-semibold text-ink transition-colors duration-300 group-hover:text-secondary">
+                    {item.title}
+                  </h3>
                   <p className="mt-3 text-[13.5px] leading-relaxed text-muted">
                     {item.desc}
                   </p>

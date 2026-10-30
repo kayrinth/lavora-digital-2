@@ -22,7 +22,16 @@ function ScrollOnRouteChange() {
   useEffect(() => {
     if (!lenis) return;
     const hash = window.location.hash;
-    const target = hash && document.querySelector(hash) ? hash : 0;
+    let target: string | number = 0;
+    if (hash) {
+      try {
+        if (document.querySelector(hash)) {
+          target = hash;
+        }
+      } catch {
+        target = 0;
+      }
+    }
     lenis.scrollTo(target, {
       offset: target === 0 ? 0 : ANCHOR_OFFSET,
       immediate: true,

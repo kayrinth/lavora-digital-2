@@ -6,10 +6,12 @@ import {
   Container,
   Eyebrow,
   GhostButton,
+  NavyPanel,
   PrimaryButton,
 } from "./ui";
 import { ContactForm } from "./contact-form";
 import { DesktopNav } from "./desktop-nav";
+import { HeroVideo } from "./hero-video";
 import { MobileMenu } from "./mobile-menu";
 import type { Dictionary, Locale } from "@/lib/dictionaries";
 import { PROJECTS } from "@/lib/portfolio";
@@ -62,8 +64,19 @@ export function Navbar({ lang, t }: P) {
     }));
 
   const menu = [
-    { key: "home", label: t.nav.home, href: href(lang, "#top"), match: `/${lang}`, exact: true },
-    { key: "service", label: t.nav.service, match: `/${lang}/services`, children: services },
+    {
+      key: "home",
+      label: t.nav.home,
+      href: href(lang, "#top"),
+      match: `/${lang}`,
+      exact: true,
+    },
+    {
+      key: "service",
+      label: t.nav.service,
+      match: `/${lang}/services`,
+      children: services,
+    },
     {
       key: "work",
       label: t.nav.work,
@@ -71,7 +84,12 @@ export function Navbar({ lang, t }: P) {
       match: `/${lang}/portfolio`,
       children: projectCategories,
     },
-    { key: "about", label: t.nav.about, href: href(lang, "/about"), match: `/${lang}/about` },
+    {
+      key: "about",
+      label: t.nav.about,
+      href: href(lang, "/about"),
+      match: `/${lang}/about`,
+    },
   ];
 
   const other: Locale = lang === "en" ? "ar" : "en";
@@ -134,19 +152,21 @@ export function Hero({ lang, t }: P) {
   const last = t.hero.headline.length - 1;
 
   return (
-    <section id="top" className="pt-10 pb-6 sm:pt-16 lg:pt-20">
+    <section className="pt-16 pb-16 sm:pt-20 sm:pb-20 lg:pt-24 lg:pb-24">
       <Container>
         {/*
-         * Asymmetric: a narrow column of supporting copy on the left, the
-         * headline taking the rest. They stack into reading order on mobile.
+         * Two columns on desktop: supporting copy on the left with generous measure,
+         * the display headline on the right. They stack into reading order on mobile.
          */}
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,17rem)_1fr] lg:items-end lg:gap-14">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-14 xl:gap-20">
           <div
             className="rise order-2 lg:order-1 lg:pb-3"
             style={{ "--d": "260ms" } as React.CSSProperties}
           >
             <Eyebrow>{t.hero.eyebrow}</Eyebrow>
-            <p className="mt-5 max-w-sm text-[14.5px] leading-[1.6] text-muted">{t.hero.lead}</p>
+            <p className="mt-5 max-w-xl text-[15px] sm:text-[16px] lg:text-[16.5px] leading-relaxed text-muted">
+              {t.hero.lead}
+            </p>
             <PrimaryButton href={href(lang, "#contact")} withArrow className="mt-7">
               {t.nav.cta}
             </PrimaryButton>
@@ -156,7 +176,7 @@ export function Hero({ lang, t }: P) {
             {t.hero.headline.map((line, i) => (
               <span
                 key={line.strong}
-                className="rise block"
+                className="rise block lg:whitespace-nowrap"
                 style={{ "--d": `${i * 110}ms` } as React.CSSProperties}
               >
                 <span className="font-medium text-faint">{line.lead}</span>{" "}
@@ -181,60 +201,56 @@ export function Hero({ lang, t }: P) {
 
 export function HeroImage({ lang, t }: P) {
   return (
-    <section className="pb-20 sm:pb-24 lg:pb-32">
-      <Container>
-        <div
-          className="rise relative overflow-hidden rounded-[24px] bg-ink sm:rounded-[32px]"
-          style={{ "--d": "420ms" } as React.CSSProperties}
-        >
-          <div className="relative aspect-[3/4] sm:aspect-[16/10] lg:aspect-[2.3/1]">
-            <Image
-              src="/hero1.webp"
-              alt={t.hero.imageAlt}
-              fill
-              priority
-              sizes="(min-width: 1440px) 1392px, 100vw"
-              className="object-cover object-[55%_50%]"
-            />
-          </div>
-
-          {/* Numbered service chips, the reference's bottom-left index row. */}
-          <ul className="absolute bottom-6 start-6 hidden gap-2 lg:flex">
-            {t.services.items.map((s, i) => (
-              <li key={s.title}>
-                <Link
-                  href={href(lang, `/services/${SERVICE_SLUGS[i]}`)}
-                  className="flex items-center gap-2 rounded-full bg-ink/55 px-4 py-2.5 text-[12px] text-white backdrop-blur-md transition hover:bg-ink"
-                >
-                  <span dir="ltr" className="text-onnavy-accent tabular-nums">
-                    0{i + 1}
-                  </span>
-                  {s.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          {/* Floating information card. Full width on phones, a panel on desktop. */}
-          <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-surface p-5 sm:inset-x-auto sm:bottom-6 sm:end-6 sm:max-w-[19rem] sm:p-6">
-            <p className="text-[17px] leading-[1.3] font-medium tracking-tight sm:text-[19px]">
-              {t.banner.titleLead} {t.banner.titleStrong}
-            </p>
-            <p className="mt-2.5 hidden text-[13px] leading-relaxed text-muted sm:block">
-              {t.banner.body}
-            </p>
-            <Link
-              href={href(lang, "#process")}
-              className="group mt-4 inline-flex items-center gap-2 text-[12.5px] font-medium"
-            >
-              {t.services.learnMore}
-              <span className="grid size-7 place-items-center rounded-full bg-secondary text-white transition group-hover:bg-primary">
-                <ArrowRight className="size-3.5 rtl:rotate-180" />
-              </span>
-            </Link>
-          </div>
+    /*
+     * Full-bleed and pulled up under the sticky bar, so the reel is the first
+     * thing on the page and the nav pill floats on it.
+     */
+    <section id="top" className="-mt-[68px] bg-ink sm:-mt-20">
+      <div className="relative overflow-hidden">
+        {/*
+         * The reel is cut 16:9 and its lettering sits in the middle of the
+         * frame. From lg up it fills the viewport and the sides are cropped,
+         * which the lettering survives; below lg it keeps its own ratio,
+         * because a phone portrait crop would eat two thirds of its width.
+         *
+         * The poster is the reel's own first frame, so the still the browser
+         * paints before playback is the frame playback starts on rather than
+         * a different picture that jumps. It is also what a device that
+         * cannot decode VP9 keeps showing.
+         */}
+        <div className="relative aspect-video lg:h-svh lg:aspect-auto">
+          <HeroVideo
+            alt={t.hero.imageAlt}
+            poster="/hero-poster.webp"
+            src="/lavora-hero-1080.webm"
+          />
         </div>
-      </Container>
+
+        {/*
+         * Floating information card. Full width on phones, a panel on desktop.
+         * Frosted dark rather than the white plate it was over the old
+         * photograph: the reel runs navy and sets its own white lettering,
+         * and a solid white block on top of that reads as a second title
+         * card competing with the first.
+         */}
+        <div className="on-navy absolute inset-x-4 bottom-4 rounded-2xl border border-white/15 bg-ink/65 p-5 text-white backdrop-blur-md sm:inset-x-auto sm:bottom-6 sm:end-6 sm:max-w-[19rem] sm:p-6 xl:bottom-10 xl:end-10">
+          <p className="text-[17px] leading-[1.3] font-medium tracking-tight sm:text-[19px]">
+            {t.banner.titleLead} {t.banner.titleStrong}
+          </p>
+          <p className="mt-2.5 hidden text-[13px] leading-relaxed text-onnavy sm:block">
+            {t.banner.body}
+          </p>
+          <Link
+            href={href(lang, "#process")}
+            className="group mt-4 inline-flex items-center gap-2 text-[12.5px] font-medium"
+          >
+            {t.services.learnMore}
+            <span className="grid size-7 place-items-center rounded-full bg-onnavy-accent text-primary transition group-hover:bg-white">
+              <ArrowRight className="size-3.5 rtl:rotate-180" />
+            </span>
+          </Link>
+        </div>
+      </div>
     </section>
   );
 }
@@ -264,47 +280,12 @@ const CLIENTS = [
 
 export function About({ t }: { t: Dictionary }) {
   return (
-    <section id="collaboration" className="scroll-mt-24 pb-24 lg:pb-32">
+    <section id="collaboration" className="scroll-mt-24 pb-20 lg:pb-28">
       <Container>
         <Eyebrow className="reveal">{t.nav.about}</Eyebrow>
 
-        <div className="mt-8 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-16">
-          <h2 className="reveal t-display max-w-[16ch]">
-            {t.collaboration.titleLead}{" "}
-            <span className="text-faint">{t.collaboration.titleStrong}</span>
-          </h2>
-
-          <div className="reveal lg:pb-2">
-            {/* Overlapping marks: a compact proof line rather than another logo grid. */}
-            <ul className="flex items-center">
-              {CLIENTS.slice(0, 4).map((c, i) => (
-                <li
-                  key={c.file}
-                  className={`relative size-14 overflow-hidden rounded-full border-2 border-background bg-surface sm:size-16 ${
-                    i > 0 ? "-ms-4" : ""
-                  }`}
-                >
-                  <Image
-                    src={`/client/${encodeURIComponent(c.file)}`}
-                    alt={c.name}
-                    fill
-                    sizes="64px"
-                    className="object-contain p-2.5"
-                  />
-                </li>
-              ))}
-              <li className="-ms-4 grid size-14 place-items-center rounded-full border-2 border-background bg-ink text-[12px] font-medium text-white sm:size-16">
-                +{CLIENTS.length - 4}
-              </li>
-            </ul>
-            <p className="mt-5 max-w-sm text-[14.5px] leading-[1.6] text-muted">
-              {t.collaboration.body}
-            </p>
-          </div>
-        </div>
-
         {/* Thin rules instead of cards: the grid line is the only container needed. */}
-        <ul className="reveal-stagger mt-16 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4">
+        <ul className="reveal-stagger mt-8 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:mt-10 lg:grid-cols-4">
           {t.collaboration.features.map((f, i) => (
             <li key={f.title} className="reveal border-t border-line pt-6">
               <span dir="ltr" className="eyebrow block text-secondary tabular-nums">
@@ -326,7 +307,7 @@ export function About({ t }: { t: Dictionary }) {
 
 export function Stats({ t }: { t: Dictionary }) {
   return (
-    <section className="pb-24 lg:pb-32">
+    <section className="pb-20 lg:pb-28">
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:gap-20">
           <div className="reveal relative aspect-[4/3] overflow-hidden rounded-[24px] bg-surface">
@@ -369,74 +350,128 @@ export function Stats({ t }: { t: Dictionary }) {
 /** One mark per service, in the order of t.services.items. */
 const SERVICE_ICONS = [Megaphone, Cursor, TrendUp];
 
+/** High-resolution visual artwork per service. */
+const SERVICE_ART = [
+  "/services/ads.webp",
+  "/services/web.webp",
+  "/services/digital-marketing.webp",
+] as const;
+
+/** Subtle tailored ambient glows that harmonize with each service's 3D artwork. */
+const SERVICE_GLOWS = [
+  "from-sky-500/20 via-sky-500/5",
+  "from-secondary/25 via-secondary/5",
+  "from-indigo-500/20 via-indigo-500/5",
+] as const;
+
 export function Services({ lang, t }: P) {
   return (
-    <section id="services" className="scroll-mt-24 pb-24 lg:pb-32">
+    <section id="services" className="scroll-mt-24 pb-20 lg:pb-28">
       <Container>
-        <div className="on-navy rounded-[24px] bg-primary px-6 py-14 text-white sm:rounded-[32px] sm:px-10 sm:py-16 lg:px-14 lg:py-20">
-          <div className="grid gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:gap-16">
-            <div className="reveal">
-              <span className="eyebrow inline-flex rounded-full bg-secondary px-4 py-2 text-white">
-                {t.services.titleStrong}
-              </span>
-              <h2 className="t-display mt-7 max-w-[11ch]">
-                {t.services.titleLead} {t.services.titleStrong}
-              </h2>
-              <p className="mt-6 max-w-sm text-[14.5px] leading-[1.6] text-onnavy">
-                {t.collaboration.body}
-              </p>
-              <GhostButton href={href(lang, "/portfolio")} onNavy className="mt-8">
-                {t.services.seeMore}
-              </GhostButton>
-            </div>
+        <NavyPanel>
+          {/*
+           * The heading runs alone above a full-width grid, where it used to
+           * share the panel with a column of body copy that was
+           * `t.collaboration.body` — the same paragraph the About section runs
+           * two screens up — and a button repeated under the work below.
+           */}
+          <div className="reveal">
+            <span className="eyebrow inline-flex rounded-full bg-secondary px-4 py-2 text-white">
+              {t.services.titleStrong}
+            </span>
+            <h2 className="t-display mt-7 max-w-[14ch]">
+              {t.services.titleLead} {t.services.titleStrong}
+            </h2>
+          </div>
 
-            {/* A hairline grid, drawn by the gap rather than by borders per card. */}
-            <ul className="reveal-stagger grid gap-px overflow-hidden rounded-2xl bg-white/15 sm:grid-cols-2">
-              {t.services.items.map((s, i) => {
-                const Icon = SERVICE_ICONS[i];
-                return (
-                  <li key={s.title} className="reveal bg-primary">
-                    <Link
-                      href={href(lang, `/services/${SERVICE_SLUGS[i]}`)}
-                      className="group flex h-full flex-col p-7 transition duration-300 hover:bg-dark sm:p-8"
-                    >
-                      <div className="flex items-center justify-between">
-                        <Icon className="size-6 text-onnavy-accent" />
-                        <span dir="ltr" className="eyebrow text-onnavy tabular-nums">
-                          0{i + 1}
+          {/* Natural separated cards with refined glass surfaces and cohesive dark depth */}
+          <ul className="reveal-stagger mt-14 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-6">
+            {t.services.items.map((s, i) => {
+              const Icon = SERVICE_ICONS[i];
+              const art = SERVICE_ART[i];
+              const glow = SERVICE_GLOWS[i];
+              return (
+                <li key={s.title} className="reveal flex">
+                  <Link
+                    href={href(lang, `/services/${SERVICE_SLUGS[i]}`)}
+                    className="group relative flex h-full w-full flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c1026]/80 p-6 backdrop-blur-xs transition duration-500 hover:border-white/20 hover:bg-[#111738]/95 hover:shadow-[0_16px_40px_rgba(0,4,20,0.4)] sm:p-7"
+                  >
+                    {/* The rule draws itself in, as it does on the work index. */}
+                    <span
+                      aria-hidden
+                      className="absolute top-0 start-0 h-0.5 w-0 bg-onnavy-accent transition-[width] duration-700 ease-out group-hover:w-full"
+                    />
+
+                    {/* Dedicated visual thumbnail stage — natural dark recess with subtle ambient backlighting */}
+                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-white/[0.06] bg-[#060818]/70 transition duration-500 group-hover:border-white/15">
+                      {/* Ambient light glow behind artwork tailored to subject */}
+                      <div
+                        aria-hidden
+                        className={`absolute inset-0 bg-radial ${glow} to-transparent opacity-40 transition duration-500 group-hover:opacity-80`}
+                      />
+                      <Image
+                        src={art}
+                        alt={s.title}
+                        fill
+                        sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
+                        className="object-contain p-3.5 drop-shadow-[0_12px_24px_rgba(0,0,0,0.35)] transition duration-700 ease-out group-hover:scale-105"
+                      />
+                      {/* Floating pill badge with number + icon */}
+                      <div className="absolute top-3 start-3 z-10 flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 backdrop-blur-md">
+                        <span
+                          dir="ltr"
+                          className="text-[12px] font-semibold tracking-tight text-onnavy-accent tabular-nums"
+                        >
+                          {String(i + 1).padStart(2, "0")}
                         </span>
+                        <span className="size-1 rounded-full bg-white/30" />
+                        <Icon className="size-3.5 text-onnavy transition duration-300 group-hover:text-white" />
                       </div>
-                      <h3 className="mt-8 text-[18px] leading-snug font-semibold tracking-tight">
+                    </div>
+
+                    <div className="mt-7 flex flex-col flex-1">
+                      <h3 className="text-[20px] leading-snug font-semibold tracking-tight text-white transition-colors duration-300 group-hover:text-white lg:text-[22px]">
                         {s.title}
                       </h3>
-                      <p className="mt-2.5 text-[13.5px] leading-relaxed text-onnavy">{s.desc}</p>
-                      <span className="mt-6 inline-flex items-center gap-1.5 text-[12.5px] font-medium text-white transition group-hover:text-onnavy-accent">
-                        {t.services.learnMore}
-                        <ArrowUpRight className="size-4 transition duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                      </span>
-                    </Link>
-                  </li>
-                );
-              })}
+                      <p className="mt-3 text-[14px] leading-[1.65] text-onnavy">
+                        {s.desc}
+                      </p>
 
-              {/* The empty fourth cell becomes the way out of the section. */}
-              <li className="bg-primary">
-                <Link
-                  href={href(lang, "#contact")}
-                  className="group flex h-full flex-col justify-end p-7 transition duration-300 hover:bg-dark sm:p-8"
-                >
-                  <span className="text-[18px] leading-snug font-semibold tracking-tight">
-                    {t.portfolio.ctaTitle}
-                  </span>
-                  <span className="mt-4 inline-flex items-center gap-2 text-[12.5px] font-medium text-onnavy-accent">
-                    {t.portfolio.cta}
-                    <ArrowRight className="size-4 transition duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
-                  </span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
+                      <div className="mt-auto pt-7 flex items-center justify-between border-t border-white/[0.08] text-[13px] font-medium text-white transition duration-300 group-hover:text-onnavy-accent">
+                        <span>{t.services.learnMore}</span>
+                        <span className="grid size-9 place-items-center rounded-full border border-white/10 bg-white/[0.06] text-white transition duration-300 group-hover:border-onnavy-accent group-hover:bg-onnavy-accent group-hover:text-primary">
+                          <ArrowUpRight className="size-4 transition duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/*
+           * The way out of the section, as one rule-wide row. It used to be an
+           * odd fourth cell in a 2x2 grid, which read as a service the brand
+           * does not sell.
+           */}
+          <Link
+            href={href(lang, "#contact")}
+            className="group reveal relative mt-12 flex flex-col gap-5 border-t border-white/20 pt-8 sm:flex-row sm:items-center sm:justify-between lg:mt-14"
+          >
+            <span
+              aria-hidden
+              className="absolute -top-px start-0 h-px w-0 bg-onnavy-accent transition-[width] duration-700 ease-out group-hover:w-full"
+            />
+            <span className="t-title max-w-[20ch] text-balance">{t.portfolio.ctaTitle}</span>
+            <span className="inline-flex shrink-0 items-center gap-3 text-[13px] font-medium text-onnavy-accent">
+              {t.portfolio.cta}
+              <span className="grid size-12 place-items-center rounded-full border border-white/25 text-white transition duration-300 group-hover:border-onnavy-accent group-hover:bg-onnavy-accent group-hover:text-primary lg:size-14">
+                <ArrowRight className="size-4.5 rtl:rotate-180" />
+              </span>
+            </span>
+          </Link>
+        </NavyPanel>
       </Container>
     </section>
   );
@@ -448,15 +483,33 @@ function pickThumb(p: (typeof PROJECTS)[number]) {
   return p.thumb ?? p.gallery?.[0];
 }
 
-/** Projects that actually ship an image, since the layout is image-led. */
-const FEATURED = PROJECTS.filter(pickThumb).slice(0, 3);
+/**
+ * Curates 1 flagship project per service discipline (ads, web, marketing)
+ * so the homepage displays the agency's full spectrum of expertise.
+ */
+function getFeaturedProjects() {
+  const ads =
+    PROJECTS.find((p) => p.slug === "unilever-indonesia") ??
+    PROJECTS.find((p) => p.service === "ads" && pickThumb(p));
+  const web =
+    PROJECTS.find((p) => p.slug === "borch-and-co") ??
+    PROJECTS.find((p) => p.service === "web" && pickThumb(p));
+  const mkt =
+    PROJECTS.find((p) => p.slug === "make-over") ??
+    PROJECTS.find((p) => p.service === "marketing" && pickThumb(p));
+
+  const list = [ads, web, mkt].filter(Boolean) as (typeof PROJECTS)[number][];
+  return list.length === 3 ? list : PROJECTS.filter(pickThumb).slice(0, 3);
+}
+
+const FEATURED = getFeaturedProjects();
 
 export function Work({ lang, t }: P) {
   const [lead, ...rest] = FEATURED;
   if (!lead) return null;
 
   return (
-    <section className="pb-24 lg:pb-32">
+    <section className="pb-20 lg:pb-28">
       <Container>
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
           <h2 className="reveal t-display max-w-[9ch]">
@@ -501,41 +554,87 @@ export function ProjectCard({
 }) {
   const src = pickThumb(project);
   const subtitle = project.subtitle[lang] ?? project.subtitle.en;
+  const isWeb = project.service === "web";
 
   return (
     <Link
       href={href(lang, `/portfolio/${project.slug}`)}
-      className={`group reveal relative block overflow-hidden rounded-[20px] bg-ink sm:rounded-[24px] ${
+      className={`group reveal relative block overflow-hidden rounded-[20px] bg-[#0c0d18] border border-white/10 transition-colors duration-500 hover:border-white/25 sm:rounded-[24px] ${
         featured ? "aspect-[4/3] lg:aspect-auto lg:h-full" : "aspect-[16/10] lg:aspect-[16/9]"
       }`}
     >
-      <Image
-        src={src!}
-        alt=""
-        fill
-        sizes={featured ? "(min-width: 1024px) 800px, 100vw" : "(min-width: 1024px) 520px, 50vw"}
-        className="object-cover transition duration-700 group-hover:scale-[1.04]"
-      />
-      {/* Enough of a wash for white type to clear the photo underneath it. */}
+      {/* Background ambient canvas */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-transparent"
+        className="absolute inset-0 bg-gradient-to-br from-[#141628] via-[#0c0d18] to-[#070710]"
       />
 
-      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-6">
+      {/* Main Thumbnail Image */}
+      <Image
+        src={src!}
+        alt={project.title}
+        fill
+        sizes={featured ? "(min-width: 1024px) 800px, 100vw" : "(min-width: 1024px) 520px, 50vw"}
+        className={`object-cover transition duration-700 ease-out group-hover:scale-[1.04] ${
+          isWeb ? "object-top" : "object-[center_20%]"
+        }`}
+      />
+
+      {/*
+       * Calibrated gradient scrim: multi-stop so the top 65% of the artwork remains
+       * vibrant and clean, while the text at the bottom has 100% legibility.
+       */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-[#0a0a14]/60 via-35% to-transparent transition duration-700 group-hover:from-primary/95 group-hover:via-primary/50"
+      />
+
+      {/* Top accent line drawn on hover */}
+      <span
+        aria-hidden
+        className="absolute top-0 start-0 h-0.5 w-0 bg-onnavy-accent transition-[width] duration-700 ease-out group-hover:w-full z-20"
+      />
+
+      {/* Top badges: Service Category Pill & Client Logo */}
+      <div className="absolute top-4 inset-x-4 z-20 flex items-center justify-between gap-3 pointer-events-none sm:top-5 sm:inset-x-5">
+        <span className="eyebrow inline-flex items-center gap-1.5 rounded-full bg-[#0a0a14]/80 px-3 py-1.5 text-onnavy-accent border border-white/15 backdrop-blur-md shadow-sm">
+          <span className="size-1.5 rounded-full bg-onnavy-accent" />
+          {t.portfolio.services[project.service]}
+        </span>
+
+        {project.logo && (
+          <span className="flex h-8 items-center justify-center rounded-full bg-white/95 px-3 py-1 shadow-md backdrop-blur-md transition duration-300 group-hover:scale-105">
+            <Image
+              src={project.logo}
+              alt={project.title}
+              width={64}
+              height={22}
+              className="max-h-5 w-auto object-contain"
+            />
+          </span>
+        )}
+      </div>
+
+      {/* Bottom Information Bar */}
+      <div className="absolute inset-x-0 bottom-0 z-20 flex items-end justify-between gap-4 p-5 sm:p-6">
         <div className="min-w-0">
-          <p className="eyebrow text-onnavy-accent">{t.portfolio.services[project.service]}</p>
           <h3
-            className={`mt-2 leading-tight font-semibold tracking-tight text-white ${
-              featured ? "text-[24px] sm:text-[30px]" : "text-[18px]"
+            className={`leading-tight font-semibold tracking-tight text-white ${
+              featured ? "text-[24px] sm:text-[32px]" : "text-[18px] sm:text-[20px]"
             }`}
           >
             {project.title}
           </h3>
-          {featured && <p className="mt-1.5 truncate text-[13.5px] text-white/70">{subtitle}</p>}
+          <p
+            className={`mt-1.5 truncate text-white/80 font-normal ${
+              featured ? "text-[14px] sm:text-[15px]" : "text-[13px]"
+            }`}
+          >
+            {subtitle}
+          </p>
         </div>
-        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-surface text-primary transition duration-300 group-hover:bg-secondary group-hover:text-white">
-          <ArrowUpRight className="size-4.5" />
+        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-surface text-primary shadow-lg transition duration-500 group-hover:bg-secondary group-hover:text-white group-hover:scale-105 sm:size-12">
+          <ArrowUpRight className="size-4.5 transition duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </span>
       </div>
     </Link>
@@ -546,11 +645,11 @@ export function ProjectCard({
 
 export function Process({ lang, t }: P) {
   return (
-    <section id="process" className="scroll-mt-24 pb-24 lg:pb-32">
+    <section id="process" className="scroll-mt-24 pb-20 lg:pb-28">
       <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
         <div className="reveal lg:sticky lg:top-28 lg:self-start">
           <Eyebrow>{t.process.eyebrow}</Eyebrow>
-          <h2 className="t-display mt-7 max-w-[9ch]">
+          <h2 className="t-display mt-7 max-w-[14ch]">
             {t.process.titleLead} <span className="text-faint">{t.process.titleStrong}</span>
           </h2>
           <p className="mt-6 max-w-sm text-[14.5px] leading-[1.6] text-muted">{t.process.body}</p>
@@ -642,7 +741,7 @@ export function Clients({ t }: { t: Dictionary }) {
   return (
     <section
       aria-label={`${t.clients.titleLead} ${t.clients.titleStrong}`.trim()}
-      className="clients group/clients overflow-hidden pb-24 lg:pb-32"
+      className="clients group/clients overflow-hidden pb-20 lg:pb-28"
     >
       <Container>
         <Eyebrow className="reveal justify-center">
@@ -675,7 +774,7 @@ export function Clients({ t }: { t: Dictionary }) {
 
 export function Cta({ t }: { t: Dictionary }) {
   return (
-    <section id="contact" className="scroll-mt-24 pb-24 lg:pb-32">
+    <section id="contact" className="scroll-mt-24 pb-20 lg:pb-28">
       <Container>
         <div className="relative overflow-hidden rounded-[24px] bg-surface px-6 py-16 sm:rounded-[32px] sm:px-10 sm:py-20 lg:px-14">
           {/*

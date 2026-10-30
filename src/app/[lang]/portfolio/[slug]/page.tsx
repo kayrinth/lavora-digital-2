@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AccentButton, Container, Eyebrow } from "@/components/ui";
+import { Container, CtaPanel, NavyPanel } from "@/components/ui";
 import { Footer, Navbar, ProjectCard } from "@/components/sections";
 import { ArrowRight, ArrowUpRight } from "@/components/icons";
 import { DEFAULT_LOCALE, LOCALES, getDictionary, isLocale } from "@/lib/dictionaries";
@@ -33,9 +33,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function ProjectPage(
-  props: PageProps<"/[lang]/portfolio/[slug]">,
-) {
+export default async function ProjectPage(props: PageProps<"/[lang]/portfolio/[slug]">) {
   const { lang, slug } = await props.params;
   if (!isLocale(lang)) notFound();
   const project = getProject(slug);
@@ -50,6 +48,8 @@ export default async function ProjectPage(
   const index = PROJECTS.findIndex((p) => p.slug === project.slug);
   const next = PROJECTS[(index + 1) % PROJECTS.length];
 
+  const nextThumb = next.thumb ?? next.gallery?.[0];
+
   const related = PROJECTS.filter(
     (p) =>
       p.service === project.service &&
@@ -58,99 +58,80 @@ export default async function ProjectPage(
       (p.thumb ?? p.gallery?.[0]),
   ).slice(0, 3);
 
-  const galleryRatio =
-    project.ratio ?? (project.service === "web" ? "16 / 9" : "4 / 5");
+  const galleryRatio = project.ratio ?? (project.service === "web" ? "16 / 9" : "4 / 5");
 
   return (
     <div className="bg-background">
       <Navbar lang={lang} t={t} />
       <main>
-        {/* Masthead. The case study opens on the brand ground, not on a bare page. */}
-        <header className="on-navy bg-primary text-white">
-          <Container className="pt-10 pb-14 lg:pt-14 lg:pb-20">
-            <Link
-              href={`/${lang}/portfolio`}
-              className="inline-flex min-h-[44px] items-center gap-2 text-[13px] text-onnavy transition hover:text-white"
-            >
-              <ArrowRight className="size-4 rotate-180 rtl:rotate-0" />
-              {t.portfolio.back}
-            </Link>
+        {/*
+         * Masthead. The case study opens on the brand ground, inset in the page
+         * rather than bled to the edges: the navbar is a pill floating on the
+         * page ground, and navy run to the top opens on a seam under it and
+         * turns the bar's frosted white to mud. This is what the service pages
+         * and the home page already do with their own opening panels.
+         */}
+        <header className="pt-3 pb-7 sm:pt-4 lg:pb-10">
+          <Container>
+            <NavyPanel>
+              <Link
+                href={`/${lang}/portfolio`}
+                className="inline-flex min-h-[44px] items-center gap-2 text-[13px] text-onnavy transition hover:text-white"
+              >
+                <ArrowRight className="size-4 rotate-180 rtl:rotate-0" />
+                {t.portfolio.back}
+              </Link>
 
-            <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
-              <div>
-                <Link
-                  href={`/${lang}/services/${SERVICE_PAGE[project.service]}`}
-                  className="eyebrow inline-flex items-center gap-2 text-onnavy-accent transition hover:text-white"
-                >
-                  <span aria-hidden className="size-1.5 rounded-full bg-onnavy-accent" />
-                  {serviceLabel}
-                </Link>
-                <h1 className="t-display mt-5 max-w-[14ch]">{project.title}</h1>
-                <p className="mt-6 max-w-lg text-[16px] leading-[1.55] text-onnavy">
-                  {pick(project.subtitle, lang)}
-                </p>
-              </div>
-
-              {project.logo && (
-                <span className="relative block h-24 w-44 shrink-0 rounded-2xl bg-surface lg:h-28 lg:w-52">
-                  <Image
-                    src={project.logo}
-                    alt=""
-                    fill
-                    sizes="208px"
-                    priority
-                    className="object-contain p-5"
-                  />
-                </span>
-              )}
-            </div>
-
-            {/* Spec row: the facts as a masthead strip rather than a sidebar list. */}
-            <dl className="mt-14 grid gap-px overflow-hidden rounded-2xl bg-white/15 sm:grid-cols-2 lg:grid-cols-3">
-              {meta.map((row) => (
-                <div key={row.label} className="bg-primary px-6 py-6">
-                  <dt className="eyebrow text-onnavy">{row.label}</dt>
-                  <dd className="mt-2.5 text-[15px] leading-snug font-medium">{row.value}</dd>
+              <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
+                <div>
+                  <Link
+                    href={`/${lang}/services/${SERVICE_PAGE[project.service]}`}
+                    className="eyebrow inline-flex items-center gap-2 text-onnavy-accent transition hover:text-white"
+                  >
+                    <span aria-hidden className="size-1.5 rounded-full bg-onnavy-accent" />
+                    {serviceLabel}
+                  </Link>
+                  <h1 className="t-display mt-5 max-w-[14ch]">{project.title}</h1>
+                  <p className="mt-6 max-w-lg text-[16px] leading-[1.55] text-onnavy">
+                    {pick(project.subtitle, lang)}
+                  </p>
                 </div>
-              ))}
-              <div className="bg-primary px-6 py-6">
-                <dt className="eyebrow text-onnavy">{t.portfolio.metaService}</dt>
-                <dd className="mt-2.5 text-[15px] leading-snug font-medium">{serviceLabel}</dd>
+
+                {project.logo && (
+                  <span className="relative block h-24 w-44 shrink-0 rounded-2xl bg-surface lg:h-28 lg:w-52">
+                    <Image
+                      src={project.logo}
+                      alt=""
+                      fill
+                      sizes="208px"
+                      priority
+                      className="object-contain p-5"
+                    />
+                  </span>
+                )}
               </div>
-            </dl>
+
+              {/* Spec row: the facts as a masthead strip rather than a sidebar list. */}
+              <dl className="mt-14 grid gap-px overflow-hidden rounded-2xl bg-white/15 sm:grid-cols-2 lg:grid-cols-3">
+                {meta.map((row) => (
+                  <div key={row.label} className="bg-primary px-6 py-6">
+                    <dt className="eyebrow text-onnavy">{row.label}</dt>
+                    <dd className="mt-2.5 text-[15px] leading-snug font-medium">{row.value}</dd>
+                  </div>
+                ))}
+                <div className="bg-primary px-6 py-6">
+                  <dt className="eyebrow text-onnavy">{t.portfolio.metaService}</dt>
+                  <dd className="mt-2.5 text-[15px] leading-snug font-medium">{serviceLabel}</dd>
+                </div>
+              </dl>
+            </NavyPanel>
           </Container>
         </header>
-
-        {/* The write-up. The lead paragraph is set as a standfirst, the rest as body. */}
-        <Container className="py-16 lg:py-24">
-          <div className="grid gap-10 lg:grid-cols-[0.34fr_0.66fr] lg:gap-20">
-            <p className="reveal text-[13px] leading-relaxed text-muted lg:sticky lg:top-28 lg:self-start">
-              {pick(project.summary, lang)}
-            </p>
-
-            <div className="max-w-[68ch]">
-              {lead && (
-                <p className="reveal text-[19px] leading-[1.5] font-medium text-balance sm:text-[22px]">
-                  {lead}
-                </p>
-              )}
-              {rest.length > 0 && (
-                <div className="mt-8 space-y-5 border-t border-line pt-8 text-[15px] leading-[1.7] text-muted">
-                  {rest.map((para) => (
-                    <p key={para} className="reveal">
-                      {para}
-                    </p>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </Container>
 
         {/* Website work is shown live, scrolled inside its own frame, instead of
             as flat screenshots; everything else keeps the image gallery. */}
         {project.url ? (
-          <Container className="pb-16 lg:pb-24">
+          <Container className="pb-14 lg:pb-20">
             <div className="reveal overflow-hidden rounded-[20px] border border-line">
               <div className="flex items-center gap-3 border-b border-line bg-surface px-4 py-3">
                 <span aria-hidden className="flex shrink-0 gap-1.5">
@@ -187,48 +168,83 @@ export default async function ProjectPage(
           </Container>
         ) : (
           project.gallery && (
-          <Container className="pb-16 lg:pb-24">
-            <ul
-              className={`reveal-stagger grid gap-4 lg:gap-6 ${
-                project.service === "web" ? "grid-cols-1" : "sm:grid-cols-2"
-              }`}
-            >
-              {project.gallery.map((src, i) => (
-                <li
-                  key={src}
-                  /* Ads run 4:5 social creatives, website work is wide screenshots. */
-                  style={{ aspectRatio: galleryRatio }}
-                  className="reveal group relative overflow-hidden rounded-[20px] border border-line bg-surface"
-                >
-                  <Image
-                    src={src}
-                    alt=""
-                    fill
-                    sizes="(min-width: 1024px) 700px, 100vw"
-                    /* Contained, not cropped: a few creatives are square, and an ad
-                       loses its message when 20% of it is cut off. */
-                    className={`transition duration-700 group-hover:scale-[1.02] ${
-                      project.service === "web" ? "object-cover" : "object-contain"
-                    }`}
-                  />
-                  <span
-                    dir="ltr"
-                    aria-hidden
-                    className="eyebrow absolute top-4 start-4 rounded-full bg-background/90 px-2.5 py-1 text-muted tabular-nums backdrop-blur"
+            <Container className="pb-14 lg:pb-20">
+              <ul
+                className={`reveal-stagger grid gap-4 lg:gap-6 ${
+                  project.service === "web" ? "grid-cols-1" : "sm:grid-cols-2"
+                }`}
+              >
+                {project.gallery.map((src, i) => (
+                  <li
+                    key={src}
+                    /* Ads run 4:5 social creatives, website work is wide screenshots. */
+                    style={{ aspectRatio: galleryRatio }}
+                    className="reveal group relative overflow-hidden rounded-[20px] border border-line bg-surface transition duration-500 hover:border-secondary"
                   >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </Container>
+                    <Image
+                      src={src}
+                      alt=""
+                      fill
+                      sizes="(min-width: 1024px) 700px, 100vw"
+                      /* Contained, not cropped: a few creatives are square, and an ad
+                       loses its message when 20% of it is cut off. */
+                      className={`transition duration-700 group-hover:scale-[1.02] ${
+                        project.service === "web" ? "object-cover" : "object-contain"
+                      }`}
+                    />
+                    <span
+                      dir="ltr"
+                      aria-hidden
+                      className="eyebrow absolute top-4 start-4 rounded-full bg-background/90 px-2.5 py-1 text-muted tabular-nums backdrop-blur"
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Container>
           )
         )}
 
+        {/*
+         * The write-up, under the work rather than above it: the visitor
+         * arrived by clicking a picture of this project, so the project is
+         * what the page owes them first and the account of it second.
+         * The lead paragraph is set as a standfirst, the rest as body.
+         */}
+        <Container className="pb-16 lg:pb-24">
+          <div className="grid gap-10 lg:grid-cols-[0.34fr_0.66fr] lg:gap-20">
+            {/* The summary is the page's thesis, not a caption: set at reading
+                size with the accent rule the rest of the site uses to open a
+                column. */}
+            <p className="reveal relative border-t border-line pt-7 text-[15px] leading-[1.65] text-muted lg:sticky lg:top-28 lg:self-start">
+              <span aria-hidden className="absolute -top-px start-0 h-px w-12 bg-secondary" />
+              {pick(project.summary, lang)}
+            </p>
+
+            <div className="max-w-[68ch]">
+              {lead && (
+                <p className="reveal text-[19px] leading-[1.5] font-medium text-balance sm:text-[22px]">
+                  {lead}
+                </p>
+              )}
+              {rest.length > 0 && (
+                <div className="mt-8 space-y-5 border-t border-line pt-8 text-[15px] leading-[1.7] text-muted">
+                  {rest.map((para) => (
+                    <p key={para} className="reveal">
+                      {para}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </Container>
+
         {related.length > 0 && (
           <Container className="pb-16 lg:pb-24">
-            <Eyebrow className="reveal">{t.portfolio.related}</Eyebrow>
-            <ul className="reveal-stagger mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+            <h2 className="reveal t-title">{t.portfolio.related}</h2>
+            <ul className="reveal-stagger mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
               {related.map((p) => (
                 <li key={p.slug}>
                   <ProjectCard project={p} lang={lang} t={t} />
@@ -242,12 +258,36 @@ export default async function ProjectPage(
         <Container className="pb-16 lg:pb-24">
           <Link
             href={`/${lang}/portfolio/${next.slug}`}
-            className="group reveal flex flex-col gap-6 border-y border-line py-10 transition sm:flex-row sm:items-center sm:justify-between lg:py-14"
+            className="group reveal relative flex flex-col gap-7 border-y border-line py-10 transition sm:flex-row sm:items-center sm:justify-between sm:gap-10 lg:py-14"
           >
-            <span>
-              <span className="eyebrow block text-secondary">{t.portfolio.next}</span>
-              <span className="t-display mt-3 block transition duration-500 group-hover:text-secondary">
-                {next.title}
+            {/* The rule draws itself in, as it does on the work index. */}
+            <span
+              aria-hidden
+              className="absolute -top-px start-0 h-px w-0 bg-secondary transition-[width] duration-700 ease-out group-hover:w-full"
+            />
+            <span className="flex min-w-0 items-center gap-6 sm:gap-8">
+              {/* The step shows what it leads to. A row that only names the
+                  next client asks the visitor to click on trust. */}
+              {nextThumb && (
+                <span className="relative hidden aspect-[4/3] w-32 shrink-0 overflow-hidden rounded-2xl bg-surface sm:block lg:w-40">
+                  <Image
+                    src={nextThumb}
+                    alt=""
+                    fill
+                    sizes="160px"
+                    className={`transition duration-700 ease-out group-hover:scale-[1.04] ${
+                      next.service === "web" ? "object-cover object-top" : "object-contain p-3"
+                    }`}
+                  />
+                </span>
+              )}
+              <span className="min-w-0">
+                <span className="eyebrow block text-secondary">{t.portfolio.next}</span>
+                {/* A client name is a proper noun of unknown length: at display
+                    scale the longest of them takes the row three lines deep. */}
+                <span className="t-title mt-3 block transition duration-500 group-hover:text-secondary">
+                  {next.title}
+                </span>
               </span>
             </span>
             <span className="grid size-14 shrink-0 place-items-center rounded-full border border-line text-primary transition duration-300 group-hover:border-secondary group-hover:bg-secondary group-hover:text-white lg:size-16">
@@ -257,15 +297,12 @@ export default async function ProjectPage(
         </Container>
 
         <Container className="pb-24 lg:pb-32">
-          <div className="rounded-[24px] bg-surface px-6 py-16 text-center sm:rounded-[32px] sm:px-10 lg:py-20">
-            <h2 className="reveal t-display mx-auto max-w-[16ch]">{t.portfolio.ctaTitle}</h2>
-            <p className="reveal mx-auto mt-6 max-w-md text-[14.5px] leading-[1.6] text-muted">
-              {t.cta.body}
-            </p>
-            <div className="mt-9 flex justify-center">
-              <AccentButton href={`/${lang}#contact`}>{t.portfolio.cta}</AccentButton>
-            </div>
-          </div>
+          <CtaPanel
+            heading={t.portfolio.ctaTitle}
+            body={t.cta.body}
+            cta={t.portfolio.cta}
+            href={`/${lang}#contact`}
+          />
         </Container>
       </main>
       <Footer lang={lang} t={t} />

@@ -22,62 +22,34 @@ export type IndexItem = {
  */
 function frame(service: ServiceKey) {
   return service === "web"
-    ? { ratio: "aspect-[16/10]", fit: "object-cover", plate: "bg-ink" }
-    : { ratio: "aspect-[4/3]", fit: "object-contain p-4 sm:p-6", plate: "bg-surface" };
+    ? {
+        ratio: "aspect-[16/10]",
+        fit: "object-cover object-top",
+        plate: "bg-[#0c0d18] border border-line/80 shadow-md",
+      }
+    : {
+        ratio: "aspect-[4/3]",
+        fit: "object-contain p-5 sm:p-7 drop-shadow-[0_12px_20px_rgba(0,0,0,0.12)] group-hover:drop-shadow-[0_18px_28px_rgba(0,0,0,0.18)]",
+        plate: "bg-gradient-to-br from-surface to-background border border-line/70 shadow-md",
+      };
 }
 
 export function PortfolioIndex({
   items,
-  filters,
-  active,
-  basePath,
-  filterLabel,
   viewLabel,
 }: {
-  /** Already filtered on the server. */
+  /** Already filtered on the server; the masthead owns the switcher. */
   items: IndexItem[];
-  filters: { key: ServiceKey; label: string; count: number }[];
-  active: ServiceKey;
-  basePath: string;
-  filterLabel: string;
   viewLabel: string;
 }) {
   return (
     <>
-      {filters.length > 1 && (
-        <nav aria-label={filterLabel} className="flex flex-wrap gap-2">
-          {filters.map((f) => {
-            const on = active === f.key;
-            return (
-              <Link
-                key={f.key}
-                href={`${basePath}?service=${f.key}`}
-                aria-current={on ? "page" : undefined}
-                className={`inline-flex min-h-[44px] items-center gap-2 rounded-full border px-5 text-[13px] transition ${
-                  on
-                    ? "border-primary bg-primary text-white"
-                    : "border-line text-muted hover:border-ink/40 hover:text-ink"
-                }`}
-              >
-                {f.label}
-                <span
-                  dir="ltr"
-                  className={`text-[11px] tabular-nums ${on ? "text-onnavy" : "text-faint"}`}
-                >
-                  {f.count}
-                </span>
-              </Link>
-            );
-          })}
-        </nav>
-      )}
-
       {/*
        * An index, not a card grid: hairlines carry the structure, the work is
        * shown uncovered, and the side the image sits on alternates so the eye
        * has a rhythm to follow down the page.
        */}
-      <ol className="reveal-stagger mt-12 lg:mt-16">
+      <ol className="reveal-stagger">
         {items.map((item, i) => {
           const { ratio, fit, plate } = frame(item.service);
           const imageFirst = i % 2 === 1;
@@ -88,7 +60,7 @@ export function PortfolioIndex({
                   stats and the service list already use, put to work as feedback. */}
               <span
                 aria-hidden
-                className="absolute -top-px start-0 h-px w-0 bg-secondary transition-all duration-700 ease-out group-hover:w-full"
+                className="absolute -top-px start-0 h-px w-0 bg-secondary transition-[width] duration-700 ease-out group-hover:w-full"
               />
 
               <Link
@@ -100,10 +72,18 @@ export function PortfolioIndex({
                     imageFirst ? "lg:order-1" : "lg:order-2"
                   }`}
                 >
+                  {/* Floating category pill */}
+                  <div className="absolute top-3.5 start-3.5 z-10 sm:top-4 sm:start-4">
+                    <span className="eyebrow inline-flex items-center gap-1.5 rounded-full bg-ink/75 px-3 py-1 text-onnavy-accent border border-white/15 backdrop-blur-md shadow-sm text-[11px]">
+                      <span className="size-1.5 rounded-full bg-onnavy-accent" />
+                      {item.serviceLabel}
+                    </span>
+                  </div>
+
                   {item.image && (
                     <Image
                       src={item.image}
-                      alt=""
+                      alt={item.title}
                       fill
                       sizes="(min-width: 1024px) 660px, 100vw"
                       className={`${fit} transition duration-700 ease-out group-hover:scale-[1.03]`}
@@ -112,17 +92,19 @@ export function PortfolioIndex({
                 </div>
 
                 <div className={imageFirst ? "lg:order-2" : "lg:order-1"}>
-                  <div className="flex items-baseline gap-5">
+                  <div className="flex items-baseline gap-6">
                     <span
                       dir="ltr"
-                      className="text-[clamp(26px,2.8vw,38px)] leading-none font-bold text-faint tabular-nums transition duration-500 group-hover:text-secondary"
+                      className="text-[clamp(38px,4vw,56px)] leading-[0.85] font-bold tracking-[-0.05em] text-faint tabular-nums transition duration-500 group-hover:text-secondary"
                     >
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span className="eyebrow text-muted">{item.subtitle}</span>
                   </div>
 
-                  <h3 className="t-title mt-6 max-w-[14ch] text-balance">{item.title}</h3>
+                  <h3 className="t-title mt-7 max-w-[14ch] text-balance transition duration-500 group-hover:text-secondary">
+                    {item.title}
+                  </h3>
 
                   <p className="mt-6 max-w-[44ch] text-[14.5px] leading-[1.65] text-muted">
                     {item.summary}
