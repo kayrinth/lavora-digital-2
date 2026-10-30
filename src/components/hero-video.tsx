@@ -106,8 +106,9 @@ export function HeroVideo({
               {line.lead}{" "}
               {i === last ? (
                 <span
-                  // Blue, not navy: this block sits on the ink hero, where the navy holds only 1.6:1.
-                  className={`mt-[0.1em] inline-block bg-blue px-[0.18em] pt-[0.08em] pb-[0.04em] ${
+                  // A white block with ink type: this sits on the ink hero, where both the navy and the
+                  // blue hold under 1.7:1 and the field would vanish into its own ground.
+                  className={`mt-[0.1em] inline-block bg-surface px-[0.18em] pt-[0.08em] pb-[0.04em] text-ink ${
                     open ? "reel-wipe" : ""
                   }`}
                   style={delay(950 + i * 120)}

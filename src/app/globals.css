@@ -5,9 +5,9 @@
   --color-surface: #ffffff;
   /* Alternate light ground: the navy at its lightest, not a neutral grey. */
   --color-mist: #e9eaf6;
-  /* Blue bands carry white text only (8.6:1), and stay well clear of the navy, which the heading
-     flags sit on top of these bands in. */
-  --color-blue: #0d47a1;
+  /* Blue bands carry white text only (12.2:1). Dark enough that the navy holds just 1.4:1 on it, so
+     a heading's flag on a dark ground is a white field, not a navy one — see --flag below. */
+  --color-blue: #232f72;
   --color-ink: #0a0a14;
   --color-dim: #5c6274;
   /* Translucent, so one hairline works on white and on the mist tint alike. */
@@ -136,10 +136,12 @@
     }
   }
 
-  /* The navy field behind a head's one coloured phrase. A gradient rather than a colour so motion.tsx can sweep
-     it in. An ink ground sets --flag to the blue: navy on ink holds only 1.6:1 and the field would disappear. */
+  /* The field behind a head's one emphasised phrase. A gradient rather than a colour so motion.tsx can sweep
+     it in. Navy by default, for a light ground; the blue, navy and ink grounds each flip it to a white field
+     carrying their own colour as the type, because every one of them holds under 2:1 against the navy. */
   .flag {
-    @apply box-decoration-clone bg-no-repeat px-[0.2em] pt-[0.08em] pb-[0.03em] text-white;
+    @apply box-decoration-clone bg-no-repeat px-[0.2em] pt-[0.08em] pb-[0.03em];
+    color: var(--flag-ink, var(--color-surface));
     background-image: linear-gradient(var(--flag, var(--color-brand)) 0 0);
   }
 

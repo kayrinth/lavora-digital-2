@@ -553,7 +553,9 @@ export function Footer({ lang, t }: P) {
   ];
 
   return (
-    <footer className="bg-ink text-white [--focus:#fff]">
+    // A hairline across the top: the blue closing band holds 1.6:1 against the ink here, and on About
+    // an ink band meets it outright, so without a seam the two surfaces read as one.
+    <footer className="border-t border-white/15 bg-ink text-white [--focus:#fff]">
       <div className="wrap grid gap-12 py-16 md:grid-cols-12 md:py-20">
         <div className="md:col-span-5">
           <div className="flex items-center gap-3">

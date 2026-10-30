@@ -137,8 +137,7 @@ export default async function About(props: PageProps<"/[lang]/about">) {
             </div>
           </div>
 
-          {/* On ink the flag takes the blue: the navy holds 1.1:1 there and would sink into the ground. */}
-          <p className="display mt-12 text-head [--flag:var(--color-blue)] md:mt-16">
+          <p className="display mt-12 text-head md:mt-16">
             <span className="flag">{doc.closing.kicker}</span>
           </p>
           <AccentButton href={`/${lang}#contact`} onNavy className="mt-8 md:mt-10">

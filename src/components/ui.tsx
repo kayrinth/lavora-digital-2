@@ -20,9 +20,9 @@ export function Container({
 const GROUND = {
   surface: "bg-surface text-ink",
   mist: "bg-mist text-ink",
-  blue: "bg-blue text-white [--focus:#fff]",
-  brand: "bg-brand text-white [--focus:#fff]",
-  ink: "bg-ink text-white [--focus:#fff]",
+  blue: "bg-blue text-white [--focus:#fff] [--flag:#fff] [--flag-ink:var(--color-blue)]",
+  brand: "bg-brand text-white [--focus:#fff] [--flag:#fff] [--flag-ink:var(--color-brand)]",
+  ink: "bg-ink text-white [--focus:#fff] [--flag:#fff] [--flag-ink:var(--color-ink)]",
 } as const;
 
 export type Ground = keyof typeof GROUND;
@@ -46,9 +46,9 @@ export function Band({
 
 /**
  * A heading with one emphasised phrase. Navy type holds 17.6:1 on white and
- * mist but only 2.0:1 on blue and 1.1:1 on ink, so a dark ground carries the
- * phrase as a navy field with white text instead — the same flag that hangs
- * under a photo. Pass `field` on blue, navy and ink.
+ * mist but 1.4:1 on blue and 1.1:1 on ink, so a dark ground carries the phrase
+ * as a white field with the band's own colour as the type — the Band's ground
+ * sets that. Pass `field` on blue, navy and ink.
  */
 export function Accent({
   lead,
