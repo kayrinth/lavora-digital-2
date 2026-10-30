@@ -33,12 +33,12 @@ export default async function About(props: PageProps<"/[lang]/about">) {
                 with a third of the band empty on either side of it. */}
             <div className="flex items-center gap-3">
               <Image
-                src="/lavora-logo.webp"
+                src="/lavora-mark-light.webp"
                 alt=""
                 width={64}
                 height={64}
                 priority
-                className="size-12 brightness-0 invert md:size-14"
+                className="size-12 object-contain md:size-14"
               />
               <span className="display text-lg md:text-xl">{t.brand}</span>
             </div>

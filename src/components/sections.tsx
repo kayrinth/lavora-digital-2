@@ -558,11 +558,11 @@ export function Footer({ lang, t }: P) {
         <div className="md:col-span-5">
           <div className="flex items-center gap-2.5">
             <Image
-              src="/lavora-logo.webp"
+              src="/lavora-mark-light.webp"
               alt=""
-              width={40}
-              height={40}
-              className="size-10 object-contain brightness-0 invert"
+              width={48}
+              height={48}
+              className="size-10 object-contain"
             />
             <span className="display text-lg">{t.brand}</span>
           </div>

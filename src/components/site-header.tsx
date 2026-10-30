@@ -76,16 +76,26 @@ export function SiteHeader({
       />
       <div className="wrap flex h-20 items-center justify-between gap-3 sm:gap-6">
         <Link href={home} onClick={close} className="flex min-h-11 shrink-0 items-center gap-0 sm:gap-2.5">
-          <Image
-            src="/lavora-logo.webp"
-            alt=""
-            width={36}
-            height={36}
-            priority
-            className={`size-8 object-contain transition-[filter] duration-300 sm:size-9 ${
-              over ? "brightness-0 invert" : ""
-            }`}
-          />
+          {/* Two marks cross-fading, not one flattened with a filter: the light version keeps the
+              artwork's navy-to-white sweep instead of going flat. */}
+          <span className="grid shrink-0 *:col-start-1 *:row-start-1 *:size-8 *:object-contain *:transition-opacity *:duration-300 sm:*:size-9">
+            <Image
+              src="/lavora-mark-light.webp"
+              alt=""
+              width={48}
+              height={48}
+              priority
+              className={over ? "" : "opacity-0"}
+            />
+            <Image
+              src="/lavora-mark.webp"
+              alt=""
+              width={48}
+              height={48}
+              priority
+              className={over ? "opacity-0" : ""}
+            />
+          </span>
           {/* The mark carries the brand on a phone, where the row has to hold the menu and the brief
               button too. sr-only rather than hidden, so the link keeps its name for a screen reader. */}
           <span className="display sr-only text-base sm:not-sr-only sm:text-lg">{brand}</span>
