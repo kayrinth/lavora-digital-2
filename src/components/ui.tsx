@@ -46,7 +46,7 @@ export function Band({
 
 /**
  * A heading with one emphasised phrase. Navy type holds 17.6:1 on white and
- * mist but only 2.5:1 on blue and 1.6:1 on ink, so a dark ground carries the
+ * mist but only 2.0:1 on blue and 1.1:1 on ink, so a dark ground carries the
  * phrase as a navy field with white text instead — the same flag that hangs
  * under a photo. Pass `field` on blue, navy and ink.
  */

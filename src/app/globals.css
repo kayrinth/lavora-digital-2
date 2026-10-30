@@ -5,8 +5,9 @@
   --color-surface: #ffffff;
   /* Alternate light ground: the navy at its lightest, not a neutral grey. */
   --color-mist: #e9eaf6;
-  /* Blue bands carry white text only (6.2:1). */
-  --color-blue: #006199;
+  /* Blue bands carry white text only (9.0:1). Darker than the old #006199, and still well clear of
+     the navy, which the heading flags sit on top of these bands in. */
+  --color-blue: #004d7a;
   --color-ink: #0a0a14;
   --color-dim: #5c6274;
   /* Translucent, so one hairline works on white and on the mist tint alike. */
