@@ -14,13 +14,13 @@ export function Container({
 
 /**
  * A full-width colour band. The page is built from these, alternating so
- * neighbouring bands differ: white, mist, steel, maroon, ink. Steel, maroon and
- * ink carry white text and set the focus ring to white.
+ * neighbouring bands differ: white, mist, blue, navy, ink. Blue, navy and ink
+ * carry white text and set the focus ring to white.
  */
 const GROUND = {
   surface: "bg-surface text-ink",
   mist: "bg-mist text-ink",
-  steel: "bg-steel text-white [--focus:#fff]",
+  blue: "bg-blue text-white [--focus:#fff]",
   brand: "bg-brand text-white [--focus:#fff]",
   ink: "bg-ink text-white [--focus:#fff]",
 } as const;
@@ -45,10 +45,10 @@ export function Band({
 }
 
 /**
- * A heading with one emphasised phrase. Maroon type holds 8.8:1 on white and
- * mist but only 1.9:1 on steel and ink, so a dark ground carries the phrase as
- * a maroon field with white text instead — the same flag that hangs under a
- * photo. Pass `field` on steel, maroon and ink.
+ * A heading with one emphasised phrase. Navy type holds 17.6:1 on white and
+ * mist but only 2.5:1 on blue and 1.6:1 on ink, so a dark ground carries the
+ * phrase as a navy field with white text instead — the same flag that hangs
+ * under a photo. Pass `field` on blue, navy and ink.
  */
 export function Accent({
   lead,
@@ -83,7 +83,7 @@ export function Eyebrow({
   );
 }
 
-/** A lucide-weight line icon on a solid maroon tile. Marks a service row or a unit. */
+/** A line icon on a solid navy tile. Marks a service row or a unit. */
 export function IconTile({
   icon: Icon,
   size = "md",
@@ -103,7 +103,7 @@ export function IconTile({
 }
 
 /**
- * The circle that ends a row or a card. It fills maroon when the row or card
+ * The circle that ends a row or a card. It fills navy when the row or card
  * around it is hovered; on a dark ground it is white-bordered and fills white.
  */
 export function ArrowDisc({
@@ -160,7 +160,7 @@ export function AccentButton({
 }: {
   href: string;
   children: React.ReactNode;
-  /** On a steel, maroon or ink ground, where maroon would disappear. */
+  /** On a blue, navy or ink ground, where the navy would disappear. */
   onNavy?: boolean;
   className?: string;
 }) {
@@ -237,7 +237,7 @@ export function CtaPanel({
   href: string;
 }) {
   return (
-    <section className="bg-steel text-white [--focus:#fff]">
+    <section className="bg-blue text-white [--focus:#fff]">
       <div className="wrap flex flex-wrap items-end justify-between gap-8 py-16 md:py-24">
         <div className="max-w-3xl">
           <h2 data-reveal className="display text-head leading-[1.08]">

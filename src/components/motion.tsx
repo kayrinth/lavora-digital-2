@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef } from "react";
 
-/* The reel's cuts. Every frame opens the way the film does, heads rise out of their own baseline, the maroon field
+/* The reel's cuts. Every frame opens the way the film does, heads rise out of their own baseline, the navy field
    sweeps in under a head's one coloured phrase, and lists come in one after another. The HTML ships everything
    visible: this only holds back what is still below the fold, so a failed script, a printout or a visitor who
    prefers less motion gets the page exactly as it was built. */

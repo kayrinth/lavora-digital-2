@@ -106,7 +106,8 @@ export function HeroVideo({
               {line.lead}{" "}
               {i === last ? (
                 <span
-                  className={`mt-[0.1em] inline-block bg-brand px-[0.18em] pt-[0.08em] pb-[0.04em] ${
+                  // Blue, not navy: this block sits on the ink hero, where the navy holds only 1.6:1.
+                  className={`mt-[0.1em] inline-block bg-blue px-[0.18em] pt-[0.08em] pb-[0.04em] ${
                     open ? "reel-wipe" : ""
                   }`}
                   style={delay(950 + i * 120)}

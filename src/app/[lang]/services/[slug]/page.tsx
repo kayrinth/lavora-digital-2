@@ -110,7 +110,7 @@ function Process({ doc }: { doc: ServiceDoc }) {
           const Icon = STEP_ICONS[i % STEP_ICONS.length];
           return (
             <li key={step.title} className="flex gap-4 md:gap-7">
-              <span className="grid size-16 shrink-0 place-items-center bg-steel text-white md:size-28">
+              <span className="grid size-16 shrink-0 place-items-center bg-blue text-white md:size-28">
                 <Icon aria-hidden className="size-7 md:size-11" strokeWidth={1.25} />
               </span>
               <div className="md:pt-1">

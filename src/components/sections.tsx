@@ -123,7 +123,7 @@ export function Hero({ t }: { t: Dictionary }) {
 
 /* ------------------------------------------------------------------- Intro */
 
-/** Who the agency is: the claim on white, the studio on a maroon field. */
+/** Who the agency is: the claim on white, the studio on a navy field. */
 export function Intro({ lang, t }: P) {
   return (
     <section className="grid lg:grid-cols-2">
@@ -230,7 +230,7 @@ export function Stats({ t }: { t: Dictionary }) {
 
 export function Services({ lang, t }: P) {
   return (
-    <Band ground="steel" id="services" className="scroll-mt-20">
+    <Band ground="blue" id="services" className="scroll-mt-20">
       <h2 data-reveal className="display text-head leading-[1.08]">
         <Accent lead={t.services.titleLead} strong={t.services.titleStrong} field />
       </h2>
@@ -432,7 +432,7 @@ export function Process({ lang, t }: P) {
           const Icon = STEP_ICONS[i];
           return (
             <li key={s.title} className="flex gap-4 md:gap-7">
-              <span className="grid size-16 shrink-0 place-items-center bg-steel text-white md:size-28">
+              <span className="grid size-16 shrink-0 place-items-center bg-blue text-white md:size-28">
                 <Icon aria-hidden className="size-7 md:size-11" strokeWidth={1.25} />
               </span>
               <div className="md:pt-1">
@@ -471,7 +471,7 @@ const CLIENTS = [
   { file: "14. LOGO SENSWELL.webp", name: "Senswell" },
 ];
 
-/** The client list under its maroon bar. */
+/** The client list under its navy bar. */
 export function Clients({ t }: { t: Dictionary }) {
   return (
     <section aria-labelledby="clients">
@@ -510,7 +510,7 @@ export function Clients({ t }: { t: Dictionary }) {
 
 export function Cta({ t }: { t: Dictionary }) {
   return (
-    <Band ground="steel" id="contact" className="scroll-mt-20">
+    <Band ground="blue" id="contact" className="scroll-mt-20">
       <div className="mx-auto max-w-3xl text-center">
         <h2 data-reveal className="display text-head leading-[1.08]">
           <Accent lead={t.cta.titleLead} strong={t.cta.titleStrong} tail={t.cta.titleTail} field />

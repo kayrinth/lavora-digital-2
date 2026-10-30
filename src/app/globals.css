@@ -1,18 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  /* Maroon fields, steel-grey bands, light grey and white sections. */
+  /* Navy fields, blue bands, a light navy tint and white sections. */
   --color-surface: #ffffff;
-  --color-mist: #ededed;
-  /* Steel bands carry white text only (4.7:1). */
-  --color-steel: #737373;
-  --color-ink: #1c1b21;
-  --color-dim: #55555a;
-  --color-line: rgb(28 27 33 / 0.12);
+  /* Alternate light ground: the navy at its lightest, not a neutral grey. */
+  --color-mist: #e9eaf6;
+  /* Blue bands carry white text only (6.2:1). */
+  --color-blue: #006199;
+  --color-ink: #0a0a14;
+  --color-dim: #5c6274;
+  /* Translucent, so one hairline works on white and on the mist tint alike. */
+  --color-line: rgb(10 10 20 / 0.14);
   /* Field borders hold 3:1 against white. */
-  --color-field: #8c8c91;
-  /* The maroon: section fields, the one coloured phrase in a heading, small red text and buttons (8.9:1 on white). */
-  --color-brand: #921919;
+  --color-field: #878da2;
+  /* The navy: section fields, the one coloured phrase in a heading, small text and buttons (17.6:1 on white). */
+  --color-brand: #030164;
 
   --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -56,7 +58,7 @@
 @layer base {
   :root {
     color-scheme: light;
-    scrollbar-color: rgb(28 27 33 / 0.3) var(--color-mist);
+    scrollbar-color: rgb(10 10 20 / 0.3) var(--color-mist);
     caret-color: var(--color-brand);
     /* Anchor jumps glide; the router turns this off for page changes (data-scroll-behavior on <html>). */
     @media (prefers-reduced-motion: no-preference) {
@@ -74,7 +76,7 @@
   ::selection {
     @apply bg-brand text-white;
   }
-  /* Dark, steel and maroon grounds set --focus to white. */
+  /* Dark, blue and navy grounds set --focus to white. */
   :focus-visible {
     outline: 2px solid var(--focus, var(--color-brand));
     outline-offset: 3px;
@@ -105,12 +107,12 @@
     @apply translate-x-1 rtl:-translate-x-1;
   }
   .btn-brand {
-    @apply bg-brand text-white hover:bg-ink;
+    @apply bg-brand text-white hover:bg-blue;
   }
   .btn-dark {
     @apply bg-ink text-white hover:bg-brand;
   }
-  /* On steel, maroon and dark grounds. */
+  /* On blue, navy and dark grounds. */
   .btn-light {
     @apply bg-surface text-ink hover:bg-mist;
   }
@@ -133,10 +135,11 @@
     }
   }
 
-  /* The maroon field behind a head's one coloured phrase. A gradient rather than a colour so motion.tsx can sweep it in. */
+  /* The navy field behind a head's one coloured phrase. A gradient rather than a colour so motion.tsx can sweep
+     it in. An ink ground sets --flag to the blue: navy on ink holds only 1.6:1 and the field would disappear. */
   .flag {
     @apply box-decoration-clone bg-no-repeat px-[0.2em] pt-[0.08em] pb-[0.03em] text-white;
-    background-image: linear-gradient(var(--color-brand) 0 0);
+    background-image: linear-gradient(var(--flag, var(--color-brand)) 0 0);
   }
 
   .link {
