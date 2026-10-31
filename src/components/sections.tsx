@@ -466,7 +466,7 @@ const CLIENTS = [
   { file: "06. LOGO ADIDAS.webp", name: "Adidas" },
   { file: "07. LOGO KALBE.webp", name: "Kalbe" },
   { file: "08. LOGO PROMAG.webp", name: "Promag" },
-  { file: "09. LOGO WAROENG STEAK.webp", name: "Waroeng Steak" },
+  { file: "09-waroeng-steak.webp", name: "Waroeng Steak" },
   { file: "10. LOGO SPRINGHILL.webp", name: "Springhill" },
   { file: "11. LOGO NATA SOLUSI.webp", name: "Nata Solusi" },
   { file: "12. LOGO CHINESERD.webp", name: "Chinese RD" },

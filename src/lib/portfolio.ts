@@ -339,7 +339,7 @@ export const PROJECTS: Project[] = [
       en: "Restaurant & Food Advertising",
       ar: "إعلانات مطاعم وأغذية",
     },
-    logo: "/client/09. LOGO WAROENG STEAK.webp",
+    logo: "/client/09-waroeng-steak.webp",
     summary: {
       en: "Meta Advertising campaigns promoting food and restaurant offerings to relevant audiences.",
       ar: "حملات إعلانات ميتا للترويج لعروض الطعام والمطعم أمام الجماهير المناسبة.",
@@ -1008,7 +1008,7 @@ export const PROJECTS: Project[] = [
     service: "marketing",
     title: "Waroeng Steak",
     subtitle: { en: "Food & Promotional Video", ar: "فيديو طعام وترويج" },
-    logo: "/client/09. LOGO WAROENG STEAK.webp",
+    logo: "/client/09-waroeng-steak.webp",
     summary: {
       en: "Appetising promotional video content built around the brand's food offerings.",
       ar: "محتوى فيديو ترويجي شهي مبني حول عروض الطعام لدى العلامة.",
