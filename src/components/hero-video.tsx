@@ -49,12 +49,21 @@ export function HeroVideo({
     v.muted = true;
     opened = true;
     if (still()) return;
+    const start = () => {
+      if (!held.current) v.play().catch(() => {});
+    };
     // Plays while on screen and rests once scrolled past: a loop nobody sees shouldn't keep decoding.
-    const io = new IntersectionObserver(([e]) =>
-      e.isIntersecting ? !held.current && v.play().catch(() => {}) : v.pause(),
-    );
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? start() : v.pause()));
     io.observe(v);
-    return () => io.disconnect();
+    // A phone refuses play() on a film it holds nothing of yet, and that first refusal is what left the reel
+    // sitting on its poster waiting for a tap. preload="metadata" makes it the common case, so ask again as
+    // soon as there is something to play.
+    const events = ["loadedmetadata", "canplay"];
+    events.forEach((e) => v.addEventListener(e, start));
+    return () => {
+      io.disconnect();
+      events.forEach((e) => v.removeEventListener(e, start));
+    };
   }, []);
 
   const last = headline.length - 1;
