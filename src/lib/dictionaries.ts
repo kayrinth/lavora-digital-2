@@ -52,6 +52,7 @@ const en = {
     lead:
       "La Vora Digital is a full-service digital agency specializing in advertising, digital marketing, and web development, helping brands connect with their audience, grow their business, and build meaningful digital experiences.",
     imageAlt: "A camera operator on a lit studio set, signalling to the crew",
+    reelAlt: "The La Vora Digital showreel: the mark, then campaign panels for each service",
     eyebrow: "Digital advertising agency",
     stats: [
       { n: "100+", l: "Impressions served" },
@@ -259,6 +260,7 @@ const ar: Dictionary = {
     lead:
       "لا فورا ديجيتال وكالة رقمية متكاملة الخدمات متخصصة في الإعلانات والتسويق الرقمي وتطوير المواقع، تساعد العلامات على الوصول إلى جمهورها، وتنمية أعمالها، وبناء تجارب رقمية ذات أثر.",
     imageAlt: "مصوّر في استوديو مضاء يشير إلى فريق العمل",
+    reelAlt: "الريل التعريفي للا فورا ديجيتال: الشعار ثم لوحات حملات لكل خدمة",
     eyebrow: "وكالة إعلانات رقمية",
     stats: [
       { n: "١٠٠+", l: "ظهور إعلاني" },

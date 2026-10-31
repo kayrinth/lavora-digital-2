@@ -109,9 +109,9 @@ export function Navbar({ lang, t }: P) {
 export function Hero({ t }: { t: Dictionary }) {
   return (
     <HeroVideo
-      alt={t.hero.imageAlt}
-      poster="/hero-poster.webp"
-      src="/lavora-hero-1080.webm"
+      alt={t.hero.reelAlt}
+      poster="/lavora-hero-web-poster.webp"
+      src="/lavora-hero-web.webm"
       headline={t.hero.headline}
       tagline={t.hero.eyebrow}
       label={t.a11y.showreel}
