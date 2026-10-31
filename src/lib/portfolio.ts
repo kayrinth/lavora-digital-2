@@ -564,40 +564,6 @@ export const PROJECTS: Project[] = [
     },
   },
   {
-    slug: "borch-and-co",
-    url: "https://borchandco.id/",
-    thumb: "/preview/borch-and-co.webp",
-    service: "web",
-    title: "Borch & Co",
-    subtitle: { en: "E Commerce Website", ar: "متجر إلكتروني" },
-    summary: {
-      en: "A refined online shopping experience for a Sydney based jewellery brand specialising in bracelets.",
-      ar: "تجربة تسوق إلكتروني أنيقة لعلامة مجوهرات من سيدني متخصصة في الأساور.",
-    },
-    body: {
-      en: [
-        "A refined online shopping experience created for Borch & Co, a Sydney based jewellery brand specialising in bracelets.",
-        "The platform presents the brand's collection in a clean and engaging format while giving customers a straightforward way to explore products and shop online.",
-      ],
-      ar: [
-        "تجربة تسوق إلكتروني أنيقة صُنعت لـ Borch & Co، علامة مجوهرات من سيدني متخصصة في الأساور.",
-        "تعرض المنصة تشكيلة العلامة بصيغة نظيفة وجذابة، وتمنح العملاء طريقة مباشرة لتصفّح المنتجات والشراء عبر الإنترنت.",
-      ],
-    },
-    meta: {
-      en: [
-        { label: "Brand", value: "Borch & Co" },
-        { label: "Industry", value: "Jewellery & Fashion" },
-        { label: "Project", value: "E Commerce Website" },
-      ],
-      ar: [
-        { label: "العلامة", value: "Borch & Co" },
-        { label: "القطاع", value: "المجوهرات والأزياء" },
-        { label: "المشروع", value: "متجر إلكتروني" },
-      ],
-    },
-  },
-  {
     slug: "chineserd-platform",
     url: "https://chineserd.com/",
     thumb: "/preview/chineserd-platform.webp",

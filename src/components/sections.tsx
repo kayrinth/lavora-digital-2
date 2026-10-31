@@ -298,9 +298,7 @@ function getFeaturedProjects() {
   const ads =
     PROJECTS.find((p) => p.slug === "unilever-indonesia") ??
     PROJECTS.find((p) => p.service === "ads" && pickThumb(p));
-  const web =
-    PROJECTS.find((p) => p.slug === "borch-and-co") ??
-    PROJECTS.find((p) => p.service === "web" && pickThumb(p));
+  const web = PROJECTS.find((p) => p.service === "web" && pickThumb(p));
   const mkt =
     PROJECTS.find((p) => p.slug === "make-over") ??
     PROJECTS.find((p) => p.service === "marketing" && pickThumb(p));
