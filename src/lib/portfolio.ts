@@ -1036,42 +1036,6 @@ export const PROJECTS: Project[] = [
       ],
     },
   },
-  {
-    slug: "borch-and-co-visual",
-    gallery: [
-      "/marketing/borch.webp",
-      "/marketing/borch2.webp",
-    ],
-    service: "marketing",
-    title: "Borch & Co",
-    subtitle: { en: "Jewellery Photography & Video", ar: "تصوير وفيديو مجوهرات" },
-    summary: {
-      en: "Refined imagery and video showcasing a Sydney jewellery brand's products.",
-      ar: "صور وفيديو أنيقة تبرز منتجات علامة مجوهرات من سيدني.",
-    },
-    body: {
-      en: [
-        "A combination of photography and video production for Borch & Co, a jewellery brand from Sydney.",
-        "The visual content was created to showcase the brand's products through refined imagery and video suitable for digital marketing, product presentation, and promotional activities.",
-      ],
-      ar: [
-        "مزيج من التصوير الفوتوغرافي وإنتاج الفيديو لـ Borch & Co، علامة مجوهرات من سيدني.",
-        "صُنع المحتوى البصري لإبراز منتجات العلامة عبر صور وفيديو أنيقة تناسب التسويق الرقمي وعرض المنتجات والأنشطة الترويجية.",
-      ],
-    },
-    meta: {
-      en: [
-        { label: "Brand", value: "Borch & Co" },
-        { label: "Industry", value: "Jewellery & Fashion" },
-        { label: "Project", value: "Photography & Video" },
-      ],
-      ar: [
-        { label: "العلامة", value: "Borch & Co" },
-        { label: "القطاع", value: "المجوهرات والأزياء" },
-        { label: "المشروع", value: "تصوير وفيديو" },
-      ],
-    },
-  },
 ];
 
 export function pick<T>(value: Localized<T>, lang: Locale): T {
