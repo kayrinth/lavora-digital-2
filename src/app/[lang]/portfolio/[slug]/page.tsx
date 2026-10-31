@@ -94,7 +94,7 @@ export default async function ProjectPage(props: PageProps<"/[lang]/portfolio/[s
                       width={208}
                       height={112}
                       priority
-                      className="max-h-full w-auto max-w-full object-contain"
+                      className="max-h-12 w-auto max-w-full object-contain md:max-h-14"
                     />
                   </div>
                 )}
