@@ -219,8 +219,8 @@ export const PROJECTS: Project[] = [
   {
     slug: "unilever-indonesia",
     gallery: [
-      "/iklan/unilever.jpg",
-      "/iklan/unilever2.jpg",
+      "/iklan/unilever.webp",
+      "/iklan/unilever2.webp",
     ],
     service: "ads",
     title: "Unilever Indonesia",
@@ -228,7 +228,7 @@ export const PROJECTS: Project[] = [
       en: "Multi Brand Meta Advertising",
       ar: "إعلانات ميتا لعدة علامات",
     },
-    logo: "/client/01. Unilever.png",
+    logo: "/client/01. Unilever.webp",
     summary: {
       en: "Meta Advertising campaigns for multiple Unilever Indonesia brands, including Vaseline, Dove, Pepsodent, and Rinso.",
       ar: "حملات إعلانات ميتا لعدة علامات من يونيليفر إندونيسيا، منها فازلين ودوف وبيبسودنت ورينسو.",
@@ -257,8 +257,8 @@ export const PROJECTS: Project[] = [
   {
     slug: "adidas",
     gallery: [
-      "/iklan/adidas.jpg",
-      "/iklan/adidas2.jpg",
+      "/iklan/adidas.webp",
+      "/iklan/adidas2.webp",
     ],
     service: "ads",
     title: "Adidas",
@@ -266,7 +266,7 @@ export const PROJECTS: Project[] = [
       en: "Shoes & Fashion Meta Advertising",
       ar: "إعلانات ميتا للأحذية والأزياء",
     },
-    logo: "/client/06. LOGO ADIDAS.png",
+    logo: "/client/06. LOGO ADIDAS.webp",
     summary: {
       en: "Meta Advertising campaigns across two product categories: Adidas Shoes and Adidas Fashion.",
       ar: "حملات إعلانات ميتا لفئتي منتجات: أحذية أديداس وأزياء أديداس.",
@@ -295,8 +295,8 @@ export const PROJECTS: Project[] = [
   {
     slug: "kalbe-promag",
     gallery: [
-      "/iklan/kalbe.jpg",
-      "/iklan/kalbe2.jpg",
+      "/iklan/kalbe.webp",
+      "/iklan/kalbe2.webp",
     ],
     service: "ads",
     title: "Kalbe",
@@ -330,8 +330,8 @@ export const PROJECTS: Project[] = [
   {
     slug: "waroeng-steak",
     gallery: [
-      "/iklan/waroeng-steak.jpg",
-      "/iklan/waroeng-steak2.jpg",
+      "/iklan/waroeng-steak.webp",
+      "/iklan/waroeng-steak2.webp",
     ],
     service: "ads",
     title: "Waroeng Steak",
@@ -339,7 +339,7 @@ export const PROJECTS: Project[] = [
       en: "Restaurant & Food Advertising",
       ar: "إعلانات مطاعم وأغذية",
     },
-    logo: "/client/09. LOGO WAROENG STEAK.jpg",
+    logo: "/client/09. LOGO WAROENG STEAK.webp",
     summary: {
       en: "Meta Advertising campaigns promoting food and restaurant offerings to relevant audiences.",
       ar: "حملات إعلانات ميتا للترويج لعروض الطعام والمطعم أمام الجماهير المناسبة.",
@@ -368,8 +368,8 @@ export const PROJECTS: Project[] = [
   {
     slug: "springhill",
     gallery: [
-      "/iklan/springhill.jpg",
-      "/iklan/springhill2.jpg",
+      "/iklan/springhill.webp",
+      "/iklan/springhill2.webp",
     ],
     service: "ads",
     title: "Springhill",
@@ -377,7 +377,7 @@ export const PROJECTS: Project[] = [
       en: "Residential Property Advertising",
       ar: "إعلانات عقارات سكنية",
     },
-    logo: "/client/10. LOGO SPRINGHILL.jpeg",
+    logo: "/client/10. LOGO SPRINGHILL.webp",
     summary: {
       en: "Meta Advertising campaigns promoting residential developments to relevant potential buyers.",
       ar: "حملات إعلانات ميتا للترويج للمشاريع السكنية أمام المشترين المحتملين المناسبين.",
@@ -408,8 +408,8 @@ export const PROJECTS: Project[] = [
   {
     slug: "nata-solusi",
     gallery: [
-      "/iklan/nata.png",
-      "/iklan/nata2.png",
+      "/iklan/nata.webp",
+      "/iklan/nata2.webp",
     ],
     service: "ads",
     title: "Nata Solusi",
@@ -417,7 +417,7 @@ export const PROJECTS: Project[] = [
       en: "Regional Tax Application & Smart Classroom Solution",
       ar: "تطبيق الضرائب الإقليمية وحل الفصل الذكي",
     },
-    logo: "/client/11. LOGO NATA SOLUSI.jpg",
+    logo: "/client/11. LOGO NATA SOLUSI.webp",
     summary: {
       en: "Meta Advertising campaigns promoting digital solutions for organisations and institutions.",
       ar: "حملات إعلانات ميتا للترويج لحلول رقمية للمؤسسات والجهات.",
@@ -452,8 +452,8 @@ export const PROJECTS: Project[] = [
   {
     slug: "chineserd",
     gallery: [
-      "/iklan/chineserd.jpg",
-      "/iklan/chineserd2.jpg",
+      "/iklan/chineserd.webp",
+      "/iklan/chineserd2.webp",
     ],
     service: "ads",
     title: "ChineseRd",
@@ -461,7 +461,7 @@ export const PROJECTS: Project[] = [
       en: "Online Mandarin Learning Application",
       ar: "تطبيق تعلّم الماندرين عبر الإنترنت",
     },
-    logo: "/client/12. LOGO CHINESERD.png",
+    logo: "/client/12. LOGO CHINESERD.webp",
     summary: {
       en: "Meta Advertising campaigns targeting audiences interested in learning Mandarin and digital education.",
       ar: "حملات إعلانات ميتا تستهدف المهتمين بتعلّم الماندرين والتعليم الرقمي.",
@@ -492,13 +492,13 @@ export const PROJECTS: Project[] = [
   {
     slug: "barburger",
     gallery: [
-      "/iklan/barburger.jpg",
-      "/iklan/barburger2.jpg",
+      "/iklan/barburger.webp",
+      "/iklan/barburger2.webp",
     ],
     service: "ads",
     title: "Barburger",
     subtitle: { en: "Burger Product Advertising", ar: "إعلانات منتجات برغر" },
-    logo: "/client/13. LOGO BARBURGER.png",
+    logo: "/client/13. LOGO BARBURGER.webp",
     summary: {
       en: "Meta Advertising campaigns promoting a range of burger products to food and lifestyle audiences.",
       ar: "حملات إعلانات ميتا للترويج لتشكيلة منتجات البرغر أمام جماهير الطعام ونمط الحياة.",
@@ -529,8 +529,8 @@ export const PROJECTS: Project[] = [
   {
     slug: "senswell",
     gallery: [
-      "/iklan/senswell.jpg",
-      "/iklan/senswell2.jpg",
+      "/iklan/senswell.webp",
+      "/iklan/senswell2.webp",
     ],
     service: "ads",
     title: "Senswell",
@@ -782,8 +782,8 @@ export const PROJECTS: Project[] = [
   {
     slug: "yamaha-motor",
     gallery: [
-      "/marketing/yamaha.jpeg",
-      "/marketing/yamaha2.jpeg",
+      "/marketing/yamaha.webp",
+      "/marketing/yamaha2.webp",
     ],
     ratio: "16 / 11",
     service: "marketing",
@@ -821,8 +821,8 @@ export const PROJECTS: Project[] = [
   {
     slug: "make-over",
     gallery: [
-      "/marketing/makeover.jpg",
-      "/marketing/makeover2.jpg",
+      "/marketing/makeover.webp",
+      "/marketing/makeover2.webp",
     ],
     service: "marketing",
     title: "Make Over",
@@ -858,7 +858,7 @@ export const PROJECTS: Project[] = [
     slug: "samsung",
     gallery: [
       "/marketing/samsung.webp",
-      "/marketing/samsung2.avif",
+      "/marketing/samsung2.webp",
     ],
     service: "marketing",
     title: "Samsung",
@@ -893,8 +893,8 @@ export const PROJECTS: Project[] = [
   {
     slug: "aquaproof",
     gallery: [
-      "/marketing/aquaproof.png",
-      "/marketing/aquaproof2.png",
+      "/marketing/aquaproof.webp",
+      "/marketing/aquaproof2.webp",
     ],
     service: "marketing",
     title: "Aquaproof",
@@ -929,8 +929,8 @@ export const PROJECTS: Project[] = [
   {
     slug: "abc-battery",
     gallery: [
-      "/marketing/abc.png",
-      "/marketing/abc2.png",
+      "/marketing/abc.webp",
+      "/marketing/abc2.webp",
     ],
     ratio: "5 / 4",
     service: "marketing",
@@ -964,8 +964,8 @@ export const PROJECTS: Project[] = [
   {
     slug: "lemonilo",
     gallery: [
-      "/marketing/lemonilo.jpg",
-      "/marketing/lemonilo2.jpg",
+      "/marketing/lemonilo.webp",
+      "/marketing/lemonilo2.webp",
     ],
     ratio: "1 / 1",
     service: "marketing",
@@ -1001,14 +1001,14 @@ export const PROJECTS: Project[] = [
   {
     slug: "waroeng-steak-video",
     gallery: [
-      "/marketing/waroengsteak.jpg",
-      "/marketing/waroengsteak2.jpg",
+      "/marketing/waroengsteak.webp",
+      "/marketing/waroengsteak2.webp",
     ],
     ratio: "1 / 1",
     service: "marketing",
     title: "Waroeng Steak",
     subtitle: { en: "Food & Promotional Video", ar: "فيديو طعام وترويج" },
-    logo: "/client/09. LOGO WAROENG STEAK.jpg",
+    logo: "/client/09. LOGO WAROENG STEAK.webp",
     summary: {
       en: "Appetising promotional video content built around the brand's food offerings.",
       ar: "محتوى فيديو ترويجي شهي مبني حول عروض الطعام لدى العلامة.",

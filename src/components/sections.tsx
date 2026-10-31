@@ -458,19 +458,19 @@ export function Process({ lang, t }: P) {
 
 /** In the order of public/client. */
 const CLIENTS = [
-  { file: "01. Unilever.png", name: "Unilever" },
-  { file: "02. LOGO VASELINE.png", name: "Vaseline" },
-  { file: "03. LOGO DOVE.png", name: "Dove" },
+  { file: "01. Unilever.webp", name: "Unilever" },
+  { file: "02. LOGO VASELINE.webp", name: "Vaseline" },
+  { file: "03. LOGO DOVE.webp", name: "Dove" },
   { file: "04. LOGO PEPSODENT.webp", name: "Pepsodent" },
   { file: "05. LOGO RINSO.webp", name: "Rinso" },
-  { file: "06. LOGO ADIDAS.png", name: "Adidas" },
+  { file: "06. LOGO ADIDAS.webp", name: "Adidas" },
   { file: "07. LOGO KALBE.webp", name: "Kalbe" },
-  { file: "08. LOGO PROMAG.png", name: "Promag" },
-  { file: "09. LOGO WAROENG STEAK.jpg", name: "Waroeng Steak" },
-  { file: "10. LOGO SPRINGHILL.jpeg", name: "Springhill" },
-  { file: "11. LOGO NATA SOLUSI.jpg", name: "Nata Solusi" },
-  { file: "12. LOGO CHINESERD.png", name: "Chinese RD" },
-  { file: "13. LOGO BARBURGER.png", name: "Barburger" },
+  { file: "08. LOGO PROMAG.webp", name: "Promag" },
+  { file: "09. LOGO WAROENG STEAK.webp", name: "Waroeng Steak" },
+  { file: "10. LOGO SPRINGHILL.webp", name: "Springhill" },
+  { file: "11. LOGO NATA SOLUSI.webp", name: "Nata Solusi" },
+  { file: "12. LOGO CHINESERD.webp", name: "Chinese RD" },
+  { file: "13. LOGO BARBURGER.webp", name: "Barburger" },
   { file: "14. LOGO SENSWELL.webp", name: "Senswell" },
 ];
 
